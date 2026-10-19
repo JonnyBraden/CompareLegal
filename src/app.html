@@ -1,0 +1,983 @@
+<title>Compare Legal</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Compare solicitors' fees for conveyancing, wills, probate and family law across England, Wales, Scotland and Northern Ireland.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a search desk up top, a fee ledger below. Fee totals carry a highlighter mark, the way a client would mark a quote. */
+:root{
+  --paper:#F5F7F6; --surface:#FFFFFF; --sunk:#ECF0EE; --ink:#15212C; --muted:#56636F; --line:#D9DFDC;
+  --accent:#24507A; --accent-ink:#FFFFFF; --accent-soft:#E3ECF5;
+  --mark:#FFE07A; --good:#2E7D4F; --good-soft:#E2F2E8; --warn:#9A5800; --warn-soft:#FBEFD9; --danger:#B3261E;
+  --shadow:0 1px 2px rgba(21,33,44,.06),0 8px 24px rgba(21,33,44,.06);
+  --f-display:"Young Serif",Georgia,"Times New Roman",serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:10px; --r-sm:6px; --wrap:1160px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0F151B; --surface:#161F28; --sunk:#1C2731; --ink:#E6ECF1; --muted:#9AA7B3; --line:#2B3743;
+  --accent:#8DB8E6; --accent-ink:#0D1722; --accent-soft:#1E3247;
+  --mark:rgba(240,200,70,.38); --good:#6CC495; --good-soft:#18352A; --warn:#E7B062; --warn-soft:#3A2B14; --danger:#F08A80;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0F151B; --surface:#161F28; --sunk:#1C2731; --ink:#E6ECF1; --muted:#9AA7B3; --line:#2B3743;
+  --accent:#8DB8E6; --accent-ink:#0D1722; --accent-soft:#1E3247;
+  --mark:rgba(240,200,70,.38); --good:#6CC495; --good-soft:#18352A; --warn:#E7B062; --warn-soft:#3A2B14; --danger:#F08A80;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--surface)}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;line-height:1.15;text-wrap:balance;margin:0}
+h1{font-size:clamp(2rem,4.6vw,3.3rem);letter-spacing:-.01em}
+h2{font-size:clamp(1.5rem,2.8vw,2.1rem)}
+h3{font-size:1.2rem}
+p{margin:0}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--f-mono);font-size:.8rem;letter-spacing:.02em}
+.eyebrow{font-size:.75rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;min-height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);background:none;border:0;padding:0;cursor:pointer}
+.brand b{font-family:var(--f-display);font-weight:400;font-size:1.3rem;letter-spacing:-.01em}
+.brand svg{flex:none}
+.nav{display:flex;gap:4px;margin-left:auto;align-items:center}
+.nav button{background:none;border:0;padding:8px 12px;border-radius:var(--r-sm);cursor:pointer;color:var(--muted);font-weight:500}
+.nav button:hover,.nav button[aria-current="page"]{color:var(--ink);background:var(--sunk)}
+.nav .btn{color:var(--accent-ink)}
+@media (max-width:640px){.nav .hide-sm{display:none}}
+.proto{background:var(--warn-soft);color:var(--warn);font-size:.82rem}
+.proto .wrap{padding-block:7px;display:flex;gap:8px;align-items:center}
+
+/* buttons, fields */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:var(--r-sm);padding:10px 18px;font-weight:600;cursor:pointer;background:var(--accent);color:var(--accent-ink);text-decoration:none;white-space:nowrap}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{background:var(--sunk);filter:none}
+.btn.sm{padding:7px 12px;font-size:.88rem}
+.btn.link{background:none;color:var(--accent);padding:0;border:0}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+label.f{display:grid;gap:6px;font-size:.88rem;font-weight:600}
+label.f small{font-weight:400;color:var(--muted)}
+.in{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;min-height:44px}
+.in:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 3px var(--accent-soft)}
+textarea.in{min-height:96px;resize:vertical}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;cursor:pointer}
+.check input{width:18px;height:18px;margin-top:2px;accent-color:var(--accent);flex:none}
+.pre{position:relative}.pre span{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}.pre .in{padding-left:26px}
+
+/* hero */
+.hero{padding-block:56px 40px}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:48px;align-items:center}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr;gap:28px}.hero{padding-block:32px 28px}}
+.hero p.lede{font-size:1.15rem;color:var(--muted);max-width:34em;margin-top:16px}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%,var(--mark) 92%,transparent 92%);padding:0 .08em}
+.hero-facts{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:26px;font-size:.92rem;color:var(--muted)}
+.hero-facts span{display:flex;gap:8px;align-items:center}
+.hero-facts svg{color:var(--good)}
+.desk{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:22px;display:grid;gap:16px}
+.areas{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:var(--sunk);padding:4px;border-radius:var(--r)}
+.areas button{border:0;background:none;padding:10px 6px;border-radius:7px;cursor:pointer;font-weight:600;font-size:.86rem;color:var(--muted);line-height:1.2}
+.areas button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+@media (max-width:460px){.areas{grid-template-columns:repeat(2,1fr)}}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.row2{grid-template-columns:1fr}}
+.desk .btn{width:100%;padding:13px}
+.desk-note{font-size:.8rem;color:var(--muted)}
+
+/* sections */
+section.band{padding-block:56px}
+section.band.alt{background:var(--surface);border-block:1px solid var(--line)}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.sec-head p{max-width:40em;color:var(--muted);margin-top:8px}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media (max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.tiles{grid-template-columns:1fr}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:10px;align-content:start;text-align:left;cursor:pointer}
+.tile:hover{border-color:var(--accent)}
+.tile ul{margin:0;padding:0;list-style:none;font-size:.9rem;color:var(--muted);display:grid;gap:4px}
+.tile .from{font-size:.85rem;margin-top:4px}
+.tile .from b{font-size:1.05rem}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+@media (max-width:760px){.steps{grid-template-columns:1fr}}
+.step{display:grid;gap:8px;align-content:start}
+.step .n{font-family:var(--f-display);font-size:1.6rem;color:var(--accent)}
+.step p{color:var(--muted)}
+.juris{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media (max-width:760px){.juris{grid-template-columns:1fr}}
+.jur{border-top:3px solid var(--ink);padding-top:14px;display:grid;gap:6px}
+.jur p{color:var(--muted);font-size:.93rem}
+.cta{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center;background:var(--ink);color:var(--paper);border-radius:14px;padding:36px}
+.cta p{opacity:.8;margin-top:10px}
+.cta ul{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.cta li{display:flex;gap:10px}
+.cta .btn{background:var(--mark);color:#15212C;margin-top:20px}
+@media (max-width:760px){.cta{grid-template-columns:1fr;padding:26px}}
+footer{padding-block:36px;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between}
+
+/* results */
+.res-head{padding-block:26px 18px;background:var(--surface);border-bottom:1px solid var(--line)}
+.res-bar{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr auto;gap:10px;align-items:end;margin-top:16px}
+@media (max-width:900px){.res-bar{grid-template-columns:1fr 1fr}.res-bar .btn{grid-column:1/-1}}
+@media (max-width:460px){.res-bar{grid-template-columns:1fr}}
+.res-body{display:grid;grid-template-columns:250px 1fr;gap:28px;padding-block:24px 64px;align-items:start}
+@media (max-width:860px){.res-body{grid-template-columns:1fr}}
+.filters{display:grid;gap:18px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 80px)}
+@media (max-width:860px){.filters{position:static;grid-template-columns:1fr 1fr;gap:14px}}
+@media (max-width:460px){.filters{grid-template-columns:1fr}}
+.fgroup{display:grid;gap:10px}
+.notice{background:var(--accent-soft);border-radius:var(--r);padding:14px;font-size:.86rem;display:grid;gap:4px}
+.list-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.list-top .in{width:auto;min-height:38px;padding:6px 10px}
+.cards{display:grid;gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;grid-template-columns:auto 1fr auto;gap:16px 18px;align-items:start}
+.card.mine{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+@media (max-width:640px){.card{grid-template-columns:auto 1fr}.card .price{grid-column:1/-1;text-align:left!important;border-top:1px dashed var(--line);padding-top:12px}}
+.logo{border-radius:8px;display:grid;place-items:center;color:#fff;font-family:var(--f-display);flex:none;overflow:hidden;background:var(--sunk)}
+.logo img{width:100%;height:100%;object-fit:contain;background:#fff}
+.card h3{font-family:var(--f-body);font-weight:700;font-size:1.05rem}
+.card .meta{font-size:.86rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{font-size:.75rem;font-weight:600;padding:3px 9px;border-radius:99px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.chip.fixed{background:var(--good-soft);color:var(--good)}
+.chip.from{background:var(--warn-soft);color:var(--warn)}
+.chip.mine{background:var(--accent);color:var(--accent-ink)}
+.card .inc{font-size:.88rem;color:var(--muted);margin-top:10px;max-width:46em}
+.price{text-align:right;display:grid;gap:4px;min-width:170px}
+.price .total{font-size:1.65rem;font-weight:700;letter-spacing:-.01em}
+.price .total .hl{padding:0 .1em}
+.price .break{font-size:.8rem;color:var(--muted)}
+.price .acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:8px}
+@media (max-width:640px){.price .acts{justify-content:flex-start}}
+.cmp-toggle{display:flex;gap:6px;align-items:center;font-size:.84rem;color:var(--muted);cursor:pointer;justify-content:flex-end}
+.cmp-toggle input{accent-color:var(--accent);width:16px;height:16px}
+.empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:36px;text-align:center;display:grid;gap:10px;justify-items:center}
+.tray{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--ink);color:var(--paper);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tray .wrap{display:flex;align-items:center;gap:14px;padding-block:12px;flex-wrap:wrap}
+.tray .slots{display:flex;gap:8px;flex-wrap:wrap;flex:1;min-width:0}
+.tray .slot{background:rgba(255,255,255,.12);padding:5px 10px;border-radius:6px;font-size:.85rem;display:flex;gap:8px;align-items:center;max-width:100%}
+.tray .slot button{background:none;border:0;color:inherit;cursor:pointer;opacity:.7;padding:0 2px}
+.tray .btn{background:var(--mark);color:#15212C}
+
+/* modal */
+.scrim{position:fixed;inset:0;z-index:70;background:rgba(10,16,22,.55);display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;padding:max(24px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.modal{background:var(--surface);border-radius:14px;width:min(860px,100%);box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden}
+.modal.wide{width:min(1040px,100%)}
+.m-head{display:flex;gap:16px;align-items:center;padding:22px 24px;border-bottom:1px solid var(--line)}
+.m-head .x{margin-left:auto;align-self:flex-start;background:var(--sunk);border:0;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:1.2rem;flex:none}
+.m-body{padding:24px;display:grid;gap:26px}
+.m-cols{display:grid;grid-template-columns:1.4fr 1fr;gap:28px}
+@media (max-width:760px){.m-cols{grid-template-columns:1fr}}
+.contact{display:grid;gap:10px;font-size:.92rem}
+.contact div{display:grid;grid-template-columns:76px 1fr auto;gap:8px;align-items:center}
+.contact dt{color:var(--muted);font-size:.8rem}
+.contact dd{margin:0;word-break:break-word;min-width:0}
+.copy{background:none;border:1px solid var(--line);border-radius:5px;font-size:.72rem;padding:2px 7px;cursor:pointer;color:var(--muted)}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td,tr:last-child th{border-bottom:0}
+thead th{background:var(--sunk);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td.r,th.r{text-align:right}
+tr.tot td{font-weight:700;background:var(--sunk)}
+.cmp th[scope="row"]{color:var(--muted);font-weight:600;font-size:.82rem;white-space:nowrap;background:var(--sunk)}
+.cmp td{min-width:190px}
+.form-grid{display:grid;gap:12px}
+.ok{background:var(--good-soft);color:var(--good);border-radius:var(--r);padding:14px;font-size:.92rem}
+
+/* portal */
+.auth{display:grid;grid-template-columns:1fr 1fr;gap:40px;padding-block:48px 72px;align-items:start}
+@media (max-width:860px){.auth{grid-template-columns:1fr;padding-block:28px 48px}}
+.auth .panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px;display:grid;gap:16px;box-shadow:var(--shadow)}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--sunk);padding:4px;border-radius:var(--r);gap:4px}
+.seg button{border:0;background:none;padding:9px;border-radius:7px;font-weight:600;cursor:pointer;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.perks{display:grid;gap:18px;margin-top:22px}
+.perk{display:grid;grid-template-columns:28px 1fr;gap:12px}
+.perk svg{color:var(--accent);margin-top:3px}
+.perk p{color:var(--muted);font-size:.93rem}
+.err{color:var(--danger);font-size:.86rem}
+.dash-head{background:var(--surface);border-bottom:1px solid var(--line);padding-block:22px 0}
+.dash-id{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.status{display:inline-flex;gap:6px;align-items:center;font-size:.8rem;font-weight:600;padding:3px 10px;border-radius:99px}
+.status.live{background:var(--good-soft);color:var(--good)}
+.status.draft{background:var(--warn-soft);color:var(--warn)}
+.tabs{display:flex;gap:2px;margin-top:18px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:12px 14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
+.dash-body{display:grid;grid-template-columns:1fr 280px;gap:28px;padding-block:28px 72px;align-items:start}
+@media (max-width:900px){.dash-body{grid-template-columns:1fr}}
+.pane{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:grid;gap:18px;min-width:0}
+.pane h3{font-family:var(--f-body);font-weight:700;font-size:1.05rem}
+.side{display:grid;gap:14px}
+.side .box{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:10px}
+.todo{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.9rem}
+.todo li{display:flex;gap:8px;align-items:flex-start}
+.todo .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--line);flex:none;margin-top:2px;display:grid;place-items:center}
+.todo .done .dot{background:var(--good);border-color:var(--good);color:#fff}
+.todo .done span{color:var(--muted)}
+.logo-up{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.drop{border:1.5px dashed var(--line);border-radius:var(--r);padding:14px 16px;display:grid;gap:4px;font-size:.88rem;cursor:pointer;flex:1;min-width:200px}
+.drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.svc{border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.svc-h{display:flex;gap:12px;align-items:center;padding:14px 16px;background:var(--sunk);flex-wrap:wrap}
+.svc-h .check{font-weight:700}
+.svc-h .sum{margin-left:auto;font-size:.85rem;color:var(--muted)}
+.svc-b{padding:16px;display:grid;gap:14px}
+.bands{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:640px){.bands{grid-template-columns:1fr 1fr}}
+.disb{display:grid;gap:8px}
+.disb-row{display:grid;grid-template-columns:1fr 130px 36px;gap:8px}
+.disb-row button{border:1px solid var(--line);background:none;border-radius:var(--r-sm);cursor:pointer;color:var(--muted)}
+.area-h{display:flex;align-items:baseline;gap:10px;margin-top:6px}
+.enq{border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:6px}
+.enq .top-l{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:8px;z-index:90;font-size:.92rem;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.save-bar{display:flex;gap:10px;justify-content:flex-end;align-items:center;border-top:1px solid var(--line);padding-top:16px;flex-wrap:wrap}
+</style>
+
+<div class="proto" role="note"><div class="wrap">
+  <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.5v4.2M8 10.8v.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  <span>Prototype. The firms and prices shown are fictional sample data, and accounts are stored in this browser only.</span>
+</div></div>
+
+<header class="top"><div class="wrap">
+  <button class="brand" data-go="home" aria-label="Compare Legal home">
+    <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="1" y="1" width="28" height="28" rx="7" fill="var(--ink)"/><rect x="7" y="9" width="10" height="3" rx="1.5" fill="var(--paper)"/><rect x="7" y="14" width="16" height="3" rx="1.5" fill="var(--mark)"/><rect x="7" y="19" width="13" height="3" rx="1.5" fill="var(--paper)"/></svg>
+    <b>Compare Legal</b>
+  </button>
+  <nav class="nav" aria-label="Main">
+    <button data-go="results" class="hide-sm">Compare fees</button>
+    <button data-go="how" class="hide-sm">How it works</button>
+    <button data-go="firms" id="nav-firm">For law firms</button>
+  </nav>
+</div></header>
+
+<main id="app"></main>
+
+<footer><div class="wrap">
+  <div><b style="color:var(--ink)">Compare Legal</b> · comparelegal.com<br>Fees are set by each firm. Always confirm the final quote with the firm before you instruct them.</div>
+  <div>Covering England &amp; Wales, Scotland and Northern Ireland</div>
+</div></footer>
+
+<script>
+(() => {
+/* ---------- reference data ---------- */
+const NATIONS = {
+  'England':{jur:'EW',tax:'Stamp Duty Land Tax'},
+  'Wales':{jur:'EW',tax:'Land Transaction Tax'},
+  'Scotland':{jur:'SC',tax:'Land and Buildings Transaction Tax'},
+  'Northern Ireland':{jur:'NI',tax:'Stamp Duty Land Tax'}
+};
+const JUR = {
+  EW:{label:'England & Wales',reg:'Solicitors Regulation Authority',short:'SRA',land:'HM Land Registry'},
+  SC:{label:'Scotland',reg:'Law Society of Scotland',short:'LSS',land:'Registers of Scotland'},
+  NI:{label:'Northern Ireland',reg:'Law Society of Northern Ireland',short:'LSNI',land:'Land Registry NI'}
+};
+const AREAS = [
+  {id:'conveyancing',name:'Conveyancing',short:'Property',blurb:'Buying, selling or remortgaging a home'},
+  {id:'wills',name:'Wills & attorneys',short:'Wills',blurb:'Wills and powers of attorney'},
+  {id:'probate',name:'Probate & estates',short:'Probate',blurb:'Dealing with an estate after a death'},
+  {id:'family',name:'Family',short:'Family',blurb:'Divorce, finances and children'}
+];
+const SERVICES = [
+  {id:'purchase',area:'conveyancing',name:'Buying a home',banded:true,inc:'Title checks, searches review, mortgage lender work, exchange and completion, registration.'},
+  {id:'sale',area:'conveyancing',name:'Selling a home',banded:true,inc:'Contract pack, replies to enquiries, exchange and completion, redeeming your mortgage.'},
+  {id:'remortgage',area:'conveyancing',name:'Remortgage',banded:true,inc:'Acting for you and the new lender, redeeming the old mortgage, registration.'},
+  {id:'will1',area:'wills',name:'Single will',inc:'Meeting or call, drafting, one round of amendments, signing guidance, storage.'},
+  {id:'will2',area:'wills',name:'Mirror wills for a couple',inc:'Two matching wills, one meeting, signing guidance, storage.'},
+  {id:'poa',area:'wills',name:{EW:'Lasting power of attorney',SC:'Power of attorney',NI:'Enduring power of attorney'},inc:'Advice, preparing the documents, certificate provider, registration.'},
+  {id:'grant',area:'probate',name:{EW:'Grant of probate only',SC:'Confirmation only',NI:'Grant of probate only'},inc:'Preparing the application and tax forms, obtaining the grant. You collect and distribute the estate.'},
+  {id:'estate',area:'probate',name:{EW:'Full estate administration',SC:'Full executry administration',NI:'Full estate administration'},inc:'Obtaining the grant, collecting assets, paying debts and tax, distributing to beneficiaries.'},
+  {id:'divorce',area:'family',name:'Uncontested divorce',inc:'Preparing and filing the application, dealing with the court until the final order.'},
+  {id:'finances',area:'family',name:{EW:'Financial consent order',SC:'Minute of agreement',NI:'Financial consent order'},inc:'Drafting the agreement you have reached so it is legally binding.'},
+  {id:'children',area:'family',name:'Child arrangements: first consultation',inc:'A one-hour meeting to advise on arrangements for your children.'}
+];
+const BANDS = [
+  {k:'b1',label:'Up to £250,000',max:250000},
+  {k:'b2',label:'£250,001 – £500,000',max:500000},
+  {k:'b3',label:'£500,001 – £1m',max:1000000},
+  {k:'b4',label:'Over £1m',max:Infinity}
+];
+const svcById = id => SERVICES.find(s=>s.id===id);
+const svcName = (s,jur='EW') => typeof s.name==='string' ? s.name : s.name[jur];
+const bandFor = price => (BANDS.find(b=>price<=b.max)||BANDS[3]).k;
+
+/* ---------- sample firms (fictional) ---------- */
+const BASE = {
+  purchase:{EW:[850,1050,1350,1850],SC:[900,1150,1450,1950],NI:[750,950,1250,1650]},
+  sale:{EW:[750,900,1150,1550],SC:[800,1000,1250,1700],NI:[650,850,1100,1450]},
+  remortgage:{EW:[450,495,595,750],SC:[500,550,650,800],NI:[425,475,550,700]},
+  will1:{EW:195,SC:180,NI:175}, will2:{EW:295,SC:275,NI:260}, poa:{EW:450,SC:395,NI:375},
+  grant:{EW:1250,SC:1350,NI:1100}, estate:{EW:2950,SC:3200,NI:2600},
+  divorce:{EW:650,SC:750,NI:700}, finances:{EW:1100,SC:950,NI:1000}, children:{EW:150,SC:150,NI:140}
+};
+function sampleDisb(id,jur){
+  const land = JUR[jur].land;
+  const D = {
+    purchase:[[jur==='SC'?'Property enquiry certificate & searches':'Property searches (local, drainage, environmental)',jur==='SC'?140:jur==='NI'?260:320],[`${land} registration fee (estimate)`,jur==='SC'?150:jur==='NI'?110:150],['ID and anti-money laundering checks',18],['Bank transfer fee',36]],
+    sale:[[jur==='SC'?'Title and legal reports':'Copies of title documents',jur==='SC'?85:12],['ID and anti-money laundering checks',18],['Bank transfer fee',36]],
+    remortgage:[['Search insurance',30],[`${land} registration fee (estimate)`,jur==='SC'?80:45],['ID checks',18]],
+    will1:[],will2:[],
+    poa:[['Registration fee (sample figure)',jur==='SC'?96:jur==='NI'?135:92]],
+    grant:[['Court fee for the grant (sample figure)',jur==='SC'?300:jur==='NI'?280:300],['Copies of the grant',16]],
+    estate:[['Court fee for the grant (sample figure)',jur==='SC'?300:jur==='NI'?280:300],['Statutory notices to creditors',jur==='SC'?0:140],['Bankruptcy searches',12]],
+    divorce:[['Court fee (sample figure)',jur==='SC'?150:jur==='NI'?250:612]],
+    finances:[['Court fee (sample figure)',jur==='SC'?0:58]],
+    children:[]
+  };
+  return (D[id]||[]).filter(d=>d[1]>0).map(([label,amount])=>({label,amount}));
+}
+const r25 = n => Math.round(n/25)*25-5 > 0 ? Math.round(n/25)*25-5 : Math.round(n/25)*25;
+const TIMES = {purchase:'8–12 weeks',sale:'8–12 weeks',remortgage:'3–5 weeks',will1:'1–2 weeks',will2:'1–2 weeks',poa:'2–3 weeks',grant:'8–16 weeks',estate:'6–12 months',divorce:'6–8 months',finances:'4–8 weeks',children:'Within 5 working days'};
+const PHONES = {England:'01632 960',Wales:'01632 960',Scotland:'0131 496 0',NorthernIreland:'028 9649 6'};
+// id, name, nation, town, multiplier, areas, remote, colour, hourly services, about
+const SAMPLE_DEF = [
+  ['ashcombe-reid','Ashcombe Reid Solicitors','England','Bristol',1.04,['conveyancing','wills','probate'],false,'#2F5D50',[],'High-street practice on Gloucester Road handling residential property and private client work for over 30 years.'],
+  ['mercer-lane','Mercer Lane Law','England','Leeds',0.93,['conveyancing'],true,'#7A3E2E',[],'Specialist residential conveyancers acting for buyers and sellers across England and Wales, with online case tracking.'],
+  ['holloway-prentice','Holloway & Prentice','England','Manchester',1.12,['conveyancing','wills','probate','family'],false,'#3B4A7A',['estate'],'Full-service high-street firm with offices in Didsbury and Chorlton.'],
+  ['brightwater','Brightwater Conveyancing LLP','England','Birmingham',0.86,['conveyancing'],true,'#1F6E8C',[],'Fixed-fee conveyancing delivered by phone and online, with a named lawyer for every case.'],
+  ['kestrel-family','Kestrel Family Law','England','Nottingham',1.0,['family'],true,'#6B3A6B',['children'],'Family law practice focused on resolving separation without going to court where possible.'],
+  ['tamsin-hale','Tamsin Hale Private Client','England','Norwich',1.18,['wills','probate'],false,'#4D5B2E',[],'Wills, powers of attorney and estates for families across Norfolk.'],
+  ['okafor-whitley','Okafor Whitley Solicitors','England','London',1.32,['conveyancing','wills','probate','family'],false,'#8A5A12',['estate','children'],'South London firm in Brixton advising on property, family and private client matters.'],
+  ['pennant-row','Pennant Row Legal','Wales','Cardiff',0.97,['conveyancing','wills','probate'],false,'#2E5E7A',[],'Bilingual Welsh and English service for property and wills across South Wales.'],
+  ['fernside','Fernside Law','England','Exeter',1.08,['conveyancing','wills','family'],false,'#5E4B8B',[],'Devon practice handling homes, wills and family matters.'],
+  ['maciver-rennie','MacIver Rennie WS','Scotland','Edinburgh',1.1,['conveyancing','wills','probate'],false,'#22495E',['estate'],'Edinburgh firm of solicitors and estate agents, handling residential property and executries.'],
+  ['dunmore-paterson','Dunmore Paterson','Scotland','Glasgow',0.95,['conveyancing','family','wills'],true,'#7A2E44',[],'Glasgow practice acting for clients across Scotland on property and family matters.'],
+  ['cairnhill','Cairnhill Legal','Scotland','Aberdeen',1.02,['conveyancing','wills','probate'],false,'#3E6B4E',[],'North-east property and private client specialists.'],
+  ['strathview','Strathview Solicitors','Scotland','Inverness',0.9,['wills','probate','family'],true,'#5A4A2E',[],'Highland firm offering wills, executries and family law, in person or by video.'],
+  ['lagan-quay','Lagan Quay Solicitors','Northern Ireland','Belfast',1.12,['conveyancing','wills','probate','family'],false,'#1E4D6B',['estate'],'Belfast city-centre firm handling property, private client and family work.'],
+  ['moyle-corrigan','Moyle & Corrigan','Northern Ireland','Ballymena',0.92,['conveyancing','wills','probate'],false,'#6A3F2A',[],'Long-established Co. Antrim practice.'],
+  ['strangford','Strangford Solicitors','Northern Ireland','Newtownards',0.97,['conveyancing','wills','probate','family'],false,'#2F5D7A',[],'Ards and North Down firm with a focus on residential property and wills.'],
+  ['foyle-street','Foyle Street Legal','Northern Ireland','Derry~Londonderry',0.88,['conveyancing','family'],true,'#4A6B2E',[],'North-west firm acting across Northern Ireland, with remote appointments available.'],
+  ['quoile','Quoile Law','Northern Ireland','Downpatrick',1.0,['wills','probate'],false,'#7A5A2E',[],'Private client practice for wills, enduring powers of attorney and estates.']
+];
+function buildSample(){
+  return SAMPLE_DEF.map(([id,name,nation,town,m,areas,remote,color,hourly,about],i)=>{
+    const jur = NATIONS[nation].jur, services = {};
+    SERVICES.filter(s=>areas.includes(s.area)).forEach((s,j)=>{
+      const wob = 1 + (((i*7+j*3)%9)-4)/100;
+      const b = BASE[s.id][jur];
+      let o;
+      if (hourly.includes(s.id)) o = {type:'hourly',rate:r25(210*m*wob)};
+      else if (s.banded) o = {type:'fixed',bands:Object.fromEntries(BANDS.map((bd,k)=>[bd.k,r25(b[k]*m*wob)]))};
+      else o = {type: s.id==='estate'||(s.id==='finances'&&i%2) ? 'from':'fixed', fee:r25(b*m*wob)};
+      o.disb = sampleDisb(s.id,jur); o.time = TIMES[s.id]; o.inc = s.inc;
+      services[s.id] = o;
+    });
+    const tel = (PHONES[nation.replace(' ','')]||'01632 960') + String(100+i*37).slice(-3);
+    const slug = name.toLowerCase().replace(/[^a-z]+/g,'').slice(0,18);
+    return {id,name,nation,town,remote,color,about,services,sample:true,
+      regNo:'Sample listing',address:`${10+i*3} High Street, ${town}`,phone:tel,
+      email:`enquiries@${slug}.example`,website:`www.${slug}.example`,updated:'2026-09-'+String(1+(i*5)%28).padStart(2,'0'),vat:true};
+  });
+}
+const SAMPLE = buildSample();
+
+/* ---------- storage (browser-only prototype) ---------- */
+const mem = {};
+const store = {
+  get(k,d){ try{ const v = localStorage.getItem('cl:'+k); return v ? JSON.parse(v) : (k in mem ? mem[k] : d); }catch(e){ return k in mem ? mem[k] : d; } },
+  set(k,v){ mem[k]=v; try{ localStorage.setItem('cl:'+k, JSON.stringify(v)); return true; }catch(e){ return false; } }
+};
+const userFirms = () => store.get('firms',{});
+const allFirms = () => { const u = userFirms(); const merged = SAMPLE.map(f=>u[f.id]||f); Object.values(u).forEach(f=>{ if(!SAMPLE.some(s=>s.id===f.id)) merged.push(f); }); return merged; };
+const firmById = id => allFirms().find(f=>f.id===id);
+function saveFirm(f){ const u = userFirms(); u[f.id]=f; store.set('firms',u); }
+const session = () => store.get('session',null);
+
+/* ---------- helpers ---------- */
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const gbp = (n,dp=0) => '£'+Number(n).toLocaleString('en-GB',{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const app = $('#app');
+let toastT;
+function toast(msg){ $('.toast')?.remove(); const t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); t.textContent=msg; document.body.append(t); clearTimeout(toastT); toastT=setTimeout(()=>t.remove(),3200); }
+function logo(f,size=52){
+  const st = `width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;`;
+  if (f.logo) return `<div class="logo" style="${st}"><img src="${f.logo}" alt="${esc(f.name)} logo"></div>`;
+  const ini = (f.name||'?').replace(/&/g,'').split(/\s+/).filter(w=>/^[A-Za-z]/.test(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?';
+  return `<div class="logo" style="${st}background:${esc(f.color||'#24507A')}" aria-hidden="true">${esc(ini)}</div>`;
+}
+const jurOf = f => NATIONS[f.nation]?.jur || 'EW';
+function quote(f, sid, band){
+  const s = f.services?.[sid]; const def = svcById(sid); if(!s) return null;
+  const disb = (s.disb||[]).reduce((a,d)=>a+(+d.amount||0),0);
+  if (s.type==='hourly') return {type:'hourly',rate:+s.rate||0,disb,total:null};
+  const legal = def.banded ? +(s.bands?.[band]||0) : +(s.fee||0);
+  if (!legal) return null;
+  const vat = f.vat===false ? 0 : legal*0.2;
+  return {type:s.type,legal,vat,disb,total:legal+vat+disb};
+}
+function feeChip(t){ return t==='fixed'?'<span class="chip fixed">Fixed fee</span>':t==='from'?'<span class="chip from">Starting price</span>':'<span class="chip">Hourly rate</span>'; }
+const ICON_TICK = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+/* ---------- state + routing ---------- */
+const state = Object.assign({area:'conveyancing',svc:'purchase',nation:'England',price:325000,town:'',remote:true,fixedOnly:false,sort:'total',compare:[]}, store.get('search',{}), {compare:[]});
+const saveSearch = () => { const {compare,...rest}=state; store.set('search',rest); };
+const VIEWS = {home:renderHome,how:renderHome,results:renderResults,firms:renderAuth,portal:renderPortal};
+let currentView = (location.hash||'#home').slice(1);
+function go(view, opts={}){
+  if (view==='portal' && !session()) view='firms';
+  if (view==='firms' && session()) view='portal';
+  currentView = view;
+  try{ const h = '#'+view; if (location.hash!==h) history.pushState(null,'',h); }catch(e){}
+  route(opts);
+}
+function route(opts={}){
+  let v = currentView; if(!VIEWS[v]) v='home';
+  if (v==='portal' && !session()) v='firms';
+  if (v==='firms' && session()) v='portal';
+  $$('.nav button').forEach(b=>b.toggleAttribute('aria-current',false));
+  const nb = $(`.nav [data-go="${v==='portal'?'firms':v}"]`); if(nb) nb.setAttribute('aria-current','page');
+  $('#nav-firm').textContent = session() ? 'Firm portal' : 'For law firms';
+  VIEWS[v](opts);
+  if (v==='how') requestAnimationFrame(()=>$('#how')?.scrollIntoView());
+  else if (!opts.keepScroll) window.scrollTo(0,0);
+  renderTray();
+}
+window.addEventListener('popstate',()=>{ currentView=(location.hash||'#home').slice(1); route(); });
+document.addEventListener('click',e=>{ const g=e.target.closest('[data-go]'); if(g){ e.preventDefault(); go(g.dataset.go); } });
+
+/* ---------- search desk (shared) ---------- */
+function servicesFor(area){ return SERVICES.filter(s=>s.area===area); }
+function deskHTML(){
+  const jur = NATIONS[state.nation].jur, def = svcById(state.svc);
+  return `<form class="desk" id="desk" aria-label="Search legal fees">
+    <div class="areas" role="group" aria-label="Area of law">${AREAS.map(a=>`<button type="button" data-area="${a.id}" aria-pressed="${a.id===state.area}">${a.name}</button>`).join('')}</div>
+    <label class="f">What do you need?
+      <select class="in" id="d-svc">${servicesFor(state.area).map(s=>`<option value="${s.id}" ${s.id===state.svc?'selected':''}>${esc(svcName(s,jur))}</option>`).join('')}</select></label>
+    <div class="row2">
+      <label class="f">${def.area==='conveyancing'?'Where is the property?':'Where do you live?'}
+        <select class="in" id="d-nation">${Object.keys(NATIONS).map(n=>`<option ${n===state.nation?'selected':''}>${n}</option>`).join('')}</select></label>
+      ${def.banded ? `<label class="f">${state.svc==='remortgage'?'Property value':state.svc==='sale'?'Sale price':'Purchase price'}
+        <div class="pre"><span>£</span><input class="in num" id="d-price" inputmode="numeric" value="${Number(state.price).toLocaleString('en-GB')}"></div></label>`
+      : `<label class="f">Town or city <small>(optional)</small><input class="in" id="d-town" value="${esc(state.town)}" placeholder="e.g. Belfast"></label>`}
+    </div>
+    ${def.banded ? `<label class="f">Town or city <small>(optional)</small><input class="in" id="d-town" value="${esc(state.town)}" placeholder="e.g. Leeds"></label>`:''}
+    <button class="btn" type="submit">Compare fees</button>
+    <p class="desk-note">Totals include VAT and the costs firms pay on your behalf, such as searches and registration fees.${def.area==='conveyancing'?` They exclude ${NATIONS[state.nation].tax}.`:''}</p>
+  </form>`;
+}
+function readDesk(){
+  const svc = $('#d-svc')?.value; if (svc) state.svc = svc;
+  const n = $('#d-nation')?.value; if (n) state.nation = n;
+  const p = $('#d-price')?.value; if (p!=null){ const v = parseInt(p.replace(/[^\d]/g,''),10); if(v) state.price=v; }
+  const t = $('#d-town'); if (t) state.town = t.value.trim();
+}
+function bindDesk(onSubmit){
+  const d = $('#desk'); if(!d) return;
+  d.addEventListener('click',e=>{ const b=e.target.closest('[data-area]'); if(!b) return; readDesk(); state.area=b.dataset.area; state.svc=servicesFor(state.area)[0].id; rerenderDesk(onSubmit); });
+  d.addEventListener('change',e=>{ if(e.target.id==='d-svc'||e.target.id==='d-nation'){ readDesk(); rerenderDesk(onSubmit); } });
+  $('#d-price')?.addEventListener('blur',e=>{ const v=parseInt(e.target.value.replace(/[^\d]/g,''),10); if(v) e.target.value=v.toLocaleString('en-GB'); });
+  d.addEventListener('submit',e=>{ e.preventDefault(); readDesk(); saveSearch(); onSubmit(); });
+}
+function rerenderDesk(onSubmit){ const old=$('#desk'); old.outerHTML = deskHTML(); bindDesk(onSubmit); }
+
+/* ---------- home ---------- */
+function cheapest(sid, nation, band){
+  const jur = NATIONS[nation].jur; let min=null;
+  allFirms().filter(f=>jurOf(f)===jur).forEach(f=>{ const q=quote(f,sid,band); if(q&&q.total&&(min===null||q.total<min)) min=q.total; });
+  return min;
+}
+function renderHome(){
+  const nFirms = allFirms().length;
+  app.innerHTML = `
+  <section class="hero"><div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Solicitors' fees, side by side</p>
+      <h1 style="margin-top:12px">Know the <span class="hl">full price</span> before you pick a solicitor.</h1>
+      <p class="lede">Compare fixed fees for conveyancing, wills, probate and family law from firms across the UK. Every total includes VAT and disbursements, so the number you see is the number you pay.</p>
+      <div class="hero-facts">
+        <span>${ICON_TICK} Prices set by the firms themselves</span>
+        <span>${ICON_TICK} All four UK nations</span>
+        <span>${ICON_TICK} Free to use, no sign-up</span>
+      </div>
+    </div>
+    ${deskHTML()}
+  </div></section>
+
+  <section class="band alt"><div class="wrap">
+    <div class="sec-head"><div><h2>High-street law, priced up front</h2><p>Typical starting totals from listed firms in ${esc(state.nation)}, including VAT and disbursements.</p></div></div>
+    <div class="tiles">${AREAS.map(a=>{
+      const jur = NATIONS[state.nation].jur; const svcs = servicesFor(a.id); const first = svcs[0];
+      const min = cheapest(first.id, state.nation, bandFor(state.price));
+      return `<button class="tile" data-tile="${a.id}">
+        <h3>${a.id==='probate'&&jur==='SC'?'Executries':a.name}</h3>
+        <ul>${svcs.map(s=>`<li>${esc(svcName(s,jur))}</li>`).join('')}</ul>
+        <p class="from muted">${min?`${esc(svcName(first,jur))} from <b class="num" style="color:var(--ink)">${gbp(min)}</b>${first.banded?' <span>for a '+BANDS.find(b=>b.k===bandFor(state.price)).label.toLowerCase()+' home</span>':''}`:'No firms listed yet'}</p>
+      </button>`; }).join('')}</div>
+  </div></section>
+
+  <section class="band" id="how"><div class="wrap">
+    <div class="sec-head"><div><h2>How it works</h2><p>${nFirms} firms list their prices directly. We show them in the same format so you can compare like with like.</p></div></div>
+    <div class="steps">
+      <div class="step"><span class="n">1</span><h3>Tell us what you need</h3><p>Pick the service and where you are. For property, add the price, since conveyancing fees are set in value bands.</p></div>
+      <div class="step"><span class="n">2</span><h3>Compare the full cost</h3><p>See each firm's legal fee, VAT and disbursements added up. Tick up to three firms to compare what each fee includes.</p></div>
+      <div class="step"><span class="n">3</span><h3>Ask for a quote</h3><p>Send your details to the firms you like. They reply directly with a written quote and their terms of business.</p></div>
+    </div>
+  </div></section>
+
+  <section class="band alt"><div class="wrap">
+    <div class="sec-head"><div><h2>Three legal systems, one search</h2><p>Property and succession law differ across the UK, so we only show firms qualified where your matter is.</p></div></div>
+    <div class="juris">
+      <div class="jur"><h3>England &amp; Wales</h3><p>Solicitors regulated by the SRA. Property registered with HM Land Registry. In Wales, buyers pay Land Transaction Tax.</p></div>
+      <div class="jur"><h3>Scotland</h3><p>Solicitors regulated by the Law Society of Scotland. Executors apply for confirmation rather than probate, and buyers pay LBTT.</p></div>
+      <div class="jur"><h3>Northern Ireland</h3><p>Solicitors regulated by the Law Society of Northern Ireland. Attorneys are appointed under enduring powers of attorney.</p></div>
+    </div>
+  </div></section>
+
+  <section class="band"><div class="wrap"><div class="cta">
+    <div><h2>Run a high-street practice?</h2><p>List your fees on Compare Legal and receive enquiries from clients who already know your price. Set it up once and update it whenever your fees change.</p>
+      <button class="btn" data-go="firms">List your firm</button></div>
+    <ul>
+      <li>${ICON_TICK} Set fixed fees, value bands and disbursements</li>
+      <li>${ICON_TICK} Add your logo, contact details and regulator number</li>
+      <li>${ICON_TICK} Receive quote requests in one inbox</li>
+      <li>${ICON_TICK} Meets SRA price transparency expectations in one place</li>
+    </ul>
+  </div></div></section>`;
+  bindDesk(()=>go('results'));
+  $$('[data-tile]').forEach(t=>t.addEventListener('click',()=>{ state.area=t.dataset.tile; state.svc=servicesFor(state.area)[0].id; saveSearch(); go('results'); }));
+}
+
+/* ---------- results ---------- */
+function matches(){
+  const jur = NATIONS[state.nation].jur, band = bandFor(state.price), town = state.town.toLowerCase();
+  const me = session()?.firmId;
+  let rows = allFirms().filter(f=>jurOf(f)===jur && f.services?.[state.svc] && (f.listed!==false || f.id===me)).map(f=>({f,q:quote(f,state.svc,band)})).filter(r=>r.q);
+  if (town) rows = rows.filter(({f})=> f.town.toLowerCase().includes(town) || (state.remote && f.remote));
+  if (state.fixedOnly) rows = rows.filter(r=>r.q.type==='fixed');
+  const key = state.sort;
+  rows.sort((a,b)=>{
+    if (key==='name') return a.f.name.localeCompare(b.f.name);
+    const av = key==='legal' ? (a.q.legal??Infinity) : (a.q.total??Infinity);
+    const bv = key==='legal' ? (b.q.legal??Infinity) : (b.q.total??Infinity);
+    if (town){ const al=a.f.town.toLowerCase().includes(town)?0:1, bl=b.f.town.toLowerCase().includes(town)?0:1; if(al!==bl) return al-bl; }
+    return av-bv;
+  });
+  return rows;
+}
+function renderResults(){
+  const jur = NATIONS[state.nation].jur, def = svcById(state.svc);
+  app.innerHTML = `
+  <div class="res-head"><div class="wrap">
+    <p class="eyebrow">${esc(AREAS.find(a=>a.id===def.area).name)} · ${esc(JUR[jur].label)}</p>
+    <h1 style="font-size:clamp(1.6rem,3vw,2.3rem);margin-top:6px">${esc(svcName(def,jur))}${def.banded?` <span class="muted num" style="font-size:.6em">for ${gbp(state.price)}</span>`:''}</h1>
+    <form class="res-bar" id="rbar">
+      <label class="f">Service<select class="in" id="r-svc">${AREAS.map(a=>`<optgroup label="${a.name}">${servicesFor(a.id).map(s=>`<option value="${s.id}" ${s.id===state.svc?'selected':''}>${esc(svcName(s,jur))}</option>`).join('')}</optgroup>`).join('')}</select></label>
+      <label class="f">Nation<select class="in" id="r-nation">${Object.keys(NATIONS).map(n=>`<option ${n===state.nation?'selected':''}>${n}</option>`).join('')}</select></label>
+      <label class="f">${def.banded?'Price':'Town'}${def.banded?`<div class="pre"><span>£</span><input class="in num" id="r-price" inputmode="numeric" value="${Number(state.price).toLocaleString('en-GB')}"></div>`:`<input class="in" id="r-town" value="${esc(state.town)}" placeholder="Any">`}</label>
+      ${def.banded?`<label class="f">Town<input class="in" id="r-town" value="${esc(state.town)}" placeholder="Any"></label>`:'<span></span>'}
+      <button class="btn" type="submit">Update</button>
+    </form>
+  </div></div>
+  <div class="wrap res-body">
+    <aside class="filters" aria-label="Filters">
+      <div class="fgroup"><span class="eyebrow">Refine</span>
+        <label class="check"><input type="checkbox" id="f-fixed" ${state.fixedOnly?'checked':''}> Fixed fees only</label>
+        <label class="check"><input type="checkbox" id="f-remote" ${state.remote?'checked':''}> Include firms that act remotely across ${esc(JUR[jur].label)}</label>
+      </div>
+      <div class="notice"><b>What the total includes</b><span>Legal fee, VAT at 20% and disbursements.${def.area==='conveyancing'?` It excludes ${esc(NATIONS[state.nation].tax)}, which depends on your circumstances.`:''}${def.banded?` Fees shown are for the ${BANDS.find(b=>b.k===bandFor(state.price)).label.toLowerCase()} band.`:''}</span></div>
+    </aside>
+    <div style="min-width:0">
+      <div class="list-top"><p id="count" class="muted"></p>
+        <label class="muted" style="display:flex;gap:8px;align-items:center;font-size:.88rem">Sort by
+          <select class="in" id="sort"><option value="total">Lowest total</option><option value="legal">Lowest legal fee</option><option value="name">Firm name</option></select></label></div>
+      <div class="cards" id="cards"></div>
+    </div>
+  </div>`;
+  $('#sort').value = state.sort;
+  const bar = $('#rbar');
+  const readBar = ()=>{ state.svc=$('#r-svc').value; state.area=svcById(state.svc).area; state.nation=$('#r-nation').value; const p=$('#r-price'); if(p){ const v=parseInt(p.value.replace(/[^\d]/g,''),10); if(v) state.price=v; } const t=$('#r-town'); state.town=t?t.value.trim():''; };
+  bar.addEventListener('submit',e=>{ e.preventDefault(); readBar(); saveSearch(); state.compare=[]; renderResults(); renderTray(); });
+  $('#r-svc').addEventListener('change',()=>{ readBar(); saveSearch(); state.compare=[]; renderResults(); renderTray(); });
+  $('#r-nation').addEventListener('change',()=>{ readBar(); saveSearch(); state.compare=[]; renderResults(); renderTray(); });
+  $('#f-fixed').addEventListener('change',e=>{ state.fixedOnly=e.target.checked; saveSearch(); drawCards(); });
+  $('#f-remote').addEventListener('change',e=>{ state.remote=e.target.checked; saveSearch(); drawCards(); });
+  $('#sort').addEventListener('change',e=>{ state.sort=e.target.value; saveSearch(); drawCards(); });
+  drawCards();
+}
+function drawCards(){
+  const rows = matches(), jur = NATIONS[state.nation].jur, me = session()?.firmId, town = state.town.toLowerCase();
+  $('#count').innerHTML = `<b style="color:var(--ink)">${rows.length}</b> firm${rows.length===1?'':'s'} in ${esc(JUR[jur].label)}${state.town?` near ${esc(state.town)}`:''}`;
+  const cards = $('#cards');
+  if (!rows.length){ cards.innerHTML = `<div class="empty"><h3>No firms match yet</h3><p class="muted">Try removing the town, or include firms that act remotely.</p><button class="btn ghost sm" id="clr">Clear town</button></div>`; $('#clr').onclick=()=>{ state.town=''; saveSearch(); renderResults(); }; return; }
+  cards.innerHTML = rows.map(({f,q})=>{
+    const s = f.services[state.svc]; const away = town && !f.town.toLowerCase().includes(town);
+    return `<article class="card ${f.id===me?'mine':''}">
+      ${logo(f)}
+      <div style="min-width:0">
+        <h3>${esc(f.name)}</h3>
+        <div class="meta"><span>${esc(f.town)}, ${esc(f.nation)}</span><span>${JUR[jurOf(f)].short} regulated</span></div>
+        <div class="chips">${feeChip(q.type)}${f.remote?`<span class="chip">${away?'Acts remotely':'Remote appointments'}</span>`:''}${s.time?`<span class="chip">${esc(s.time)}</span>`:''}${f.id===me?'<span class="chip mine">Your listing</span>':''}${f.sample?'<span class="chip">Sample firm</span>':''}</div>
+        ${s.inc?`<p class="inc">${esc(s.inc)}</p>`:''}
+      </div>
+      <div class="price">
+        ${q.type==='hourly'
+          ? `<span class="eyebrow">Hourly rate</span><span class="total num">${gbp(q.rate)}<span style="font-size:.55em;font-weight:500" class="muted"> /hr + VAT</span></span><span class="break">Ask the firm for an estimate</span>`
+          : `<span class="eyebrow">${q.type==='from'?'Total from':'Total'}</span><span class="total num"><span class="hl">${gbp(q.total)}</span></span><span class="break num">${gbp(q.legal)} fee${q.vat?` + ${gbp(q.vat)} VAT`:''}${q.disb?` + ${gbp(q.disb)} disbursements`:''}</span>`}
+        <label class="cmp-toggle"><input type="checkbox" data-cmp="${f.id}" ${state.compare.includes(f.id)?'checked':''}> Compare</label>
+        <div class="acts"><button class="btn ghost sm" data-firm="${f.id}">See all fees</button><button class="btn sm" data-quote="${f.id}">Request a quote</button></div>
+      </div>
+    </article>`;}).join('');
+  $$('[data-firm]',cards).forEach(b=>b.onclick=()=>openFirm(b.dataset.firm));
+  $$('[data-quote]',cards).forEach(b=>b.onclick=()=>openFirm(b.dataset.quote,true));
+  $$('[data-cmp]',cards).forEach(c=>c.onchange=()=>{
+    const id=c.dataset.cmp;
+    if (c.checked){ if(state.compare.length>=3){ c.checked=false; toast('You can compare up to three firms at a time.'); return; } state.compare.push(id); }
+    else state.compare = state.compare.filter(x=>x!==id);
+    renderTray();
+  });
+}
+function renderTray(){
+  $('.tray')?.remove();
+  const onResults = currentView==='results';
+  if (!onResults || !state.compare.length) { document.body.style.paddingBottom=''; return; }
+  const t = document.createElement('div'); t.className='tray';
+  t.innerHTML = `<div class="wrap"><span style="font-weight:600">Compare</span><div class="slots">${state.compare.map(id=>{ const f=firmById(id); return `<span class="slot">${esc(f?.name)}<button aria-label="Remove ${esc(f?.name)}" data-rm="${id}">✕</button></span>`; }).join('')}</div><button class="btn sm" id="do-cmp" ${state.compare.length<2?'disabled':''}>${state.compare.length<2?'Pick one more':'Compare '+state.compare.length+' firms'}</button></div>`;
+  document.body.append(t); document.body.style.paddingBottom = '80px';
+  $$('[data-rm]',t).forEach(b=>b.onclick=()=>{ state.compare=state.compare.filter(x=>x!==b.dataset.rm); const c=$(`[data-cmp="${b.dataset.rm}"]`); if(c) c.checked=false; renderTray(); });
+  $('#do-cmp',t).onclick=openCompare;
+}
+
+/* ---------- modals ---------- */
+function modal(html,wide=false){
+  closeModal();
+  const s = document.createElement('div'); s.className='scrim'; s.innerHTML = `<div class="modal ${wide?'wide':''}" role="dialog" aria-modal="true">${html}</div>`;
+  document.body.append(s); document.body.style.overflow='hidden';
+  s.addEventListener('click',e=>{ if(e.target===s || e.target.closest('.x')) closeModal(); });
+  setTimeout(()=>s.querySelector('.x')?.focus(),0);
+  return s;
+}
+function closeModal(){ $('.scrim')?.remove(); document.body.style.overflow=''; }
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+function copyBtn(text){ return `<button class="copy" data-copy="${esc(text)}">Copy</button>`; }
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-copy]'); if(!b) return; const t=b.dataset.copy;
+  const done=()=>{ b.textContent='Copied'; setTimeout(()=>b.textContent='Copy',1500); };
+  try{ navigator.clipboard.writeText(t).then(done,()=>selectText(b)); }catch(err){ selectText(b); } });
+function selectText(b){ const dd=b.previousElementSibling; const r=document.createRange(); r.selectNodeContents(dd); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
+
+function feeTableHTML(f){
+  const jur = jurOf(f), band = bandFor(state.price);
+  return AREAS.map(a=>{
+    const svcs = servicesFor(a.id).filter(s=>f.services?.[s.id]); if(!svcs.length) return '';
+    return `<div style="display:grid;gap:10px"><h3 style="font-size:1.05rem">${a.name}</h3><div class="tbl-wrap"><table>
+      <thead><tr><th>Service</th><th>Fee type</th>${svcs.some(s=>s.banded)?BANDS.map(b=>`<th class="r">${b.label.replace('£250,001 – £500,000','£250k–£500k').replace('£500,001 – £1m','£500k–£1m').replace('Up to £250,000','To £250k')}</th>`).join(''):'<th class="r">Fee (ex VAT)</th>'}</tr></thead>
+      <tbody>${svcs.map(s=>{ const o=f.services[s.id];
+        const cells = s.banded ? (o.type==='hourly'?`<td class="r num" colspan="4">${gbp(o.rate)}/hr</td>`:BANDS.map(b=>`<td class="r num" ${b.k===band&&s.id===state.svc?'style="font-weight:700"':''}>${o.bands?.[b.k]?gbp(o.bands[b.k]):'–'}</td>`).join(''))
+          : `<td class="r num" ${svcs.some(x=>x.banded)?'colspan="4"':''}>${o.type==='hourly'?gbp(o.rate)+'/hr':gbp(o.fee)}</td>`;
+        return `<tr><td>${esc(svcName(s,jur))}${o.time?`<br><span class="muted" style="font-size:.8rem">${esc(o.time)}</span>`:''}</td><td>${o.type==='fixed'?'Fixed':o.type==='from'?'From':'Hourly'}</td>${cells}</tr>`; }).join('')}</tbody></table></div></div>`;
+  }).join('');
+}
+function openFirm(id, toQuote=false){
+  const f = firmById(id); if(!f) return; const jur = jurOf(f), sid = f.services?.[state.svc]?state.svc:Object.keys(f.services||{})[0];
+  const def = sid ? svcById(sid) : null, o = sid ? f.services[sid] : {}, q = sid ? quote(f,sid,bandFor(state.price)) : null;
+  const s = modal(`
+    <div class="m-head">${logo(f,64)}<div style="min-width:0"><h2 style="font-size:1.5rem">${esc(f.name)}</h2><p class="muted" style="font-size:.9rem">${esc(f.town)}, ${esc(f.nation)} · Fees updated ${new Date(f.updated||Date.now()).toLocaleDateString('en-GB',{month:'long',year:'numeric'})}</p></div><button class="x" aria-label="Close">×</button></div>
+    <div class="m-body">
+      <div class="m-cols">
+        <div style="display:grid;gap:14px;align-content:start;min-width:0">
+          ${f.about?`<p>${esc(f.about)}</p>`:''}
+          ${def?`<div><p class="eyebrow">Your quote: ${esc(svcName(def,jur))}${def.banded?` at ${gbp(state.price)}`:''}</p></div>`:'<p class="muted">This firm has not published any prices yet.</p>'}
+          ${q && q.type!=='hourly' ? `<div class="tbl-wrap"><table><tbody>
+            <tr><td>Legal fee${q.type==='from'?' (starting price)':''}</td><td class="r num">${gbp(q.legal,2)}</td></tr>
+            <tr><td>VAT at 20%</td><td class="r num">${gbp(q.vat,2)}</td></tr>
+            ${(o.disb||[]).map(d=>`<tr><td>${esc(d.label)}</td><td class="r num">${gbp(d.amount,2)}</td></tr>`).join('')}
+            <tr class="tot"><td>Total</td><td class="r num"><span class="hl">${gbp(q.total,2)}</span></td></tr></tbody></table></div>`
+          : q ? `<p>Charged at <b>${gbp(q.rate)} per hour plus VAT</b>. Ask the firm for an estimate based on your circumstances.</p>` : ''}
+          ${o.inc?`<p class="muted" style="font-size:.92rem"><b style="color:var(--ink)">Included:</b> ${esc(o.inc)}</p>`:''}
+          ${def?.area==='conveyancing'?`<p class="muted" style="font-size:.85rem">Excludes ${esc(NATIONS[state.nation].tax)}. Leasehold, new-build and Help to Buy cases usually cost more.</p>`:''}
+        </div>
+        <div style="display:grid;gap:16px;align-content:start">
+          <dl class="contact" style="margin:0">
+            <div><dt>Phone</dt><dd class="num">${esc(f.phone)}</dd>${copyBtn(f.phone)}</div>
+            <div><dt>Email</dt><dd>${esc(f.email)}</dd>${copyBtn(f.email)}</div>
+            ${f.website?`<div><dt>Website</dt><dd>${esc(f.website)}</dd>${copyBtn(f.website)}</div>`:''}
+            <div><dt>Address</dt><dd>${esc(f.address)}</dd><span></span></div>
+            <div><dt>Regulator</dt><dd>${esc(JUR[jur].reg)}<br><span class="mono muted">${esc(f.regNo||'')}</span></dd><span></span></div>
+          </dl>
+          <form class="form-grid" id="qform" style="border-top:1px solid var(--line);padding-top:16px">
+            <h3 style="font-family:var(--f-body);font-weight:700;font-size:1rem">Request a quote</h3>
+            <label class="f">Your name<input class="in" id="q-name" required autocomplete="name"></label>
+            <label class="f">Email<input class="in" id="q-email" type="email" required autocomplete="email"></label>
+            <label class="f">Phone <small>(optional)</small><input class="in" id="q-phone" type="tel" autocomplete="tel"></label>
+            <label class="f">Anything the firm should know? <small>(optional)</small><textarea class="in" id="q-msg" placeholder="e.g. leasehold flat, mortgage with Nationwide"></textarea></label>
+            <button class="btn" type="submit">Send request to ${esc(f.name)}</button>
+            <p class="muted" style="font-size:.8rem">The firm will contact you with a written quote. In this prototype, requests appear in the firm's portal in this browser.</p>
+          </form>
+        </div>
+      </div>
+      <div style="display:grid;gap:18px"><h2 style="font-size:1.3rem">All published fees <span class="muted" style="font-family:var(--f-body);font-size:.8rem">excluding VAT and disbursements</span></h2>${feeTableHTML(f)}</div>
+    </div>`, true);
+  if (toQuote) setTimeout(()=>$('#q-name',s)?.focus(),50);
+  $('#qform',s).addEventListener('submit',e=>{
+    e.preventDefault();
+    const enq = store.get('enquiries',[]);
+    enq.unshift({id:Date.now().toString(36),firmId:f.id,svc:sid,nation:state.nation,price:def?.banded?state.price:null,name:$('#q-name',s).value.trim(),email:$('#q-email',s).value.trim(),phone:$('#q-phone',s).value.trim(),msg:$('#q-msg',s).value.trim(),total:q?.total??null,at:new Date().toISOString()});
+    store.set('enquiries',enq);
+    e.target.innerHTML = `<div class="ok"><b>Request saved for ${esc(f.name)}.</b><br>On the live site the firm is emailed straight away and usually replies within one working day.</div>`;
+  });
+}
+function openCompare(){
+  const band = bandFor(state.price), def = svcById(state.svc), jur = NATIONS[state.nation].jur;
+  const firms = state.compare.map(firmById).filter(Boolean); const qs = firms.map(f=>quote(f,state.svc,band));
+  const totals = qs.map(q=>q?.total).filter(Boolean); const best = Math.min(...totals);
+  const row = (label, fn) => `<tr><th scope="row">${label}</th>${firms.map((f,i)=>`<td>${fn(f,qs[i],f.services[state.svc])}</td>`).join('')}</tr>`;
+  const s = modal(`
+    <div class="m-head"><div><p class="eyebrow">Comparing ${firms.length} firms</p><h2 style="font-size:1.5rem;margin-top:4px">${esc(svcName(def,jur))}${def.banded?` at ${gbp(state.price)}`:''}</h2></div><button class="x" aria-label="Close">×</button></div>
+    <div class="m-body"><div class="tbl-wrap"><table class="cmp">
+      <thead><tr><th></th>${firms.map(f=>`<th style="text-transform:none;letter-spacing:0;font-size:.95rem;color:var(--ink)"><div style="display:flex;gap:10px;align-items:center">${logo(f,36)}<span>${esc(f.name)}</span></div></th>`).join('')}</tr></thead>
+      <tbody>
+        ${row('Total',(f,q)=>q?.total?`<b class="num" style="font-size:1.2rem">${q.total===best?`<span class="hl">${gbp(q.total)}</span>`:gbp(q.total)}</b>${q.total===best&&totals.length>1?'<br><span class="chip fixed" style="display:inline-block;margin-top:6px">Lowest total</span>':`<br><span class="muted num" style="font-size:.82rem">+${gbp(q.total-best)}</span>`}`:`<span class="num">${gbp(q.rate)}/hr + VAT</span>`)}
+        ${row('Fee type',(f,q)=>feeChip(q.type))}
+        ${row('Legal fee',(f,q)=>q.legal?`<span class="num">${gbp(q.legal,2)}</span>`:'–')}
+        ${row('VAT',(f,q)=>q.vat?`<span class="num">${gbp(q.vat,2)}</span>`:'–')}
+        ${row('Disbursements',(f,q,o)=>(o.disb||[]).length?(o.disb.map(d=>`<div style="display:flex;justify-content:space-between;gap:10px;font-size:.85rem"><span class="muted">${esc(d.label)}</span><span class="num">${gbp(d.amount)}</span></div>`).join('')):'<span class="muted">None</span>')}
+        ${row('Included',(f,q,o)=>`<span style="font-size:.88rem">${esc(o.inc||'Not stated')}</span>`)}
+        ${row('Timescale',(f,q,o)=>esc(o.time||'Not stated'))}
+        ${row('Location',f=>`${esc(f.town)}${f.remote?'<br><span class="muted" style="font-size:.85rem">Also acts remotely</span>':''}`)}
+        ${row('Regulator',f=>`${JUR[jurOf(f)].short}`)}
+        ${row('',f=>`<button class="btn sm" data-q2="${f.id}">Request a quote</button>`)}
+      </tbody></table></div></div>`, true);
+  $$('[data-q2]',s).forEach(b=>b.onclick=()=>openFirm(b.dataset.q2,true));
+}
+
+/* ---------- firm auth ---------- */
+let authMode = 'signin';
+function renderAuth(){
+  app.innerHTML = `<div class="wrap auth">
+    <div>
+      <p class="eyebrow">For law firms</p>
+      <h1 style="margin-top:10px;font-size:clamp(1.9rem,3.6vw,2.7rem)">Put your fees in front of clients who are ready to instruct.</h1>
+      <div class="perks">
+        <div class="perk">${ICON_TICK}<div><h3 style="font-family:var(--f-body);font-weight:700;font-size:1rem">Your prices, your way</h3><p>Fixed fees, starting prices or hourly rates. Conveyancing fees by property value band, with each disbursement listed separately.</p></div></div>
+        <div class="perk">${ICON_TICK}<div><h3 style="font-family:var(--f-body);font-weight:700;font-size:1rem">A profile clients trust</h3><p>Your logo, contact details, regulator and a short description of the firm, shown with every quote.</p></div></div>
+        <div class="perk">${ICON_TICK}<div><h3 style="font-family:var(--f-body);font-weight:700;font-size:1rem">Enquiries in one place</h3><p>Quote requests arrive with the service, property value and the price the client saw.</p></div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="seg" role="group" aria-label="Account"><button type="button" data-mode="signin" aria-pressed="${authMode==='signin'}">Sign in</button><button type="button" data-mode="register" aria-pressed="${authMode==='register'}">Register your firm</button></div>
+      <form id="authf" class="form-grid">
+        ${authMode==='register'?`
+          <label class="f">Firm name<input class="in" id="a-firm" required autocomplete="organization"></label>
+          <label class="f">Nation<select class="in" id="a-nation">${Object.keys(NATIONS).map(n=>`<option>${n}</option>`).join('')}</select></label>`:''}
+        <label class="f">Work email<input class="in" id="a-email" type="email" required autocomplete="email"></label>
+        <label class="f">Password<input class="in" id="a-pw" type="password" required minlength="8" autocomplete="${authMode==='register'?'new-password':'current-password'}"><small>${authMode==='register'?'At least 8 characters':''}</small></label>
+        <p class="err" id="a-err" hidden></p>
+        <button class="btn" type="submit">${authMode==='register'?'Create firm account':'Sign in'}</button>
+      </form>
+      <div style="border-top:1px solid var(--line);padding-top:16px;display:grid;gap:8px">
+        <p class="muted" style="font-size:.88rem">Want to look around first? Open the portal as a sample firm, Strangford Solicitors in Newtownards.</p>
+        <button class="btn ghost" id="demo">Try the demo firm account</button>
+      </div>
+    </div>
+  </div>`;
+  $$('[data-mode]').forEach(b=>b.onclick=()=>{ authMode=b.dataset.mode; renderAuth(); });
+  $('#demo').onclick = ()=>{ store.set('session',{email:'demo@strangford.example',firmId:'strangford',demo:true}); toast('Signed in as Strangford Solicitors'); go('portal'); };
+  $('#authf').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const email = $('#a-email').value.trim().toLowerCase(), pw = $('#a-pw').value, err = $('#a-err');
+    const accounts = store.get('accounts',{}); const h = await hash(pw);
+    if (authMode==='signin'){
+      const a = accounts[email]; if(!a || a.pw!==h){ err.textContent='That email and password don’t match an account in this browser. Check them, or register your firm.'; err.hidden=false; return; }
+      store.set('session',{email,firmId:a.firmId}); toast('Signed in'); go('portal');
+    } else {
+      if (accounts[email]){ err.textContent='An account with this email already exists. Sign in instead.'; err.hidden=false; return; }
+      const name = $('#a-firm').value.trim(), nation=$('#a-nation').value;
+      const id = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'-'+Date.now().toString(36).slice(-4);
+      saveFirm({id,name,nation,town:'',address:'',phone:'',email,website:'',regNo:'',remote:false,about:'',color:'#24507A',services:{},vat:true,updated:new Date().toISOString(),listed:false});
+      accounts[email] = {pw:h,firmId:id}; store.set('accounts',accounts); store.set('session',{email,firmId:id});
+      toast('Account created. Add your details and prices to go live.'); go('portal');
+    }
+  });
+}
+async function hash(s){ try{ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('cl:'+s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }catch(e){ return 'p:'+s.length+':'+[...s].reduce((a,c)=>(a*31+c.charCodeAt(0))|0,7); } }
+
+/* ---------- firm portal ---------- */
+let tab = 'details', draft = null;
+function checklist(f){
+  const priced = Object.keys(f.services||{}).length;
+  return [
+    ['Firm name and nation', !!(f.name&&f.nation)],
+    ['Town and address', !!(f.town&&f.address)],
+    ['Phone and email', !!(f.phone&&f.email)],
+    ['Regulator number', !!f.regNo],
+    ['Logo uploaded', !!f.logo || !!f.sample],
+    ['At least one service priced', priced>0]
+  ];
+}
+const isLive = f => checklist(f).filter(([l])=>l!=='Logo uploaded').every(([,ok])=>ok);
+function renderPortal(){
+  const sess = session(); const f0 = firmById(sess.firmId);
+  if (!f0){ store.set('session',null); return go('firms'); }
+  draft = JSON.parse(JSON.stringify(f0));
+  const enq = store.get('enquiries',[]).filter(e=>e.firmId===f0.id);
+  const live = isLive(f0) && f0.listed!==false;
+  app.innerHTML = `
+  <div class="dash-head"><div class="wrap">
+    <div class="dash-id">${logo(f0,56)}<div style="min-width:0;flex:1"><h1 style="font-size:1.7rem">${esc(f0.name)}</h1>
+      <p class="muted" style="font-size:.9rem">${esc(sess.email)} · <span class="status ${live?'live':'draft'}">${live?'Live on Compare Legal':'Draft: not yet visible to clients'}</span></p></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="view-live">View listing</button><button class="btn ghost sm" id="signout">Sign out</button></div></div>
+    <div class="tabs" role="tablist">${[['details','Firm details'],['prices','Prices'],['enquiries',`Enquiries${enq.length?` (${enq.length})`:''}`]].map(([k,l])=>`<button role="tab" data-tab="${k}" aria-selected="${tab===k}">${l}</button>`).join('')}</div>
+  </div></div>
+  <div class="wrap dash-body"><div id="pane" style="min-width:0"></div>
+    <aside class="side">
+      <div class="box"><p class="eyebrow">Listing checklist</p><ul class="todo">${checklist(f0).map(([l,ok])=>`<li class="${ok?'done':''}"><span class="dot">${ok?'✓':''}</span><span>${l}</span></li>`).join('')}</ul>
+        ${!live && isLive(f0)?'<button class="btn sm" id="publish">Publish listing</button>':''}</div>
+      <div class="box"><p class="eyebrow">How clients see your price</p><p style="font-size:.88rem" class="muted">Totals are worked out as your fee, plus VAT at 20%, plus the disbursements you list. Keep disbursements up to date so your total stays accurate.</p></div>
+      ${sess.demo?'<div class="box"><p class="eyebrow">Demo account</p><p style="font-size:.88rem" class="muted">Changes are saved in this browser. Edit a price, then search for that service to see your listing update.</p></div>':''}
+    </aside></div>`;
+  $$('[data-tab]').forEach(b=>b.onclick=()=>{ tab=b.dataset.tab; $$('[data-tab]').forEach(x=>x.setAttribute('aria-selected',x===b)); drawPane(); });
+  $('#signout').onclick=()=>{ store.set('session',null); tab='details'; toast('Signed out'); go('firms'); };
+  $('#view-live').onclick=()=>openFirm(f0.id);
+  $('#publish')?.addEventListener('click',()=>{ const f=firmById(f0.id); f.listed=true; saveFirm(f); toast('Your listing is live'); renderPortal(); });
+  drawPane();
+}
+function drawPane(){
+  const p = $('#pane');
+  if (tab==='details') p.innerHTML = detailsPane();
+  else if (tab==='prices') p.innerHTML = pricesPane();
+  else p.innerHTML = enquiriesPane();
+  bindPane();
+}
+function detailsPane(){
+  const f = draft, jur = jurOf(f);
+  return `<form class="pane" id="detf">
+    <h3>Logo</h3>
+    <div class="logo-up">${logo(f,84)}<label class="drop" id="drop" for="logo-in"><b>Upload your logo</b><span class="muted">PNG, JPG or SVG, up to 2 MB. Square logos look best.</span><input type="file" id="logo-in" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden></label>
+      ${f.logo?'<button type="button" class="btn ghost sm" id="logo-rm">Remove</button>':''}</div>
+    <h3 style="margin-top:6px">Firm</h3>
+    <div class="row2"><label class="f">Firm name<input class="in" id="p-name" value="${esc(f.name)}" required></label>
+      <label class="f">Nation<select class="in" id="p-nation">${Object.keys(NATIONS).map(n=>`<option ${n===f.nation?'selected':''}>${n}</option>`).join('')}</select></label></div>
+    <div class="row2"><label class="f">Regulator<input class="in" value="${esc(JUR[jur].reg)}" disabled id="p-reg"></label>
+      <label class="f">${jur==='EW'?'SRA number':'Membership or firm number'}<input class="in mono" id="p-regno" value="${esc(f.regNo)}"></label></div>
+    <label class="f">About the firm <small>Up to 300 characters, shown on your profile</small><textarea class="in" id="p-about" maxlength="300">${esc(f.about)}</textarea></label>
+    <h3 style="margin-top:6px">Contact</h3>
+    <div class="row2"><label class="f">Town or city<input class="in" id="p-town" value="${esc(f.town)}"></label>
+      <label class="f">Address<input class="in" id="p-address" value="${esc(f.address)}" autocomplete="street-address"></label></div>
+    <div class="row2"><label class="f">Phone<input class="in" id="p-phone" type="tel" value="${esc(f.phone)}"></label>
+      <label class="f">Enquiries email<input class="in" id="p-email" type="email" value="${esc(f.email)}"></label></div>
+    <label class="f">Website<input class="in" id="p-web" value="${esc(f.website)}" placeholder="www.yourfirm.co.uk"></label>
+    <label class="check"><input type="checkbox" id="p-remote" ${f.remote?'checked':''}> We act for clients anywhere in ${esc(JUR[jur].label)} by phone and video</label>
+    <label class="check"><input type="checkbox" id="p-vat" ${f.vat!==false?'checked':''}> We are VAT registered (adds 20% to legal fees)</label>
+    <div class="save-bar"><span class="muted" id="dirty" style="font-size:.85rem"></span><button class="btn" type="submit">Save details</button></div>
+  </form>`;
+}
+function pricesPane(){
+  const f = draft, jur = jurOf(f);
+  return `<form class="pane" id="pricef">
+    <div><h3>Your prices</h3><p class="muted" style="font-size:.92rem;margin-top:4px">Turn on each service you offer. Enter legal fees excluding VAT, and list each disbursement separately.</p></div>
+    ${AREAS.map(a=>`<div class="area-h"><span class="eyebrow">${a.name}</span></div>${servicesFor(a.id).map(s=>svcEditor(s,f.services[s.id],jur)).join('')}`).join('')}
+    <div class="save-bar"><span class="muted" style="font-size:.85rem" id="psum"></span><button class="btn" type="submit">Save prices</button></div>
+  </form>`;
+}
+function svcEditor(s,o,jur){
+  const on = !!o; o = o || {type:'fixed',disb:[],time:'',inc:''};
+  const fee = s.banded ? `<div class="bands">${BANDS.map(b=>`<label class="f" style="font-weight:500;font-size:.8rem">${b.label}<div class="pre"><span>£</span><input class="in num" data-band="${b.k}" inputmode="decimal" value="${o.bands?.[b.k]??''}"></div></label>`).join('')}</div>`
+    : `<label class="f" style="max-width:220px">Fee excluding VAT<div class="pre"><span>£</span><input class="in num" data-fee inputmode="decimal" value="${o.fee??''}"></div></label>`;
+  return `<div class="svc" data-svc="${s.id}">
+    <div class="svc-h"><label class="check"><input type="checkbox" data-on ${on?'checked':''}> ${esc(svcName(s,jur))}</label><span class="sum num" data-sum>${on?summary(s,o):'Not offered'}</span></div>
+    <div class="svc-b" ${on?'':'hidden'}>
+      <div class="row2" style="max-width:520px"><label class="f">How you charge<select class="in" data-type><option value="fixed" ${o.type==='fixed'?'selected':''}>Fixed fee</option><option value="from" ${o.type==='from'?'selected':''}>Starting price (from)</option><option value="hourly" ${o.type==='hourly'?'selected':''}>Hourly rate</option></select></label>
+        <label class="f">Typical timescale<input class="in" data-time value="${esc(o.time||'')}" placeholder="${TIMES[s.id]}"></label></div>
+      <div data-feewrap ${o.type==='hourly'?'hidden':''}>${fee}</div>
+      <label class="f" data-ratewrap style="max-width:220px" ${o.type==='hourly'?'':'hidden'}>Hourly rate excluding VAT<div class="pre"><span>£</span><input class="in num" data-rate inputmode="decimal" value="${o.rate??''}"></div></label>
+      <div class="disb"><span style="font-size:.88rem;font-weight:600">Disbursements <span class="muted" style="font-weight:400">(including any VAT on them)</span></span>
+        ${(o.disb||[]).map(d=>disbRow(d)).join('')}
+        <button type="button" class="btn link" data-add style="justify-self:start;font-size:.9rem">+ Add a disbursement</button></div>
+      <label class="f">What's included<textarea class="in" data-inc style="min-height:70px" placeholder="${esc(s.inc)}">${esc(o.inc||'')}</textarea></label>
+    </div></div>`;
+}
+const disbRow = (d={label:'',amount:''}) => `<div class="disb-row"><input class="in" data-dl placeholder="e.g. Local authority search" value="${esc(d.label)}" aria-label="Disbursement"><div class="pre"><span>£</span><input class="in num" data-da inputmode="decimal" value="${esc(d.amount)}" aria-label="Amount"></div><button type="button" data-drm aria-label="Remove disbursement">✕</button></div>`;
+function summary(s,o){
+  if (o.type==='hourly') return o.rate?gbp(o.rate)+'/hr':'Add a rate';
+  if (s.banded){ const v=BANDS.map(b=>+o.bands?.[b.k]).filter(Boolean); return v.length?`${gbp(Math.min(...v))} – ${gbp(Math.max(...v))}`:'Add fees'; }
+  return o.fee?(o.type==='from'?'From ':'')+gbp(o.fee):'Add a fee';
+}
+function readSvc(el){
+  const s = svcById(el.dataset.svc); const type = $('[data-type]',el).value;
+  const o = {type,time:$('[data-time]',el).value.trim(),inc:$('[data-inc]',el).value.trim(),
+    disb:$$('.disb-row',el).map(r=>({label:$('[data-dl]',r).value.trim(),amount:parseFloat($('[data-da]',r).value)||0})).filter(d=>d.label)};
+  if (type==='hourly') o.rate = parseFloat($('[data-rate]',el).value)||0;
+  else if (s.banded) o.bands = Object.fromEntries($$('[data-band]',el).map(i=>[i.dataset.band,parseFloat(i.value)||0]));
+  else o.fee = parseFloat($('[data-fee]',el).value)||0;
+  return o;
+}
+function enquiriesPane(){
+  const enq = store.get('enquiries',[]).filter(e=>e.firmId===draft.id); const jur=jurOf(draft);
+  if (!enq.length) return `<div class="pane"><h3>Enquiries</h3><div class="empty"><p><b>No quote requests yet</b></p><p class="muted">When a client asks for a quote from your listing, it appears here with the service, their details and the price they saw. To try it, open your listing and send yourself a request.</p><button class="btn ghost sm" id="try-q">Open your listing</button></div></div>`;
+  return `<div class="pane"><h3>Enquiries</h3>${enq.map(e=>{ const s=svcById(e.svc); return `<div class="enq">
+    <div class="top-l"><b>${esc(e.name)}</b><span class="muted" style="font-size:.85rem">${new Date(e.at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
+    <span style="font-size:.92rem">${esc(svcName(s,jur))}${e.price?` · ${gbp(e.price)}`:''}${e.total?` · saw <b class="num">${gbp(e.total)}</b>`:''}</span>
+    <span class="muted" style="font-size:.9rem">${esc(e.email)}${e.phone?' · '+esc(e.phone):''}</span>
+    ${e.msg?`<p style="font-size:.92rem;background:var(--sunk);padding:10px;border-radius:6px">${esc(e.msg)}</p>`:''}
+  </div>`; }).join('')}</div>`;
+}
+function bindPane(){
+  const detf = $('#detf');
+  if (detf){
+    const inp = $('#logo-in'), drop = $('#drop');
+    const take = file => {
+      if (!file) return; if (file.size>2*1024*1024){ toast('That file is over 2 MB. Choose a smaller image.'); return; }
+      const rd = new FileReader(); rd.onload = () => { const img = new Image(); img.onload=()=>{
+        const max=256, sc=Math.min(1,max/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=Math.round(img.width*sc)||max; c.height=Math.round(img.height*sc)||max;
+        const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(img,0,0,c.width,c.height);
+        draft.logo = c.toDataURL('image/png'); captureDetails(); drawPane(); toast('Logo added. Save details to keep it.'); };
+        img.onerror=()=>toast('We couldn’t read that image. Try a PNG or JPG.'); img.src=rd.result; };
+      rd.readAsDataURL(file);
+    };
+    inp.onchange = () => take(inp.files[0]);
+    ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
+    ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
+    drop.addEventListener('drop',e=>take(e.dataTransfer.files[0]));
+    $('#logo-rm')?.addEventListener('click',()=>{ captureDetails(); delete draft.logo; drawPane(); });
+    $('#p-nation').onchange = () => { captureDetails(); drawPane(); };
+    detf.addEventListener('input',()=>{ $('#dirty').textContent='Unsaved changes'; });
+    detf.addEventListener('submit',e=>{ e.preventDefault(); captureDetails(); if(!draft.name){ toast('Add your firm name.'); return; } draft.updated=new Date().toISOString(); saveFirm(draft); toast('Details saved'); renderPortal(); });
+  }
+  const pf = $('#pricef');
+  if (pf){
+    pf.addEventListener('change',e=>{
+      const el = e.target.closest('.svc'); if(!el) return;
+      if (e.target.matches('[data-on]')) $('.svc-b',el).hidden = !e.target.checked;
+      if (e.target.matches('[data-type]')){ const h=e.target.value==='hourly'; $('[data-feewrap]',el).hidden=h; $('[data-ratewrap]',el).hidden=!h; }
+      $('[data-sum]',el).textContent = $('[data-on]',el).checked ? summary(svcById(el.dataset.svc),readSvc(el)) : 'Not offered';
+    });
+    pf.addEventListener('input',e=>{ const el=e.target.closest('.svc'); if(el && $('[data-on]',el).checked) $('[data-sum]',el).textContent = summary(svcById(el.dataset.svc),readSvc(el)); $('#psum').textContent='Unsaved changes'; });
+    pf.addEventListener('click',e=>{
+      if (e.target.matches('[data-add]')){ e.target.insertAdjacentHTML('beforebegin',disbRow()); e.target.previousElementSibling.querySelector('input').focus(); }
+      if (e.target.matches('[data-drm]')){ e.target.closest('.disb-row').remove(); $('#psum').textContent='Unsaved changes'; }
+    });
+    pf.addEventListener('submit',e=>{
+      e.preventDefault(); const svcs = {}; const missing=[];
+      $$('.svc',pf).forEach(el=>{ if(!$('[data-on]',el).checked) return; const s=svcById(el.dataset.svc), o=readSvc(el);
+        const ok = o.type==='hourly'?o.rate>0 : s.banded?BANDS.every(b=>o.bands[b.k]>0) : o.fee>0;
+        if(!ok) missing.push(svcName(s,jurOf(draft))); svcs[s.id]=o; });
+      if (missing.length){ toast(`Add a price for: ${missing.join(', ')}.`); return; }
+      draft.services = svcs; draft.updated = new Date().toISOString(); saveFirm(draft); toast('Prices saved'); renderPortal();
+    });
+  }
+  $('#try-q')?.addEventListener('click',()=>openFirm(draft.id,true));
+}
+function captureDetails(){
+  const v = id => $(id)?.value.trim() ?? '';
+  Object.assign(draft,{name:v('#p-name'),nation:$('#p-nation').value,regNo:v('#p-regno'),about:v('#p-about'),town:v('#p-town'),address:v('#p-address'),phone:v('#p-phone'),email:v('#p-email'),website:v('#p-web'),remote:$('#p-remote').checked,vat:$('#p-vat').checked});
+}
+
+route();
+})();
+</script>

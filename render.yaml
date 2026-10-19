@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: comparelegal
+    runtime: static
+    buildCommand: python3 build.py
+    staticPublishPath: ./public
+    domains:
+      - comparelegal.com
+      - www.comparelegal.com
