@@ -1,0 +1,24 @@
+# Supabase CLI configuration for Compare Legal. Link your project with:
+#   supabase link --project-ref <your-project-ref>
+# then:  supabase db push   and   supabase functions deploy
+project_id = "comparelegal"
+
+[auth]
+# Where confirmation and password-reset emails send people back to. Set the production value
+# (https://comparelegal.com) in the dashboard: Authentication > URL Configuration.
+site_url = "https://comparelegal.com"
+additional_redirect_urls = ["https://www.comparelegal.com", "http://localhost:8000"]
+minimum_password_length = 8
+
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+
+# Stripe and clients call these without a Supabase session, so they handle their own
+# verification: the webhook checks Stripe's signature; submit-enquiry validates, honeypots and
+# rate-limits. The two billing functions keep the default and require a signed-in firm.
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.submit-enquiry]
+verify_jwt = false

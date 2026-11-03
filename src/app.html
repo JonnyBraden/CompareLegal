@@ -214,6 +214,21 @@ tr.tot td{font-weight:700;background:var(--sunk)}
 .status{display:inline-flex;gap:6px;align-items:center;font-size:.8rem;font-weight:600;padding:3px 10px;border-radius:99px}
 .status.live{background:var(--good-soft);color:var(--good)}
 .status.draft{background:var(--warn-soft);color:var(--warn)}
+.status.premium{background:var(--mark);color:var(--ink)}
+.chip.prem{background:var(--accent-soft);color:var(--accent)}
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.plan{border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:12px;align-content:start;background:var(--surface)}
+.plan.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.plan h4{margin:0;font-family:var(--f-body);font-size:1.05rem}
+.plan ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.92rem}
+.plan li{display:grid;grid-template-columns:18px 1fr;gap:8px}
+.plan li svg{color:var(--good);margin-top:3px}
+.plan .price-l{font-size:1.5rem;font-family:var(--f-display)}
+.lock{border:1px dashed var(--line);border-radius:var(--r);padding:16px;display:grid;gap:8px;background:var(--sunk);justify-items:start}
+.enq-ctl{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.enq-ctl .in{width:auto}
+.warn-box{background:var(--warn-soft);color:var(--warn);border-radius:var(--r);padding:12px 14px;font-size:.92rem}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .tabs{display:flex;gap:2px;margin-top:18px;overflow-x:auto}
 .tabs button{border:0;background:none;padding:12px 14px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
 .tabs button[aria-selected="true"]{color:var(--ink);border-color:var(--accent)}
@@ -272,8 +287,14 @@ tr.tot td{font-weight:700;background:var(--sunk)}
   <div>Covering England &amp; Wales, Scotland and Northern Ireland</div>
 </div></footer>
 
+<!--BACKEND_SCRIPTS-->
 <script>
 (() => {
+/* Live mode (real accounts, Supabase + Stripe) switches on when backend.js finds Supabase keys in
+   config.js. Without them this file runs as a browser-only prototype using localStorage. */
+const CL = window.CL || {live:false};
+const LIVE = !!CL.live;
+
 /* ---------- reference data ---------- */
 const NATIONS = {
   'England':{jur:'EW',tax:'Stamp Duty Land Tax'},
@@ -392,11 +413,25 @@ const store = {
   get(k,d){ try{ const v = localStorage.getItem('cl:'+k); return v ? JSON.parse(v) : (k in mem ? mem[k] : d); }catch(e){ return k in mem ? mem[k] : d; } },
   set(k,v){ mem[k]=v; try{ localStorage.setItem('cl:'+k, JSON.stringify(v)); return true; }catch(e){ return false; } }
 };
+if (LIVE){ CL.serviceIds = SERVICES.map(s=>s.id); CL.bandedIds = SERVICES.filter(s=>s.banded).map(s=>s.id); CL.bandKeys = BANDS.map(b=>b.k); }
+const SHOW_SAMPLES = LIVE ? !!(CL.cfg && CL.cfg.showSamples) : true;
+const premiumPrice = () => esc((LIVE && CL.cfg && CL.cfg.premiumPrice) || '£49 per month');
 const userFirms = () => store.get('firms',{});
-const allFirms = () => { const u = userFirms(); const merged = SAMPLE.map(f=>u[f.id]||f); Object.values(u).forEach(f=>{ if(!SAMPLE.some(s=>s.id===f.id)) merged.push(f); }); return merged; };
+const allFirms = () => {
+  if (LIVE){
+    const me = CL.me?.firm;
+    const out = CL.firms.map(f=>me && f.id===me.id ? me : f);
+    if (me && !out.some(f=>f.id===me.id)) out.push(me);
+    if (SHOW_SAMPLES) out.push(...SAMPLE);
+    return out;
+  }
+  const u = userFirms(); const merged = SAMPLE.map(f=>u[f.id]||f); Object.values(u).forEach(f=>{ if(!SAMPLE.some(s=>s.id===f.id)) merged.push(f); }); return merged;
+};
 const firmById = id => allFirms().find(f=>f.id===id);
-function saveFirm(f){ const u = userFirms(); u[f.id]=f; store.set('firms',u); }
-const session = () => store.get('session',null);
+async function saveFirm(f){ if (LIVE) return CL.saveFirm(f); const u = userFirms(); u[f.id]=f; store.set('firms',u); }
+const session = () => LIVE ? (CL.user ? {email:CL.user.email, firmId:CL.me?.firm?.id} : null) : store.get('session',null);
+const myEnquiries = firmId => LIVE ? (CL.me?.enquiries||[]) : store.get('enquiries',[]).filter(e=>e.firmId===firmId);
+const isPremium = () => LIVE && !!CL.me?.billing?.premium;
 
 /* ---------- helpers ---------- */
 const $ = (s,el=document)=>el.querySelector(s);
@@ -408,7 +443,7 @@ let toastT;
 function toast(msg){ $('.toast')?.remove(); const t=document.createElement('div'); t.className='toast'; t.setAttribute('role','status'); t.textContent=msg; document.body.append(t); clearTimeout(toastT); toastT=setTimeout(()=>t.remove(),3200); }
 function logo(f,size=52){
   const st = `width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;`;
-  if (f.logo) return `<div class="logo" style="${st}"><img src="${f.logo}" alt="${esc(f.name)} logo"></div>`;
+  if (f.logo) return `<div class="logo" style="${st}"><img src="${esc(f.logo)}" alt="${esc(f.name)} logo"></div>`;
   const ini = (f.name||'?').replace(/&/g,'').split(/\s+/).filter(w=>/^[A-Za-z]/.test(w)).slice(0,2).map(w=>w[0]).join('').toUpperCase()||'?';
   return `<div class="logo" style="${st}background:${esc(f.color||'#24507A')}" aria-hidden="true">${esc(ini)}</div>`;
 }
@@ -428,7 +463,7 @@ const ICON_TICK = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="
 /* ---------- state + routing ---------- */
 const state = Object.assign({area:'conveyancing',svc:'purchase',nation:'England',price:325000,town:'',remote:true,fixedOnly:false,sort:'total',compare:[]}, store.get('search',{}), {compare:[]});
 const saveSearch = () => { const {compare,...rest}=state; store.set('search',rest); };
-const VIEWS = {home:renderHome,how:renderHome,results:renderResults,firms:renderAuth,portal:renderPortal};
+const VIEWS = {home:renderHome,how:renderHome,results:renderResults,firms:renderAuth,portal:renderPortal,reset:renderReset};
 let currentView = (location.hash||'#home').slice(1);
 function go(view, opts={}){
   if (view==='portal' && !session()) view='firms';
@@ -445,6 +480,8 @@ function route(opts={}){
   const nb = $(`.nav [data-go="${v==='portal'?'firms':v}"]`); if(nb) nb.setAttribute('aria-current','page');
   $('#nav-firm').textContent = session() ? 'Firm portal' : 'For law firms';
   VIEWS[v](opts);
+  // Keep listings fresh while people browse (at most once a minute); redraw only the cards.
+  if (LIVE && v==='results') CL.maybeRefresh().then(changed=>{ if(changed && currentView==='results' && $('#cards')) drawCards(); });
   if (v==='how') requestAnimationFrame(()=>$('#how')?.scrollIntoView());
   else if (!opts.keepScroll) window.scrollTo(0,0);
   renderTray();
@@ -592,6 +629,7 @@ function renderResults(){
         <label class="check"><input type="checkbox" id="f-remote" ${state.remote?'checked':''}> Include firms that act remotely across ${esc(JUR[jur].label)}</label>
       </div>
       <div class="notice"><b>What the total includes</b><span>Legal fee, VAT at 20% and disbursements.${def.area==='conveyancing'?` It excludes ${esc(NATIONS[state.nation].tax)}, which depends on your circumstances.`:''}${def.banded?` Fees shown are for the ${BANDS.find(b=>b.k===bandFor(state.price)).label.toLowerCase()} band.`:''}</span></div>
+      ${LIVE?`<div class="notice"><b>How firms are ranked</b><span>By price. Some firms pay for a Premium listing, which adds a logo and extra tools. Paying never changes where a firm appears in the results.</span></div>`:''}
     </aside>
     <div style="min-width:0">
       <div class="list-top"><p id="count" class="muted"></p>
@@ -623,7 +661,7 @@ function drawCards(){
       <div style="min-width:0">
         <h3>${esc(f.name)}</h3>
         <div class="meta"><span>${esc(f.town)}, ${esc(f.nation)}</span><span>${JUR[jurOf(f)].short} regulated</span></div>
-        <div class="chips">${feeChip(q.type)}${f.remote?`<span class="chip">${away?'Acts remotely':'Remote appointments'}</span>`:''}${s.time?`<span class="chip">${esc(s.time)}</span>`:''}${f.id===me?'<span class="chip mine">Your listing</span>':''}${f.sample?'<span class="chip">Sample firm</span>':''}</div>
+        <div class="chips">${feeChip(q.type)}${f.remote?`<span class="chip">${away?'Acts remotely':'Remote appointments'}</span>`:''}${s.time?`<span class="chip">${esc(s.time)}</span>`:''}${f.premium?'<span class="chip prem">Premium listing</span>':''}${f.id===me?'<span class="chip mine">Your listing</span>':''}${f.sample?'<span class="chip">Sample firm</span>':''}</div>
         ${s.inc?`<p class="inc">${esc(s.inc)}</p>`:''}
       </div>
       <div class="price">
@@ -716,16 +754,33 @@ function openFirm(id, toQuote=false){
             <label class="f">Email<input class="in" id="q-email" type="email" required autocomplete="email"></label>
             <label class="f">Phone <small>(optional)</small><input class="in" id="q-phone" type="tel" autocomplete="tel"></label>
             <label class="f">Anything the firm should know? <small>(optional)</small><textarea class="in" id="q-msg" placeholder="e.g. leasehold flat, mortgage with Nationwide"></textarea></label>
+            ${LIVE?'<div class="hp" aria-hidden="true"><label>Leave this empty<input id="q-hp" tabindex="-1" autocomplete="off"></label></div>':''}
             <button class="btn" type="submit">Send request to ${esc(f.name)}</button>
-            <p class="muted" style="font-size:.8rem">The firm will contact you with a written quote. In this prototype, requests appear in the firm's portal in this browser.</p>
+            <p class="muted" style="font-size:.8rem">${LIVE
+              ? `The firm will contact you with a written quote. By sending this request you agree that Compare Legal passes your name, email, phone number and message to ${esc(f.name)} so they can reply.`
+              : 'The firm will contact you with a written quote. In this prototype, requests appear in the firm\'s portal in this browser.'}</p>
+            <p class="err" id="q-err" hidden></p>
           </form>
         </div>
       </div>
       <div style="display:grid;gap:18px"><h2 style="font-size:1.3rem">All published fees <span class="muted" style="font-family:var(--f-body);font-size:.8rem">excluding VAT and disbursements</span></h2>${feeTableHTML(f)}</div>
     </div>`, true);
   if (toQuote) setTimeout(()=>$('#q-name',s)?.focus(),50);
-  $('#qform',s).addEventListener('submit',e=>{
+  if (LIVE && f.sample){
+    $('#qform',s).innerHTML = `<h3 style="font-family:var(--f-body);font-weight:700;font-size:1rem">Request a quote</h3><p class="muted" style="font-size:.9rem">This is a sample firm, shown for illustration. It cannot receive requests.</p>`;
+  }
+  $('#qform',s).addEventListener('submit',async e=>{
     e.preventDefault();
+    if (LIVE){
+      const btn = $('button[type=submit]',e.target), err = $('#q-err',s); err.hidden = true; btn.disabled = true;
+      try{
+        await CL.submitEnquiry({firmId:f.id,service:sid,nation:state.nation,price:def?.banded?state.price:null,total:q?.total??null,
+          name:$('#q-name',s).value.trim(),email:$('#q-email',s).value.trim(),phone:$('#q-phone',s).value.trim(),
+          message:$('#q-msg',s).value.trim(),hp:$('#q-hp',s)?.value||''});
+        e.target.innerHTML = `<div class="ok"><b>Request sent to ${esc(f.name)}.</b><br>They have been emailed your details and usually reply within one working day.</div>`;
+      }catch(ex){ err.textContent = ex.message; err.hidden = false; btn.disabled = false; }
+      return;
+    }
     const enq = store.get('enquiries',[]);
     enq.unshift({id:Date.now().toString(36),firmId:f.id,svc:sid,nation:state.nation,price:def?.banded?state.price:null,name:$('#q-name',s).value.trim(),email:$('#q-email',s).value.trim(),phone:$('#q-phone',s).value.trim(),msg:$('#q-msg',s).value.trim(),total:q?.total??null,at:new Date().toISOString()});
     store.set('enquiries',enq);
@@ -767,6 +822,7 @@ function renderAuth(){
         <div class="perk">${ICON_TICK}<div><h3 style="font-family:var(--f-body);font-weight:700;font-size:1rem">Your prices, your way</h3><p>Fixed fees, starting prices or hourly rates. Conveyancing fees by property value band, with each disbursement listed separately.</p></div></div>
         <div class="perk">${ICON_TICK}<div><h3 style="font-family:var(--f-body);font-weight:700;font-size:1rem">A profile clients trust</h3><p>Your logo, contact details, regulator and a short description of the firm, shown with every quote.</p></div></div>
         <div class="perk">${ICON_TICK}<div><h3 style="font-family:var(--f-body);font-weight:700;font-size:1rem">Enquiries in one place</h3><p>Quote requests arrive with the service, property value and the price the client saw.</p></div></div>
+        ${LIVE?`<div class="perk">${ICON_TICK}<div><h3 style="font-family:var(--f-body);font-weight:700;font-size:1rem">Free to list, Premium to stand out</h3><p>Listing your fees and receiving enquiries is free. Premium (${premiumPrice()}) adds your logo, enquiry tracking and CSV export. Premium never changes your place in the price ranking.</p></div></div>`:''}
       </div>
     </div>
     <div class="panel">
@@ -777,20 +833,41 @@ function renderAuth(){
           <label class="f">Nation<select class="in" id="a-nation">${Object.keys(NATIONS).map(n=>`<option>${n}</option>`).join('')}</select></label>`:''}
         <label class="f">Work email<input class="in" id="a-email" type="email" required autocomplete="email"></label>
         <label class="f">Password<input class="in" id="a-pw" type="password" required minlength="8" autocomplete="${authMode==='register'?'new-password':'current-password'}"><small>${authMode==='register'?'At least 8 characters':''}</small></label>
+        ${authMode==='register'?`<label class="check"><input type="checkbox" id="a-ok" required> I am authorised to list this firm's fees, and the firm is regulated by the SRA, the Law Society of Scotland or the Law Society of Northern Ireland.</label>`:''}
         <p class="err" id="a-err" hidden></p>
         <button class="btn" type="submit">${authMode==='register'?'Create firm account':'Sign in'}</button>
+        ${LIVE&&authMode==='signin'?'<button type="button" class="btn link" id="forgot" style="justify-self:start;font-size:.9rem">Forgot your password?</button>':''}
       </form>
-      <div style="border-top:1px solid var(--line);padding-top:16px;display:grid;gap:8px">
+      ${LIVE?'':`<div style="border-top:1px solid var(--line);padding-top:16px;display:grid;gap:8px">
         <p class="muted" style="font-size:.88rem">Want to look around first? Open the portal as a sample firm, Strangford Solicitors in Newtownards.</p>
         <button class="btn ghost" id="demo">Try the demo firm account</button>
-      </div>
+      </div>`}
     </div>
   </div>`;
   $$('[data-mode]').forEach(b=>b.onclick=()=>{ authMode=b.dataset.mode; renderAuth(); });
-  $('#demo').onclick = ()=>{ store.set('session',{email:'demo@strangford.example',firmId:'strangford',demo:true}); toast('Signed in as Strangford Solicitors'); go('portal'); };
+  $('#demo')?.addEventListener('click',()=>{ store.set('session',{email:'demo@strangford.example',firmId:'strangford',demo:true}); toast('Signed in as Strangford Solicitors'); go('portal'); });
+  $('#forgot')?.addEventListener('click',async ()=>{
+    const email = $('#a-email').value.trim().toLowerCase(), err = $('#a-err');
+    if (!email){ err.textContent='Enter your work email above, then choose "Forgot your password?" again.'; err.hidden=false; return; }
+    try{ await CL.resetPassword(email); err.hidden=true; toast('If that email has an account, a reset link is on its way.'); }
+    catch(ex){ err.textContent=ex.message; err.hidden=false; }
+  });
   $('#authf').addEventListener('submit',async e=>{
     e.preventDefault();
     const email = $('#a-email').value.trim().toLowerCase(), pw = $('#a-pw').value, err = $('#a-err');
+    if (LIVE){
+      const btn = $('button[type=submit]',e.target); err.hidden = true; btn.disabled = true;
+      try{
+        if (authMode==='signin'){ await CL.signIn(email,pw); toast('Signed in'); go('portal'); }
+        else {
+          const r = await CL.signUp({email,password:pw,firmName:$('#a-firm').value.trim(),nation:$('#a-nation').value});
+          if (r.needsConfirm){
+            e.target.innerHTML = `<div class="ok"><b>Check your inbox.</b><br>We sent a confirmation link to ${esc(email)}. Open it, then sign in to add your details and prices.</div>`;
+          } else { toast('Account created. Add your details and prices to go live.'); go('portal'); }
+        }
+      }catch(ex){ err.textContent = ex.message; err.hidden = false; btn.disabled = false; }
+      return;
+    }
     const accounts = store.get('accounts',{}); const h = await hash(pw);
     if (authMode==='signin'){
       const a = accounts[email]; if(!a || a.pw!==h){ err.textContent='That email and password don’t match an account in this browser. Check them, or register your firm.'; err.hidden=false; return; }
@@ -811,7 +888,7 @@ async function hash(s){ try{ const b = await crypto.subtle.digest('SHA-256', new
 let tab = 'details', draft = null;
 function checklist(f){
   const priced = Object.keys(f.services||{}).length;
-  return [
+  const items = [
     ['Firm name and nation', !!(f.name&&f.nation)],
     ['Town and address', !!(f.town&&f.address)],
     ['Phone and email', !!(f.phone&&f.email)],
@@ -819,20 +896,31 @@ function checklist(f){
     ['Logo uploaded', !!f.logo || !!f.sample],
     ['At least one service priced', priced>0]
   ];
+  // Logos are a Premium feature on the live site, so don't nag free firms for one.
+  return LIVE && !f.premium ? items.filter(([l])=>l!=='Logo uploaded') : items;
 }
 const isLive = f => checklist(f).filter(([l])=>l!=='Logo uploaded').every(([,ok])=>ok);
 function renderPortal(){
   const sess = session(); const f0 = firmById(sess.firmId);
-  if (!f0){ store.set('session',null); return go('firms'); }
+  if (!f0){
+    if (LIVE){
+      app.innerHTML = `<div class="wrap" style="padding:60px 0"><div class="empty"><h3>We could not load your firm account</h3><p class="muted">Your sign-in worked, but your firm details did not load. Try again, and contact support if it keeps happening.</p><div style="display:flex;gap:8px"><button class="btn" id="retry">Try again</button><button class="btn ghost" id="signout">Sign out</button></div></div></div>`;
+      $('#retry').onclick = ()=>location.reload();
+      $('#signout').onclick = async ()=>{ await CL.signOut(); go('firms'); };
+      return;
+    }
+    store.set('session',null); return go('firms');
+  }
   draft = JSON.parse(JSON.stringify(f0));
-  const enq = store.get('enquiries',[]).filter(e=>e.firmId===f0.id);
+  const enq = myEnquiries(f0.id);
   const live = isLive(f0) && f0.listed!==false;
+  const tabs = [['details','Firm details'],['prices','Prices'],['enquiries',`Enquiries${enq.length?` (${enq.length})`:''}`],['plan','Plan']];
   app.innerHTML = `
   <div class="dash-head"><div class="wrap">
     <div class="dash-id">${logo(f0,56)}<div style="min-width:0;flex:1"><h1 style="font-size:1.7rem">${esc(f0.name)}</h1>
-      <p class="muted" style="font-size:.9rem">${esc(sess.email)} · <span class="status ${live?'live':'draft'}">${live?'Live on Compare Legal':'Draft: not yet visible to clients'}</span></p></div>
+      <p class="muted" style="font-size:.9rem">${esc(sess.email)} · <span class="status ${live?'live':'draft'}">${live?'Live on Compare Legal':'Draft: not yet visible to clients'}</span>${isPremium()?' <span class="status premium">Premium</span>':''}</p></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost sm" id="view-live">View listing</button><button class="btn ghost sm" id="signout">Sign out</button></div></div>
-    <div class="tabs" role="tablist">${[['details','Firm details'],['prices','Prices'],['enquiries',`Enquiries${enq.length?` (${enq.length})`:''}`]].map(([k,l])=>`<button role="tab" data-tab="${k}" aria-selected="${tab===k}">${l}</button>`).join('')}</div>
+    <div class="tabs" role="tablist">${tabs.map(([k,l])=>`<button role="tab" data-tab="${k}" aria-selected="${tab===k}">${l}</button>`).join('')}</div>
   </div></div>
   <div class="wrap dash-body"><div id="pane" style="min-width:0"></div>
     <aside class="side">
@@ -841,25 +929,35 @@ function renderPortal(){
       <div class="box"><p class="eyebrow">How clients see your price</p><p style="font-size:.88rem" class="muted">Totals are worked out as your fee, plus VAT at 20%, plus the disbursements you list. Keep disbursements up to date so your total stays accurate.</p></div>
       ${sess.demo?'<div class="box"><p class="eyebrow">Demo account</p><p style="font-size:.88rem" class="muted">Changes are saved in this browser. Edit a price, then search for that service to see your listing update.</p></div>':''}
     </aside></div>`;
-  $$('[data-tab]').forEach(b=>b.onclick=()=>{ tab=b.dataset.tab; $$('[data-tab]').forEach(x=>x.setAttribute('aria-selected',x===b)); drawPane(); });
-  $('#signout').onclick=()=>{ store.set('session',null); tab='details'; toast('Signed out'); go('firms'); };
+  $$('[data-tab]').forEach(b=>b.onclick=()=>{
+    tab=b.dataset.tab; $$('[data-tab]').forEach(x=>x.setAttribute('aria-selected',x===b)); drawPane();
+    // Pull in enquiries that arrived since the portal was opened.
+    if (LIVE && tab==='enquiries') CL.loadEnquiries().then(()=>{ if(tab==='enquiries' && $('#pane')) drawPane(); }).catch(()=>{});
+  });
+  $('#signout').onclick=async ()=>{ if (LIVE) await CL.signOut(); else store.set('session',null); tab='details'; toast('Signed out'); go('firms'); };
   $('#view-live').onclick=()=>openFirm(f0.id);
-  $('#publish')?.addEventListener('click',()=>{ const f=firmById(f0.id); f.listed=true; saveFirm(f); toast('Your listing is live'); renderPortal(); });
+  $('#publish')?.addEventListener('click',async ()=>{
+    const f=JSON.parse(JSON.stringify(firmById(f0.id))); f.listed=true;
+    try{ await saveFirm(f); toast('Your listing is live'); renderPortal(); }catch(ex){ toast(ex.message); }
+  });
   drawPane();
 }
 function drawPane(){
   const p = $('#pane');
   if (tab==='details') p.innerHTML = detailsPane();
   else if (tab==='prices') p.innerHTML = pricesPane();
+  else if (tab==='plan') p.innerHTML = planPane();
   else p.innerHTML = enquiriesPane();
   bindPane();
 }
 function detailsPane(){
   const f = draft, jur = jurOf(f);
   return `<form class="pane" id="detf">
-    <h3>Logo</h3>
-    <div class="logo-up">${logo(f,84)}<label class="drop" id="drop" for="logo-in"><b>Upload your logo</b><span class="muted">PNG, JPG or SVG, up to 2 MB. Square logos look best.</span><input type="file" id="logo-in" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden></label>
-      ${f.logo?'<button type="button" class="btn ghost sm" id="logo-rm">Remove</button>':''}</div>
+    <h3>Logo${LIVE?' <span class="chip prem">Premium</span>':''}</h3>
+    ${LIVE && !isPremium()
+      ? `<div class="lock"><div class="logo-up">${logo(f,84)}<div><b>Show your logo to clients</b><p class="muted" style="font-size:.9rem">With Premium your logo appears on your listing and in comparisons. Until then, clients see your initials.</p></div></div><button type="button" class="btn sm" data-goplan>See Premium</button></div>`
+      : `<div class="logo-up">${logo(f,84)}<label class="drop" id="drop" for="logo-in"><b>Upload your logo</b><span class="muted">PNG, JPG or SVG, up to 2 MB. Square logos look best.</span><input type="file" id="logo-in" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden></label>
+      ${f.logo?'<button type="button" class="btn ghost sm" id="logo-rm">Remove</button>':''}</div>`}
     <h3 style="margin-top:6px">Firm</h3>
     <div class="row2"><label class="f">Firm name<input class="in" id="p-name" value="${esc(f.name)}" required></label>
       <label class="f">Nation<select class="in" id="p-nation">${Object.keys(NATIONS).map(n=>`<option ${n===f.nation?'selected':''}>${n}</option>`).join('')}</select></label></div>
@@ -917,15 +1015,77 @@ function readSvc(el){
   else o.fee = parseFloat($('[data-fee]',el).value)||0;
   return o;
 }
+// Both storage modes feed the same card: the live database uses snake_case columns.
+const normEnq = e => LIVE
+  ? {id:e.id,svc:e.service,price:e.property_price,total:e.quoted_total,name:e.name,email:e.email,phone:e.phone,msg:e.message,at:e.created_at,status:e.status||'new',note:e.note||'',nation:e.nation}
+  : e;
+const ENQ_STATUS = [['new','New'],['contacted','Contacted'],['instructed','Instructed'],['closed','Closed']];
 function enquiriesPane(){
-  const enq = store.get('enquiries',[]).filter(e=>e.firmId===draft.id); const jur=jurOf(draft);
-  if (!enq.length) return `<div class="pane"><h3>Enquiries</h3><div class="empty"><p><b>No quote requests yet</b></p><p class="muted">When a client asks for a quote from your listing, it appears here with the service, their details and the price they saw. To try it, open your listing and send yourself a request.</p><button class="btn ghost sm" id="try-q">Open your listing</button></div></div>`;
-  return `<div class="pane"><h3>Enquiries</h3>${enq.map(e=>{ const s=svcById(e.svc); return `<div class="enq">
+  const enq = myEnquiries(draft.id).map(normEnq); const jur=jurOf(draft), prem = isPremium();
+  if (!enq.length) return `<div class="pane"><h3>Enquiries</h3><div class="empty"><p><b>No quote requests yet</b></p><p class="muted">When a client asks for a quote from your listing, it appears here with the service, their details and the price they saw${LIVE?', and we email it to you straight away':''}. To try it, open your listing and send yourself a request.</p><button class="btn ghost sm" id="try-q">Open your listing</button></div></div>`;
+  return `<div class="pane"><div class="top-l" style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center"><h3>Enquiries</h3>${LIVE&&prem?'<button class="btn ghost sm" id="enq-csv">Export CSV</button>':''}</div>
+    ${LIVE&&!prem?'<div class="lock"><span style="font-size:.92rem"><b>Track every enquiry.</b> Premium adds a status and private notes to each enquiry, plus a CSV export.</span><button type="button" class="btn sm" data-goplan>See Premium</button></div>':''}
+    ${enq.map(e=>{ const s=svcById(e.svc); return `<div class="enq" data-enq="${esc(e.id)}">
     <div class="top-l"><b>${esc(e.name)}</b><span class="muted" style="font-size:.85rem">${new Date(e.at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
-    <span style="font-size:.92rem">${esc(svcName(s,jur))}${e.price?` · ${gbp(e.price)}`:''}${e.total?` · saw <b class="num">${gbp(e.total)}</b>`:''}</span>
+    <span style="font-size:.92rem">${esc(s?svcName(s,jur):e.svc)}${e.price?` · ${gbp(e.price)}`:''}${e.total?` · saw <b class="num">${gbp(e.total)}</b>`:''}</span>
     <span class="muted" style="font-size:.9rem">${esc(e.email)}${e.phone?' · '+esc(e.phone):''}</span>
     ${e.msg?`<p style="font-size:.92rem;background:var(--sunk);padding:10px;border-radius:6px">${esc(e.msg)}</p>`:''}
+    ${LIVE&&prem?`<div class="enq-ctl"><label class="muted" style="font-size:.85rem">Status <select class="in" data-estatus>${ENQ_STATUS.map(([k,l])=>`<option value="${k}" ${e.status===k?'selected':''}>${l}</option>`).join('')}</select></label>
+      <label class="f" style="flex:1;min-width:200px;font-size:.85rem;font-weight:500">Private note<textarea class="in" data-enote maxlength="2000" style="min-height:44px">${esc(e.note)}</textarea></label></div>`:''}
   </div>`; }).join('')}</div>`;
+}
+function csvCell(v){
+  let s = String(v==null?'':v);
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s; // stop spreadsheets running a client's text as a formula
+  return /[",\n\r]/.test(s) ? '"'+s.replace(/"/g,'""')+'"' : s;
+}
+function exportEnquiries(){
+  const jur = jurOf(draft);
+  const rows = [['Received','Name','Email','Phone','Service','Nation','Property value','Total quoted','Status','Note','Message']]
+    .concat(myEnquiries(draft.id).map(normEnq).map(e=>{ const s=svcById(e.svc); return [new Date(e.at).toISOString(),e.name,e.email,e.phone,s?svcName(s,jur):e.svc,e.nation||'',e.price??'',e.total??'',e.status,e.note,e.msg]; }));
+  const blob = new Blob(['﻿'+rows.map(r=>r.map(csvCell).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'comparelegal-enquiries.csv';
+  document.body.append(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function planPane(){
+  if (!LIVE) return `<div class="pane"><h3>Plan</h3><div class="empty"><p><b>Plans are not connected in this demo</b></p><p class="muted">On the live site every firm lists for free and can upgrade to Premium from this tab.</p></div></div>`;
+  const b = CL.me.billing, prem = b.premium, price = premiumPrice();
+  const when = b.periodEnd ? new Date(b.periodEnd).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) : '';
+  const tick = t=>`<li>${ICON_TICK}<span>${t}</span></li>`;
+  const status = prem
+    ? (b.status==='past_due'
+        ? `<div class="warn-box"><b>We could not take your last payment.</b> Update your card to keep Premium. Your Premium features stay on while we retry.</div>`
+        : b.cancelAtPeriodEnd
+          ? `<div class="warn-box">Premium is set to end${when?` on <b>${when}</b>`:''}. You keep Premium features until then. You can resume from billing.</div>`
+          : `<div class="ok">Premium is active${when?`. It renews on <b>${when}</b>`:''}.</div>`)
+    : (b.status==='canceled'||b.status==='unpaid'||b.status==='incomplete_expired' ? `<div class="warn-box">Your Premium plan has ended. Your logo is hidden, but we have kept it for when you come back.</div>` : '');
+  return `<div class="pane">
+    <div><h3>Your plan</h3><p class="muted" style="font-size:.92rem;margin-top:4px">Listing your fees and receiving enquiries is always free. Premium adds tools to run your listing. It never changes where you appear in the price ranking.</p></div>
+    ${status}
+    <div class="plans">
+      <div class="plan ${prem?'':'on'}"><h4>Free</h4><span class="price-l">£0</span>
+        <ul>${tick('Listing with your prices and contact details')}${tick('Every enquiry emailed to you straight away')}${tick('Enquiries kept in your portal')}${tick('Pause or update your listing any time')}</ul>
+        ${prem?'':'<span class="chip">Your current plan</span>'}</div>
+      <div class="plan ${prem?'on':''}"><h4>Premium</h4><span class="price-l">${price}</span>
+        <ul>${tick('Your logo on your listing and in comparisons')}${tick('A "Premium listing" label on your listing')}${tick('Status and private notes on every enquiry')}${tick('CSV export of your enquiries')}</ul>
+        ${prem?'<button class="btn ghost" id="manage-billing">Manage billing</button>':'<button class="btn" id="upgrade">Upgrade to Premium</button>'}
+        ${prem?'<span class="chip prem">Your current plan</span>':'<span class="muted" style="font-size:.8rem">Cancel any time from billing. Payments are handled by Stripe.</span>'}</div>
+    </div></div>`;
+}
+function renderReset(){
+  if (!LIVE || !CL.user){ go('firms'); return; }
+  app.innerHTML = `<div class="wrap auth"><div><p class="eyebrow">For law firms</p><h1 style="margin-top:10px;font-size:clamp(1.9rem,3.6vw,2.7rem)">Choose a new password.</h1></div>
+    <div class="panel"><form id="resetf" class="form-grid">
+      <label class="f">New password<input class="in" id="r-pw" type="password" required minlength="8" autocomplete="new-password"><small>At least 8 characters</small></label>
+      <label class="f">Repeat it<input class="in" id="r-pw2" type="password" required minlength="8" autocomplete="new-password"></label>
+      <p class="err" id="r-err" hidden></p><button class="btn" type="submit">Save new password</button></form></div></div>`;
+  $('#resetf').addEventListener('submit',async e=>{
+    e.preventDefault(); const err=$('#r-err'); err.hidden=true;
+    if ($('#r-pw').value!==$('#r-pw2').value){ err.textContent='The two passwords do not match.'; err.hidden=false; return; }
+    const btn=$('button[type=submit]',e.target); btn.disabled=true;
+    try{ await CL.updatePassword($('#r-pw').value); toast('Password updated'); go('portal'); }
+    catch(ex){ err.textContent=ex.message; err.hidden=false; btn.disabled=false; }
+  });
 }
 function bindPane(){
   const detf = $('#detf');
@@ -936,18 +1096,37 @@ function bindPane(){
       const rd = new FileReader(); rd.onload = () => { const img = new Image(); img.onload=()=>{
         const max=256, sc=Math.min(1,max/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=Math.round(img.width*sc)||max; c.height=Math.round(img.height*sc)||max;
         const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(img,0,0,c.width,c.height);
+        if (LIVE){
+          // Upload the shrunken PNG now; the new file name is saved with the rest of the details.
+          c.toBlob(async blob=>{
+            try{ captureDetails(); draft.logoPath = await CL.uploadLogo(blob, draft.id); draft.logo = CL.logoUrl(draft.logoPath); drawPane(); toast('Logo added. Save details to keep it.'); }
+            catch(ex){ toast(ex.message); }
+          },'image/png');
+          return;
+        }
         draft.logo = c.toDataURL('image/png'); captureDetails(); drawPane(); toast('Logo added. Save details to keep it.'); };
         img.onerror=()=>toast('We couldn’t read that image. Try a PNG or JPG.'); img.src=rd.result; };
       rd.readAsDataURL(file);
     };
-    inp.onchange = () => take(inp.files[0]);
-    ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
-    ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
-    drop.addEventListener('drop',e=>take(e.dataTransfer.files[0]));
-    $('#logo-rm')?.addEventListener('click',()=>{ captureDetails(); delete draft.logo; drawPane(); });
+    if (inp && drop){
+      inp.onchange = () => take(inp.files[0]);
+      ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
+      ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
+      drop.addEventListener('drop',e=>take(e.dataTransfer.files[0]));
+    }
+    $('#logo-rm')?.addEventListener('click',()=>{ captureDetails(); delete draft.logo; draft.logoPath = null; drawPane(); });
     $('#p-nation').onchange = () => { captureDetails(); drawPane(); };
     detf.addEventListener('input',()=>{ $('#dirty').textContent='Unsaved changes'; });
-    detf.addEventListener('submit',e=>{ e.preventDefault(); captureDetails(); if(!draft.name){ toast('Add your firm name.'); return; } draft.updated=new Date().toISOString(); saveFirm(draft); toast('Details saved'); renderPortal(); });
+    detf.addEventListener('submit',async e=>{
+      e.preventDefault(); captureDetails(); if(!draft.name){ toast('Add your firm name.'); return; }
+      draft.updated=new Date().toISOString();
+      const btn=$('button[type=submit]',detf); btn.disabled=true;
+      try{
+        await saveFirm(draft);
+        if (LIVE && draft.logoPath) CL.pruneLogos(draft.id, draft.logoPath);
+        toast('Details saved'); renderPortal();
+      }catch(ex){ toast(ex.message); btn.disabled=false; }
+    });
   }
   const pf = $('#pricef');
   if (pf){
@@ -962,22 +1141,72 @@ function bindPane(){
       if (e.target.matches('[data-add]')){ e.target.insertAdjacentHTML('beforebegin',disbRow()); e.target.previousElementSibling.querySelector('input').focus(); }
       if (e.target.matches('[data-drm]')){ e.target.closest('.disb-row').remove(); $('#psum').textContent='Unsaved changes'; }
     });
-    pf.addEventListener('submit',e=>{
+    pf.addEventListener('submit',async e=>{
       e.preventDefault(); const svcs = {}; const missing=[];
       $$('.svc',pf).forEach(el=>{ if(!$('[data-on]',el).checked) return; const s=svcById(el.dataset.svc), o=readSvc(el);
         const ok = o.type==='hourly'?o.rate>0 : s.banded?BANDS.every(b=>o.bands[b.k]>0) : o.fee>0;
         if(!ok) missing.push(svcName(s,jurOf(draft))); svcs[s.id]=o; });
       if (missing.length){ toast(`Add a price for: ${missing.join(', ')}.`); return; }
-      draft.services = svcs; draft.updated = new Date().toISOString(); saveFirm(draft); toast('Prices saved'); renderPortal();
+      draft.services = svcs; draft.updated = new Date().toISOString();
+      const btn=$('button[type=submit]',pf); btn.disabled=true;
+      try{ await saveFirm(draft); toast('Prices saved'); renderPortal(); }catch(ex){ toast(ex.message); btn.disabled=false; }
     });
   }
   $('#try-q')?.addEventListener('click',()=>openFirm(draft.id,true));
+
+  // Premium: upgrade prompts, billing, enquiry tracking and export.
+  $$('[data-goplan]',$('#pane')).forEach(b=>b.onclick=()=>{ tab='plan'; $$('[data-tab]').forEach(x=>x.setAttribute('aria-selected',x.dataset.tab==='plan')); drawPane(); });
+  $('#upgrade')?.addEventListener('click',async e=>{
+    const btn=e.currentTarget; btn.disabled=true;
+    try{ await CL.startCheckout(); }
+    catch(ex){
+      if (ex.code==='already_subscribed'){ await CL.refreshBilling().catch(()=>{}); renderPortal(); toast('You are already on Premium.'); }
+      else { toast(ex.message); btn.disabled=false; }
+    }
+  });
+  $('#manage-billing')?.addEventListener('click',async e=>{
+    const btn=e.currentTarget; btn.disabled=true;
+    try{ await CL.openBillingPortal(); }catch(ex){ toast(ex.message); btn.disabled=false; }
+  });
+  $('#enq-csv')?.addEventListener('click',exportEnquiries);
+  $$('[data-estatus]').forEach(sel=>sel.onchange=async()=>{
+    try{ await CL.updateEnquiry(sel.closest('[data-enq]').dataset.enq,{status:sel.value}); toast('Status updated'); }catch(ex){ toast(ex.message); }
+  });
+  $$('[data-enote]').forEach(t=>t.onchange=async()=>{
+    try{ await CL.updateEnquiry(t.closest('[data-enq]').dataset.enq,{note:t.value.trim()}); toast('Note saved'); }catch(ex){ toast(ex.message); }
+  });
 }
 function captureDetails(){
   const v = id => $(id)?.value.trim() ?? '';
   Object.assign(draft,{name:v('#p-name'),nation:$('#p-nation').value,regNo:v('#p-regno'),about:v('#p-about'),town:v('#p-town'),address:v('#p-address'),phone:v('#p-phone'),email:v('#p-email'),website:v('#p-web'),remote:$('#p-remote').checked,vat:$('#p-vat').checked});
 }
 
-route();
+/* ---------- start ---------- */
+if (!LIVE) route();
+else {
+  app.innerHTML = '<div class="wrap" style="padding:80px 0"><p class="muted" role="status">Loading…</p></div>';
+  // Auth changes from another tab or an email link re-draw the page; token refreshes do not (see backend.js).
+  CL.onChange = () => { if (CL.recovery) go('reset'); else route({keepScroll:true}); };
+  // Coming back from Stripe with the back button restores the page from cache; redraw it so buttons work again.
+  window.addEventListener('pageshow',e=>{ if(e.persisted && currentView==='portal' && session()) renderPortal(); });
+  CL.init().then(()=>{
+    const returned = new URLSearchParams(location.search).get('billing');
+    if (returned){ try{ history.replaceState(null,'',location.pathname+location.hash); }catch(e){} }
+    if (CL.recovery) currentView = 'reset';
+    if (returned && session()) currentView = 'portal';
+    if (returned==='success' && session()) tab = 'plan';
+    route();
+    if (returned==='success' && session()){
+      toast('Thanks! Activating your Premium plan…');
+      CL.waitForPremium().then(ok=>{
+        if (currentView==='portal' && session()){ renderPortal(); toast(ok ? 'Premium is active.' : 'Your payment is being confirmed. This can take a minute, so refresh shortly.'); }
+      });
+    } else if (returned==='cancelled') toast('Checkout cancelled. You have not been charged.');
+  }).catch(err=>{
+    console.error(err);
+    app.innerHTML = '<div class="wrap" style="padding:60px 0"><div class="empty"><h3>We could not load Compare Legal</h3><p class="muted">Check your connection and try again.</p><button class="btn" id="reload">Try again</button></div></div>';
+    $('#reload').onclick = () => location.reload();
+  });
+}
 })();
 </script>

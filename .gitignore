@@ -1,0 +1,8 @@
+node_modules/
+.env
+.env.*
+!.env.example
+# Generated per environment by build.py (holds the Supabase URL and public key)
+public/config.js
+supabase/.temp/
+supabase/functions/.env
