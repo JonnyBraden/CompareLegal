@@ -1,4 +1,4 @@
-<title>Compare Legal</title>
+<title>Compare Legal: compare solicitors' fees across the UK</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Compare solicitors' fees for conveyancing, wills, probate and family law across England, Wales, Scotland and Northern Ireland.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -250,7 +250,7 @@ tr.tot td{font-weight:700;background:var(--sunk)}
 
 <div class="proto" role="note"><div class="wrap">
   <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 4.5v4.2M8 10.8v.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-  <span>Prototype. The firms and prices shown are fictional sample data, and accounts are stored in this browser only.</span>
+  <span>We've just launched. Listings marked “Sample firm” are examples with illustrative prices, not real firms. Law firms can <button class="btn link" data-go="firms" style="font-size:inherit;padding:0;color:inherit;text-decoration:underline">list their fees now</button>.</span>
 </div></div>
 
 <header class="top"><div class="wrap">
@@ -315,88 +315,36 @@ const svcById = id => SERVICES.find(s=>s.id===id);
 const svcName = (s,jur='EW') => typeof s.name==='string' ? s.name : s.name[jur];
 const bandFor = price => (BANDS.find(b=>price<=b.max)||BANDS[3]).k;
 
-/* ---------- sample firms (fictional) ---------- */
-const BASE = {
-  purchase:{EW:[850,1050,1350,1850],SC:[900,1150,1450,1950],NI:[750,950,1250,1650]},
-  sale:{EW:[750,900,1150,1550],SC:[800,1000,1250,1700],NI:[650,850,1100,1450]},
-  remortgage:{EW:[450,495,595,750],SC:[500,550,650,800],NI:[425,475,550,700]},
-  will1:{EW:195,SC:180,NI:175}, will2:{EW:295,SC:275,NI:260}, poa:{EW:450,SC:395,NI:375},
-  grant:{EW:1250,SC:1350,NI:1100}, estate:{EW:2950,SC:3200,NI:2600},
-  divorce:{EW:650,SC:750,NI:700}, finances:{EW:1100,SC:950,NI:1000}, children:{EW:150,SC:150,NI:140}
-};
-function sampleDisb(id,jur){
-  const land = JUR[jur].land;
-  const D = {
-    purchase:[[jur==='SC'?'Property enquiry certificate & searches':'Property searches (local, drainage, environmental)',jur==='SC'?140:jur==='NI'?260:320],[`${land} registration fee (estimate)`,jur==='SC'?150:jur==='NI'?110:150],['ID and anti-money laundering checks',18],['Bank transfer fee',36]],
-    sale:[[jur==='SC'?'Title and legal reports':'Copies of title documents',jur==='SC'?85:12],['ID and anti-money laundering checks',18],['Bank transfer fee',36]],
-    remortgage:[['Search insurance',30],[`${land} registration fee (estimate)`,jur==='SC'?80:45],['ID checks',18]],
-    will1:[],will2:[],
-    poa:[['Registration fee (sample figure)',jur==='SC'?96:jur==='NI'?135:92]],
-    grant:[['Court fee for the grant (sample figure)',jur==='SC'?300:jur==='NI'?280:300],['Copies of the grant',16]],
-    estate:[['Court fee for the grant (sample figure)',jur==='SC'?300:jur==='NI'?280:300],['Statutory notices to creditors',jur==='SC'?0:140],['Bankruptcy searches',12]],
-    divorce:[['Court fee (sample figure)',jur==='SC'?150:jur==='NI'?250:612]],
-    finances:[['Court fee (sample figure)',jur==='SC'?0:58]],
-    children:[]
-  };
-  return (D[id]||[]).filter(d=>d[1]>0).map(([label,amount])=>({label,amount}));
-}
-const r25 = n => Math.round(n/25)*25-5 > 0 ? Math.round(n/25)*25-5 : Math.round(n/25)*25;
 const TIMES = {purchase:'8–12 weeks',sale:'8–12 weeks',remortgage:'3–5 weeks',will1:'1–2 weeks',will2:'1–2 weeks',poa:'2–3 weeks',grant:'8–16 weeks',estate:'6–12 months',divorce:'6–8 months',finances:'4–8 weeks',children:'Within 5 working days'};
-const PHONES = {England:'01632 960',Wales:'01632 960',Scotland:'0131 496 0',NorthernIreland:'028 9649 6'};
-// id, name, nation, town, multiplier, areas, remote, colour, hourly services, about
-const SAMPLE_DEF = [
-  ['ashcombe-reid','Ashcombe Reid Solicitors','England','Bristol',1.04,['conveyancing','wills','probate'],false,'#2F5D50',[],'High-street practice on Gloucester Road handling residential property and private client work for over 30 years.'],
-  ['mercer-lane','Mercer Lane Law','England','Leeds',0.93,['conveyancing'],true,'#7A3E2E',[],'Specialist residential conveyancers acting for buyers and sellers across England and Wales, with online case tracking.'],
-  ['holloway-prentice','Holloway & Prentice','England','Manchester',1.12,['conveyancing','wills','probate','family'],false,'#3B4A7A',['estate'],'Full-service high-street firm with offices in Didsbury and Chorlton.'],
-  ['brightwater','Brightwater Conveyancing LLP','England','Birmingham',0.86,['conveyancing'],true,'#1F6E8C',[],'Fixed-fee conveyancing delivered by phone and online, with a named lawyer for every case.'],
-  ['kestrel-family','Kestrel Family Law','England','Nottingham',1.0,['family'],true,'#6B3A6B',['children'],'Family law practice focused on resolving separation without going to court where possible.'],
-  ['tamsin-hale','Tamsin Hale Private Client','England','Norwich',1.18,['wills','probate'],false,'#4D5B2E',[],'Wills, powers of attorney and estates for families across Norfolk.'],
-  ['okafor-whitley','Okafor Whitley Solicitors','England','London',1.32,['conveyancing','wills','probate','family'],false,'#8A5A12',['estate','children'],'South London firm in Brixton advising on property, family and private client matters.'],
-  ['pennant-row','Pennant Row Legal','Wales','Cardiff',0.97,['conveyancing','wills','probate'],false,'#2E5E7A',[],'Bilingual Welsh and English service for property and wills across South Wales.'],
-  ['fernside','Fernside Law','England','Exeter',1.08,['conveyancing','wills','family'],false,'#5E4B8B',[],'Devon practice handling homes, wills and family matters.'],
-  ['maciver-rennie','MacIver Rennie WS','Scotland','Edinburgh',1.1,['conveyancing','wills','probate'],false,'#22495E',['estate'],'Edinburgh firm of solicitors and estate agents, handling residential property and executries.'],
-  ['dunmore-paterson','Dunmore Paterson','Scotland','Glasgow',0.95,['conveyancing','family','wills'],true,'#7A2E44',[],'Glasgow practice acting for clients across Scotland on property and family matters.'],
-  ['cairnhill','Cairnhill Legal','Scotland','Aberdeen',1.02,['conveyancing','wills','probate'],false,'#3E6B4E',[],'North-east property and private client specialists.'],
-  ['strathview','Strathview Solicitors','Scotland','Inverness',0.9,['wills','probate','family'],true,'#5A4A2E',[],'Highland firm offering wills, executries and family law, in person or by video.'],
-  ['lagan-quay','Lagan Quay Solicitors','Northern Ireland','Belfast',1.12,['conveyancing','wills','probate','family'],false,'#1E4D6B',['estate'],'Belfast city-centre firm handling property, private client and family work.'],
-  ['moyle-corrigan','Moyle & Corrigan','Northern Ireland','Ballymena',0.92,['conveyancing','wills','probate'],false,'#6A3F2A',[],'Long-established Co. Antrim practice.'],
-  ['strangford','Strangford Solicitors','Northern Ireland','Newtownards',0.97,['conveyancing','wills','probate','family'],false,'#2F5D7A',[],'Ards and North Down firm with a focus on residential property and wills.'],
-  ['foyle-street','Foyle Street Legal','Northern Ireland','Derry~Londonderry',0.88,['conveyancing','family'],true,'#4A6B2E',[],'North-west firm acting across Northern Ireland, with remote appointments available.'],
-  ['quoile','Quoile Law','Northern Ireland','Downpatrick',1.0,['wills','probate'],false,'#7A5A2E',[],'Private client practice for wills, enduring powers of attorney and estates.']
-];
-function buildSample(){
-  return SAMPLE_DEF.map(([id,name,nation,town,m,areas,remote,color,hourly,about],i)=>{
-    const jur = NATIONS[nation].jur, services = {};
-    SERVICES.filter(s=>areas.includes(s.area)).forEach((s,j)=>{
-      const wob = 1 + (((i*7+j*3)%9)-4)/100;
-      const b = BASE[s.id][jur];
-      let o;
-      if (hourly.includes(s.id)) o = {type:'hourly',rate:r25(210*m*wob)};
-      else if (s.banded) o = {type:'fixed',bands:Object.fromEntries(BANDS.map((bd,k)=>[bd.k,r25(b[k]*m*wob)]))};
-      else o = {type: s.id==='estate'||(s.id==='finances'&&i%2) ? 'from':'fixed', fee:r25(b*m*wob)};
-      o.disb = sampleDisb(s.id,jur); o.time = TIMES[s.id]; o.inc = s.inc;
-      services[s.id] = o;
-    });
-    const tel = (PHONES[nation.replace(' ','')]||'01632 960') + String(100+i*37).slice(-3);
-    const slug = name.toLowerCase().replace(/[^a-z]+/g,'').slice(0,18);
-    return {id,name,nation,town,remote,color,about,services,sample:true,
-      regNo:'Sample listing',address:`${10+i*3} High Street, ${town}`,phone:tel,
-      email:`enquiries@${slug}.example`,website:`www.${slug}.example`,updated:'2026-09-'+String(1+(i*5)%28).padStart(2,'0'),vat:true};
-  });
-}
-const SAMPLE = buildSample();
 
-/* ---------- storage (browser-only prototype) ---------- */
+/* ---------- data (Supabase) ---------- */
+const SB_URL = 'https://dtsxrmmdnyjmplhoyinv.supabase.co';
+const SB_KEY = 'sb_publishable_gyrD_o-zaQ2XvgFLTUBgrQ_3r0MYZ3g';
+const bootHash = location.hash;
+const sb = window.supabase.createClient(SB_URL, SB_KEY, {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true}});
 const mem = {};
 const store = {
   get(k,d){ try{ const v = localStorage.getItem('cl:'+k); return v ? JSON.parse(v) : (k in mem ? mem[k] : d); }catch(e){ return k in mem ? mem[k] : d; } },
   set(k,v){ mem[k]=v; try{ localStorage.setItem('cl:'+k, JSON.stringify(v)); return true; }catch(e){ return false; } }
 };
-const userFirms = () => store.get('firms',{});
-const allFirms = () => { const u = userFirms(); const merged = SAMPLE.map(f=>u[f.id]||f); Object.values(u).forEach(f=>{ if(!SAMPLE.some(s=>s.id===f.id)) merged.push(f); }); return merged; };
-const firmById = id => allFirms().find(f=>f.id===id);
-function saveFirm(f){ const u = userFirms(); u[f.id]=f; store.set('firms',u); }
-const session = () => store.get('session',null);
+let FIRMS = [], SESS = null, ENQ = null, recovering = false;
+const fromRow = r => ({id:r.id,owner:r.owner,name:r.name,nation:r.nation,town:r.town,address:r.address,phone:r.phone,email:r.email,website:r.website,regNo:r.reg_no,about:r.about,color:r.color,logo:r.logo_url||null,remote:r.remote,vat:r.vat,services:r.services||{},listed:r.listed,sample:r.sample,updated:r.updated_at});
+const toRow = f => ({name:f.name,nation:f.nation,town:f.town||'',address:f.address||'',phone:f.phone||'',email:f.email||'',website:f.website||'',reg_no:f.regNo||'',about:f.about||'',color:f.color||'#24507A',logo_url:f.logo||null,remote:!!f.remote,vat:f.vat!==false,services:f.services||{},listed:!!f.listed});
+async function loadFirms(){ const {data,error} = await sb.from('firms').select('*').order('name'); if(error) throw error; FIRMS = data.map(fromRow); }
+const allFirms = () => FIRMS;
+const firmById = id => FIRMS.find(f=>f.id===id);
+function cacheFirm(n){ const i = FIRMS.findIndex(x=>x.id===n.id); if(i>=0) FIRMS[i]=n; else FIRMS.push(n); return n; }
+async function saveFirm(f){ const {data,error} = await sb.from('firms').update(toRow(f)).eq('id',f.id).select().single(); if(error) throw error; return cacheFirm(fromRow(data)); }
+const session = () => SESS;
+async function setSession(s){
+  if (!s){ SESS = null; ENQ = null; return; }
+  let f = FIRMS.find(x=>x.owner===s.user.id);
+  if (!f){ await loadFirms(); f = FIRMS.find(x=>x.owner===s.user.id); }
+  SESS = {email:s.user.email, uid:s.user.id, firmId:f?.id||null};
+}
+const incOf = (f,sid) => f.services?.[sid]?.inc || (f.sample ? svcById(sid)?.inc : '') || '';
+const timeOf = (f,sid) => f.services?.[sid]?.time || (f.sample ? TIMES[sid] : '') || '';
+const errMsg = e => (e && (e.message||e.error_description)) || 'Something went wrong. Please try again.';
 
 /* ---------- helpers ---------- */
 const $ = (s,el=document)=>el.querySelector(s);
@@ -494,7 +442,7 @@ function cheapest(sid, nation, band){
   return min;
 }
 function renderHome(){
-  const nFirms = allFirms().length;
+  const nReal = allFirms().filter(f=>!f.sample).length;
   app.innerHTML = `
   <section class="hero"><div class="wrap hero-grid">
     <div>
@@ -523,7 +471,7 @@ function renderHome(){
   </div></section>
 
   <section class="band" id="how"><div class="wrap">
-    <div class="sec-head"><div><h2>How it works</h2><p>${nFirms} firms list their prices directly. We show them in the same format so you can compare like with like.</p></div></div>
+    <div class="sec-head"><div><h2>How it works</h2><p>${nReal>1?nReal+' firms list':'Firms list'} their prices directly. We show them in the same format so you can compare like with like.</p></div></div>
     <div class="steps">
       <div class="step"><span class="n">1</span><h3>Tell us what you need</h3><p>Pick the service and where you are. For property, add the price, since conveyancing fees are set in value bands.</p></div>
       <div class="step"><span class="n">2</span><h3>Compare the full cost</h3><p>See each firm's legal fee, VAT and disbursements added up. Tick up to three firms to compare what each fee includes.</p></div>
@@ -623,8 +571,8 @@ function drawCards(){
       <div style="min-width:0">
         <h3>${esc(f.name)}</h3>
         <div class="meta"><span>${esc(f.town)}, ${esc(f.nation)}</span><span>${JUR[jurOf(f)].short} regulated</span></div>
-        <div class="chips">${feeChip(q.type)}${f.remote?`<span class="chip">${away?'Acts remotely':'Remote appointments'}</span>`:''}${s.time?`<span class="chip">${esc(s.time)}</span>`:''}${f.id===me?'<span class="chip mine">Your listing</span>':''}${f.sample?'<span class="chip">Sample firm</span>':''}</div>
-        ${s.inc?`<p class="inc">${esc(s.inc)}</p>`:''}
+        <div class="chips">${feeChip(q.type)}${f.remote?`<span class="chip">${away?'Acts remotely':'Remote appointments'}</span>`:''}${timeOf(f,state.svc)?`<span class="chip">${esc(timeOf(f,state.svc))}</span>`:''}${f.id===me?'<span class="chip mine">Your listing</span>':''}${f.sample?'<span class="chip">Sample firm</span>':''}</div>
+        ${incOf(f,state.svc)?`<p class="inc">${esc(incOf(f,state.svc))}</p>`:''}
       </div>
       <div class="price">
         ${q.type==='hourly'
@@ -680,7 +628,7 @@ function feeTableHTML(f){
       <tbody>${svcs.map(s=>{ const o=f.services[s.id];
         const cells = s.banded ? (o.type==='hourly'?`<td class="r num" colspan="4">${gbp(o.rate)}/hr</td>`:BANDS.map(b=>`<td class="r num" ${b.k===band&&s.id===state.svc?'style="font-weight:700"':''}>${o.bands?.[b.k]?gbp(o.bands[b.k]):'–'}</td>`).join(''))
           : `<td class="r num" ${svcs.some(x=>x.banded)?'colspan="4"':''}>${o.type==='hourly'?gbp(o.rate)+'/hr':gbp(o.fee)}</td>`;
-        return `<tr><td>${esc(svcName(s,jur))}${o.time?`<br><span class="muted" style="font-size:.8rem">${esc(o.time)}</span>`:''}</td><td>${o.type==='fixed'?'Fixed':o.type==='from'?'From':'Hourly'}</td>${cells}</tr>`; }).join('')}</tbody></table></div></div>`;
+        return `<tr><td>${esc(svcName(s,jur))}${timeOf(f,s.id)?`<br><span class="muted" style="font-size:.8rem">${esc(timeOf(f,s.id))}</span>`:''}</td><td>${o.type==='fixed'?'Fixed':o.type==='from'?'From':'Hourly'}</td>${cells}</tr>`; }).join('')}</tbody></table></div></div>`;
   }).join('');
 }
 function openFirm(id, toQuote=false){
@@ -691,7 +639,7 @@ function openFirm(id, toQuote=false){
     <div class="m-body">
       <div class="m-cols">
         <div style="display:grid;gap:14px;align-content:start;min-width:0">
-          ${f.about?`<p>${esc(f.about)}</p>`:''}
+          ${f.sample?`<div class="notice"><b>Sample listing</b><span>This is an example firm with illustrative prices. It isn't a real firm and can't take enquiries.</span></div>`:''}${f.about?`<p>${esc(f.about)}</p>`:''}
           ${def?`<div><p class="eyebrow">Your quote: ${esc(svcName(def,jur))}${def.banded?` at ${gbp(state.price)}`:''}</p></div>`:'<p class="muted">This firm has not published any prices yet.</p>'}
           ${q && q.type!=='hourly' ? `<div class="tbl-wrap"><table><tbody>
             <tr><td>Legal fee${q.type==='from'?' (starting price)':''}</td><td class="r num">${gbp(q.legal,2)}</td></tr>
@@ -699,7 +647,7 @@ function openFirm(id, toQuote=false){
             ${(o.disb||[]).map(d=>`<tr><td>${esc(d.label)}</td><td class="r num">${gbp(d.amount,2)}</td></tr>`).join('')}
             <tr class="tot"><td>Total</td><td class="r num"><span class="hl">${gbp(q.total,2)}</span></td></tr></tbody></table></div>`
           : q ? `<p>Charged at <b>${gbp(q.rate)} per hour plus VAT</b>. Ask the firm for an estimate based on your circumstances.</p>` : ''}
-          ${o.inc?`<p class="muted" style="font-size:.92rem"><b style="color:var(--ink)">Included:</b> ${esc(o.inc)}</p>`:''}
+          ${sid&&incOf(f,sid)?`<p class="muted" style="font-size:.92rem"><b style="color:var(--ink)">Included:</b> ${esc(incOf(f,sid))}</p>`:''}
           ${def?.area==='conveyancing'?`<p class="muted" style="font-size:.85rem">Excludes ${esc(NATIONS[state.nation].tax)}. Leasehold, new-build and Help to Buy cases usually cost more.</p>`:''}
         </div>
         <div style="display:grid;gap:16px;align-content:start">
@@ -710,26 +658,27 @@ function openFirm(id, toQuote=false){
             <div><dt>Address</dt><dd>${esc(f.address)}</dd><span></span></div>
             <div><dt>Regulator</dt><dd>${esc(JUR[jur].reg)}<br><span class="mono muted">${esc(f.regNo||'')}</span></dd><span></span></div>
           </dl>
-          <form class="form-grid" id="qform" style="border-top:1px solid var(--line);padding-top:16px">
+          ${f.sample?`<div class="notice" style="border-top:1px solid var(--line);padding-top:16px"><b>Quote requests unavailable</b><span>This is a sample listing, so it can't receive enquiries. Real firms show a quote form here.</span></div>`:`<form class="form-grid" id="qform" style="border-top:1px solid var(--line);padding-top:16px">
             <h3 style="font-family:var(--f-body);font-weight:700;font-size:1rem">Request a quote</h3>
             <label class="f">Your name<input class="in" id="q-name" required autocomplete="name"></label>
             <label class="f">Email<input class="in" id="q-email" type="email" required autocomplete="email"></label>
             <label class="f">Phone <small>(optional)</small><input class="in" id="q-phone" type="tel" autocomplete="tel"></label>
             <label class="f">Anything the firm should know? <small>(optional)</small><textarea class="in" id="q-msg" placeholder="e.g. leasehold flat, mortgage with Nationwide"></textarea></label>
             <button class="btn" type="submit">Send request to ${esc(f.name)}</button>
-            <p class="muted" style="font-size:.8rem">The firm will contact you with a written quote. In this prototype, requests appear in the firm's portal in this browser.</p>
-          </form>
+            <p class="muted" style="font-size:.8rem">Your details go only to ${esc(f.name)}, who will contact you directly with a written quote and their terms of business.</p>
+          </form>`}
         </div>
       </div>
       <div style="display:grid;gap:18px"><h2 style="font-size:1.3rem">All published fees <span class="muted" style="font-family:var(--f-body);font-size:.8rem">excluding VAT and disbursements</span></h2>${feeTableHTML(f)}</div>
     </div>`, true);
   if (toQuote) setTimeout(()=>$('#q-name',s)?.focus(),50);
-  $('#qform',s).addEventListener('submit',e=>{
+  $('#qform',s)?.addEventListener('submit',async e=>{
     e.preventDefault();
-    const enq = store.get('enquiries',[]);
-    enq.unshift({id:Date.now().toString(36),firmId:f.id,svc:sid,nation:state.nation,price:def?.banded?state.price:null,name:$('#q-name',s).value.trim(),email:$('#q-email',s).value.trim(),phone:$('#q-phone',s).value.trim(),msg:$('#q-msg',s).value.trim(),total:q?.total??null,at:new Date().toISOString()});
-    store.set('enquiries',enq);
-    e.target.innerHTML = `<div class="ok"><b>Request saved for ${esc(f.name)}.</b><br>On the live site the firm is emailed straight away and usually replies within one working day.</div>`;
+    const form = e.target, btn = $('button[type=submit]',form); btn.disabled = true; btn.textContent = 'Sending…';
+    const row = {firm_id:f.id, svc:sid, nation:state.nation, price:def?.banded?Math.round(state.price):null, name:$('#q-name',s).value.trim(), email:$('#q-email',s).value.trim(), phone:$('#q-phone',s).value.trim(), msg:$('#q-msg',s).value.trim(), total:q?.total??null};
+    const {error} = await sb.from('enquiries').insert(row);
+    if (error){ btn.disabled=false; btn.textContent=`Send request to ${f.name}`; toast(f.listed ? 'We couldn’t send that. Check your details and try again.' : 'This listing isn’t live yet, so it can’t receive requests.'); return; }
+    form.innerHTML = `<div class="ok"><b>Request sent to ${esc(f.name)}.</b><br>The firm will contact you at ${esc(row.email)} with a written quote.</div>`;
   });
 }
 function openCompare(){
@@ -747,18 +696,34 @@ function openCompare(){
         ${row('Legal fee',(f,q)=>q.legal?`<span class="num">${gbp(q.legal,2)}</span>`:'–')}
         ${row('VAT',(f,q)=>q.vat?`<span class="num">${gbp(q.vat,2)}</span>`:'–')}
         ${row('Disbursements',(f,q,o)=>(o.disb||[]).length?(o.disb.map(d=>`<div style="display:flex;justify-content:space-between;gap:10px;font-size:.85rem"><span class="muted">${esc(d.label)}</span><span class="num">${gbp(d.amount)}</span></div>`).join('')):'<span class="muted">None</span>')}
-        ${row('Included',(f,q,o)=>`<span style="font-size:.88rem">${esc(o.inc||'Not stated')}</span>`)}
-        ${row('Timescale',(f,q,o)=>esc(o.time||'Not stated'))}
+        ${row('Included',f=>`<span style="font-size:.88rem">${esc(incOf(f,state.svc)||'Not stated')}</span>`)}
+        ${row('Timescale',f=>esc(timeOf(f,state.svc)||'Not stated'))}
         ${row('Location',f=>`${esc(f.town)}${f.remote?'<br><span class="muted" style="font-size:.85rem">Also acts remotely</span>':''}`)}
         ${row('Regulator',f=>`${JUR[jurOf(f)].short}`)}
-        ${row('',f=>`<button class="btn sm" data-q2="${f.id}">Request a quote</button>`)}
+        ${row('',f=>f.sample?'<span class="chip">Sample firm</span>':`<button class="btn sm" data-q2="${f.id}">Request a quote</button>`)}
       </tbody></table></div></div>`, true);
   $$('[data-q2]',s).forEach(b=>b.onclick=()=>openFirm(b.dataset.q2,true));
 }
 
 /* ---------- firm auth ---------- */
 let authMode = 'signin';
+const SITE = location.origin + '/';
 function renderAuth(){
+  const modeBtns = authMode==='recover' ? '' : `<div class="seg" role="group" aria-label="Account"><button type="button" data-mode="signin" aria-pressed="${authMode==='signin'}">Sign in</button><button type="button" data-mode="register" aria-pressed="${authMode==='register'}">Register your firm</button></div>`;
+  const fields = authMode==='recover' ? `
+        <h3 style="font-family:var(--f-body);font-weight:700;font-size:1.05rem">Choose a new password</h3>
+        <label class="f">New password<input class="in" id="a-pw" type="password" required minlength="8" autocomplete="new-password"><small>At least 8 characters</small></label>`
+    : authMode==='forgot' ? `
+        <h3 style="font-family:var(--f-body);font-weight:700;font-size:1.05rem">Reset your password</h3>
+        <p class="muted" style="font-size:.9rem">We'll email you a link to choose a new password.</p>
+        <label class="f">Work email<input class="in" id="a-email" type="email" required autocomplete="email"></label>`
+    : `${authMode==='register'?`
+          <label class="f">Firm name<input class="in" id="a-firm" required maxlength="120" autocomplete="organization"></label>
+          <label class="f">Nation<select class="in" id="a-nation">${Object.keys(NATIONS).map(n=>`<option>${n}</option>`).join('')}</select></label>`:''}
+        <label class="f">Work email<input class="in" id="a-email" type="email" required autocomplete="email"></label>
+        <label class="f">Password<input class="in" id="a-pw" type="password" required minlength="8" autocomplete="${authMode==='register'?'new-password':'current-password'}"><small>${authMode==='register'?'At least 8 characters':''}</small></label>
+        ${authMode==='register'?`<label class="check" style="font-size:.88rem"><input type="checkbox" id="a-ok" required> I'm authorised to list this firm's fees, and the details I add will be accurate.</label>`:''}`;
+  const submit = {signin:'Sign in',register:'Create firm account',forgot:'Email me a reset link',recover:'Save new password'}[authMode];
   app.innerHTML = `<div class="wrap auth">
     <div>
       <p class="eyebrow">For law firms</p>
@@ -770,42 +735,50 @@ function renderAuth(){
       </div>
     </div>
     <div class="panel">
-      <div class="seg" role="group" aria-label="Account"><button type="button" data-mode="signin" aria-pressed="${authMode==='signin'}">Sign in</button><button type="button" data-mode="register" aria-pressed="${authMode==='register'}">Register your firm</button></div>
+      ${modeBtns}
       <form id="authf" class="form-grid">
-        ${authMode==='register'?`
-          <label class="f">Firm name<input class="in" id="a-firm" required autocomplete="organization"></label>
-          <label class="f">Nation<select class="in" id="a-nation">${Object.keys(NATIONS).map(n=>`<option>${n}</option>`).join('')}</select></label>`:''}
-        <label class="f">Work email<input class="in" id="a-email" type="email" required autocomplete="email"></label>
-        <label class="f">Password<input class="in" id="a-pw" type="password" required minlength="8" autocomplete="${authMode==='register'?'new-password':'current-password'}"><small>${authMode==='register'?'At least 8 characters':''}</small></label>
+        ${fields}
         <p class="err" id="a-err" hidden></p>
-        <button class="btn" type="submit">${authMode==='register'?'Create firm account':'Sign in'}</button>
+        <div class="ok" id="a-ok-msg" hidden></div>
+        <button class="btn" type="submit">${submit}</button>
+        ${authMode==='signin'?'<button type="button" class="btn link" data-mode="forgot" style="justify-self:start;font-size:.9rem">Forgotten your password?</button>':''}
+        ${authMode==='forgot'?'<button type="button" class="btn link" data-mode="signin" style="justify-self:start;font-size:.9rem">Back to sign in</button>':''}
       </form>
-      <div style="border-top:1px solid var(--line);padding-top:16px;display:grid;gap:8px">
-        <p class="muted" style="font-size:.88rem">Want to look around first? Open the portal as a sample firm, Strangford Solicitors in Newtownards.</p>
-        <button class="btn ghost" id="demo">Try the demo firm account</button>
-      </div>
     </div>
   </div>`;
   $$('[data-mode]').forEach(b=>b.onclick=()=>{ authMode=b.dataset.mode; renderAuth(); });
-  $('#demo').onclick = ()=>{ store.set('session',{email:'demo@strangford.example',firmId:'strangford',demo:true}); toast('Signed in as Strangford Solicitors'); go('portal'); };
   $('#authf').addEventListener('submit',async e=>{
     e.preventDefault();
-    const email = $('#a-email').value.trim().toLowerCase(), pw = $('#a-pw').value, err = $('#a-err');
-    const accounts = store.get('accounts',{}); const h = await hash(pw);
-    if (authMode==='signin'){
-      const a = accounts[email]; if(!a || a.pw!==h){ err.textContent='That email and password don’t match an account in this browser. Check them, or register your firm.'; err.hidden=false; return; }
-      store.set('session',{email,firmId:a.firmId}); toast('Signed in'); go('portal');
-    } else {
-      if (accounts[email]){ err.textContent='An account with this email already exists. Sign in instead.'; err.hidden=false; return; }
-      const name = $('#a-firm').value.trim(), nation=$('#a-nation').value;
-      const id = name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'-'+Date.now().toString(36).slice(-4);
-      saveFirm({id,name,nation,town:'',address:'',phone:'',email,website:'',regNo:'',remote:false,about:'',color:'#24507A',services:{},vat:true,updated:new Date().toISOString(),listed:false});
-      accounts[email] = {pw:h,firmId:id}; store.set('accounts',accounts); store.set('session',{email,firmId:id});
-      toast('Account created. Add your details and prices to go live.'); go('portal');
-    }
+    const err = $('#a-err'), ok = $('#a-ok-msg'), btn = $('#authf button[type=submit]');
+    const fail = m => { err.textContent = m; err.hidden = false; ok.hidden = true; btn.disabled = false; };
+    err.hidden = true; btn.disabled = true;
+    const email = $('#a-email')?.value.trim().toLowerCase(), pw = $('#a-pw')?.value;
+    try {
+      if (authMode==='signin'){
+        const {data,error} = await sb.auth.signInWithPassword({email,password:pw});
+        if (error) return fail(/confirm/i.test(error.message) ? 'Please confirm your email address first, using the link we sent you.' : 'That email and password don’t match an account. Check them, or register your firm.');
+        await setSession(data.session); toast('Signed in'); go('portal');
+      } else if (authMode==='register'){
+        const firm_name = $('#a-firm').value.trim(), nation = $('#a-nation').value;
+        const {data,error} = await sb.auth.signUp({email,password:pw,options:{emailRedirectTo:SITE,data:{firm_name,nation}}});
+        if (error) return fail(/registered|exists/i.test(error.message) ? 'An account with this email already exists. Sign in instead.' : errMsg(error));
+        if (data.user && data.user.identities && data.user.identities.length===0) return fail('An account with this email already exists. Sign in instead.');
+        if (data.session){ await setSession(data.session); toast('Account created. Add your details and prices to go live.'); go('portal'); return; }
+        ok.innerHTML = `<b>Check your inbox.</b><br>We've sent a confirmation link to ${esc(email)}. Open it to finish setting up ${esc(firm_name)}.`; ok.hidden = false; btn.disabled = false;
+      } else if (authMode==='forgot'){
+        const {error} = await sb.auth.resetPasswordForEmail(email,{redirectTo:SITE});
+        if (error) return fail(errMsg(error));
+        ok.innerHTML = `If there's an account for ${esc(email)}, a reset link is on its way.`; ok.hidden = false; btn.disabled = false;
+      } else if (authMode==='recover'){
+        const {data,error} = await sb.auth.updateUser({password:pw});
+        if (error) return fail(errMsg(error));
+        recovering = false; authMode = 'signin';
+        const {data:{session:s2}} = await sb.auth.getSession(); await setSession(s2);
+        toast('Password updated'); go('portal');
+      }
+    } catch(ex){ fail(errMsg(ex)); }
   });
 }
-async function hash(s){ try{ const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode('cl:'+s)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join(''); }catch(e){ return 'p:'+s.length+':'+[...s].reduce((a,c)=>(a*31+c.charCodeAt(0))|0,7); } }
 
 /* ---------- firm portal ---------- */
 let tab = 'details', draft = null;
@@ -816,16 +789,24 @@ function checklist(f){
     ['Town and address', !!(f.town&&f.address)],
     ['Phone and email', !!(f.phone&&f.email)],
     ['Regulator number', !!f.regNo],
-    ['Logo uploaded', !!f.logo || !!f.sample],
+    ['Logo uploaded', !!f.logo],
     ['At least one service priced', priced>0]
   ];
 }
 const isLive = f => checklist(f).filter(([l])=>l!=='Logo uploaded').every(([,ok])=>ok);
+async function signOut(){ await sb.auth.signOut(); SESS=null; ENQ=null; tab='details'; try{ await loadFirms(); }catch(e){} toast('Signed out'); go('firms'); }
+async function loadEnquiries(){
+  const id = session()?.firmId; if(!id) return;
+  const {data,error} = await sb.from('enquiries').select('*').eq('firm_id',id).order('created_at',{ascending:false}).limit(500);
+  ENQ = error ? [] : data;
+  if (currentView==='portal' && session()?.firmId===id){ const t=$('[data-tab="enquiries"]'); if(t) t.textContent = `Enquiries${ENQ.length?` (${ENQ.length})`:''}`; if(tab==='enquiries') drawPane(); }
+}
 function renderPortal(){
-  const sess = session(); const f0 = firmById(sess.firmId);
-  if (!f0){ store.set('session',null); return go('firms'); }
+  const sess = session(); const f0 = sess && firmById(sess.firmId);
+  if (!f0){ app.innerHTML = `<div class="wrap" style="padding:60px 0"><div class="empty"><h3>We couldn't find your firm's listing</h3><p class="muted">Sign out and back in. If it still doesn't appear, contact us.</p><button class="btn ghost sm" id="signout">Sign out</button></div></div>`; $('#signout').onclick=signOut; return; }
   draft = JSON.parse(JSON.stringify(f0));
-  const enq = store.get('enquiries',[]).filter(e=>e.firmId===f0.id);
+  const enq = ENQ || [];
+  if (ENQ===null) loadEnquiries();
   const live = isLive(f0) && f0.listed!==false;
   app.innerHTML = `
   <div class="dash-head"><div class="wrap">
@@ -839,12 +820,14 @@ function renderPortal(){
       <div class="box"><p class="eyebrow">Listing checklist</p><ul class="todo">${checklist(f0).map(([l,ok])=>`<li class="${ok?'done':''}"><span class="dot">${ok?'✓':''}</span><span>${l}</span></li>`).join('')}</ul>
         ${!live && isLive(f0)?'<button class="btn sm" id="publish">Publish listing</button>':''}</div>
       <div class="box"><p class="eyebrow">How clients see your price</p><p style="font-size:.88rem" class="muted">Totals are worked out as your fee, plus VAT at 20%, plus the disbursements you list. Keep disbursements up to date so your total stays accurate.</p></div>
-      ${sess.demo?'<div class="box"><p class="eyebrow">Demo account</p><p style="font-size:.88rem" class="muted">Changes are saved in this browser. Edit a price, then search for that service to see your listing update.</p></div>':''}
+      ${live?'<div class="box"><p class="eyebrow">Your listing</p><p style="font-size:.88rem" class="muted">Clients can find you now. To take your listing down, use the button below.</p><button class="btn ghost sm" id="unpublish">Hide listing</button></div>':''}
     </aside></div>`;
   $$('[data-tab]').forEach(b=>b.onclick=()=>{ tab=b.dataset.tab; $$('[data-tab]').forEach(x=>x.setAttribute('aria-selected',x===b)); drawPane(); });
-  $('#signout').onclick=()=>{ store.set('session',null); tab='details'; toast('Signed out'); go('firms'); };
+  $('#signout').onclick=signOut;
   $('#view-live').onclick=()=>openFirm(f0.id);
-  $('#publish')?.addEventListener('click',()=>{ const f=firmById(f0.id); f.listed=true; saveFirm(f); toast('Your listing is live'); renderPortal(); });
+  const setListed = async (on,btn) => { btn.disabled=true; try{ await saveFirm({...firmById(f0.id),listed:on}); toast(on?'Your listing is live':'Your listing is hidden'); renderPortal(); }catch(e){ btn.disabled=false; toast(errMsg(e)); } };
+  $('#publish')?.addEventListener('click',e=>setListed(true,e.target));
+  $('#unpublish')?.addEventListener('click',e=>setListed(false,e.target));
   drawPane();
 }
 function drawPane(){
@@ -858,7 +841,7 @@ function detailsPane(){
   const f = draft, jur = jurOf(f);
   return `<form class="pane" id="detf">
     <h3>Logo</h3>
-    <div class="logo-up">${logo(f,84)}<label class="drop" id="drop" for="logo-in"><b>Upload your logo</b><span class="muted">PNG, JPG or SVG, up to 2 MB. Square logos look best.</span><input type="file" id="logo-in" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden></label>
+    <div class="logo-up">${logo(f,84)}<label class="drop" id="drop" for="logo-in"><b>Upload your logo</b><span class="muted">PNG, JPG or SVG, up to 2 MB. Square logos look best.</span><input type="file" id="logo-in" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden></label>
       ${f.logo?'<button type="button" class="btn ghost sm" id="logo-rm">Remove</button>':''}</div>
     <h3 style="margin-top:6px">Firm</h3>
     <div class="row2"><label class="f">Firm name<input class="in" id="p-name" value="${esc(f.name)}" required></label>
@@ -918,12 +901,13 @@ function readSvc(el){
   return o;
 }
 function enquiriesPane(){
-  const enq = store.get('enquiries',[]).filter(e=>e.firmId===draft.id); const jur=jurOf(draft);
-  if (!enq.length) return `<div class="pane"><h3>Enquiries</h3><div class="empty"><p><b>No quote requests yet</b></p><p class="muted">When a client asks for a quote from your listing, it appears here with the service, their details and the price they saw. To try it, open your listing and send yourself a request.</p><button class="btn ghost sm" id="try-q">Open your listing</button></div></div>`;
+  if (ENQ===null) return `<div class="pane"><h3>Enquiries</h3><p class="muted">Loading…</p></div>`;
+  const enq = ENQ; const jur=jurOf(draft);
+  if (!enq.length) return `<div class="pane"><h3>Enquiries</h3><div class="empty"><p><b>No quote requests yet</b></p><p class="muted">When a client asks for a quote from your listing, it appears here with the service, their details and the price they saw. Your listing needs to be live to receive requests.</p></div></div>`;
   return `<div class="pane"><h3>Enquiries</h3>${enq.map(e=>{ const s=svcById(e.svc); return `<div class="enq">
-    <div class="top-l"><b>${esc(e.name)}</b><span class="muted" style="font-size:.85rem">${new Date(e.at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
+    <div class="top-l"><b>${esc(e.name)}</b><span class="muted" style="font-size:.85rem">${new Date(e.created_at).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
     <span style="font-size:.92rem">${esc(svcName(s,jur))}${e.price?` · ${gbp(e.price)}`:''}${e.total?` · saw <b class="num">${gbp(e.total)}</b>`:''}</span>
-    <span class="muted" style="font-size:.9rem">${esc(e.email)}${e.phone?' · '+esc(e.phone):''}</span>
+    <span style="font-size:.9rem"><a href="mailto:${esc(e.email)}">${esc(e.email)}</a>${e.phone?` · <a href="tel:${esc(e.phone.replace(/\s+/g,''))}">${esc(e.phone)}</a>`:''}</span>
     ${e.msg?`<p style="font-size:.92rem;background:var(--sunk);padding:10px;border-radius:6px">${esc(e.msg)}</p>`:''}
   </div>`; }).join('')}</div>`;
 }
@@ -934,9 +918,19 @@ function bindPane(){
     const take = file => {
       if (!file) return; if (file.size>2*1024*1024){ toast('That file is over 2 MB. Choose a smaller image.'); return; }
       const rd = new FileReader(); rd.onload = () => { const img = new Image(); img.onload=()=>{
-        const max=256, sc=Math.min(1,max/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=Math.round(img.width*sc)||max; c.height=Math.round(img.height*sc)||max;
+        const max=512, sc=Math.min(1,max/Math.max(img.width,img.height)); const c=document.createElement('canvas'); c.width=Math.round(img.width*sc)||max; c.height=Math.round(img.height*sc)||max;
         const x=c.getContext('2d'); x.fillStyle='#fff'; x.fillRect(0,0,c.width,c.height); x.drawImage(img,0,0,c.width,c.height);
-        draft.logo = c.toDataURL('image/png'); captureDetails(); drawPane(); toast('Logo added. Save details to keep it.'); };
+        c.toBlob(async blob=>{
+          if (!blob){ toast('We couldn’t read that image. Try a PNG or JPG.'); return; }
+          captureDetails(); toast('Uploading logo…');
+          const path = `${session().uid}/logo-${Date.now()}.png`;
+          const up = await sb.storage.from('logos').upload(path, blob, {contentType:'image/png', cacheControl:'31536000'});
+          if (up.error){ toast('Upload failed: '+errMsg(up.error)); return; }
+          const url = sb.storage.from('logos').getPublicUrl(path).data.publicUrl;
+          const {data,error} = await sb.from('firms').update({logo_url:url}).eq('id',draft.id).select().single();
+          if (error){ toast(errMsg(error)); return; }
+          cacheFirm(fromRow(data)); draft.logo = url; renderPortal(); toast('Logo updated');
+        }, 'image/png'); };
         img.onerror=()=>toast('We couldn’t read that image. Try a PNG or JPG.'); img.src=rd.result; };
       rd.readAsDataURL(file);
     };
@@ -944,10 +938,13 @@ function bindPane(){
     ['dragenter','dragover'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add('over');}));
     ['dragleave','drop'].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove('over');}));
     drop.addEventListener('drop',e=>take(e.dataTransfer.files[0]));
-    $('#logo-rm')?.addEventListener('click',()=>{ captureDetails(); delete draft.logo; drawPane(); });
+    $('#logo-rm')?.addEventListener('click',async()=>{ captureDetails(); const {data,error} = await sb.from('firms').update({logo_url:null}).eq('id',draft.id).select().single(); if(error){ toast(errMsg(error)); return; } cacheFirm(fromRow(data)); draft.logo=null; renderPortal(); toast('Logo removed'); });
     $('#p-nation').onchange = () => { captureDetails(); drawPane(); };
     detf.addEventListener('input',()=>{ $('#dirty').textContent='Unsaved changes'; });
-    detf.addEventListener('submit',e=>{ e.preventDefault(); captureDetails(); if(!draft.name){ toast('Add your firm name.'); return; } draft.updated=new Date().toISOString(); saveFirm(draft); toast('Details saved'); renderPortal(); });
+    detf.addEventListener('submit',async e=>{ e.preventDefault(); captureDetails(); if(!draft.name){ toast('Add your firm name.'); return; }
+      const keep = {...firmById(draft.id), ...draft, services:firmById(draft.id).services, listed:firmById(draft.id).listed};
+      const btn = $('button[type=submit]',detf); btn.disabled = true;
+      try{ await saveFirm(keep); toast('Details saved'); renderPortal(); }catch(ex){ btn.disabled=false; toast(errMsg(ex)); } });
   }
   const pf = $('#pricef');
   if (pf){
@@ -968,16 +965,37 @@ function bindPane(){
         const ok = o.type==='hourly'?o.rate>0 : s.banded?BANDS.every(b=>o.bands[b.k]>0) : o.fee>0;
         if(!ok) missing.push(svcName(s,jurOf(draft))); svcs[s.id]=o; });
       if (missing.length){ toast(`Add a price for: ${missing.join(', ')}.`); return; }
-      draft.services = svcs; draft.updated = new Date().toISOString(); saveFirm(draft); toast('Prices saved'); renderPortal();
+      const btn = $('button[type=submit]',pf); btn.disabled = true;
+      saveFirm({...firmById(draft.id), services:svcs}).then(()=>{ toast('Prices saved'); renderPortal(); }).catch(ex=>{ btn.disabled=false; toast(errMsg(ex)); });
     });
   }
-  $('#try-q')?.addEventListener('click',()=>openFirm(draft.id,true));
+
 }
 function captureDetails(){
   const v = id => $(id)?.value.trim() ?? '';
   Object.assign(draft,{name:v('#p-name'),nation:$('#p-nation').value,regNo:v('#p-regno'),about:v('#p-about'),town:v('#p-town'),address:v('#p-address'),phone:v('#p-phone'),email:v('#p-email'),website:v('#p-web'),remote:$('#p-remote').checked,vat:$('#p-vat').checked});
 }
 
-route();
+/* ---------- boot ---------- */
+app.innerHTML = '<div class="wrap" style="padding:80px 0;text-align:center"><p class="muted">Loading fees…</p></div>';
+(async()=>{
+  try{
+    await loadFirms();
+    const {data:{session:s0}} = await sb.auth.getSession();
+    await setSession(s0);
+  }catch(e){
+    app.innerHTML = `<div class="wrap" style="padding:80px 0"><div class="empty"><h3>We couldn't load firms just now</h3><p class="muted">Please refresh the page in a moment.</p></div></div>`; return;
+  }
+  if (/type=recovery/.test(bootHash)) { recovering = true; }
+  if (recovering){ authMode='recover'; currentView='firms'; SESS=null; }
+  else if (/access_token|type=signup|type=email/.test(bootHash) && SESS){ currentView='portal'; toast('Email confirmed. Welcome to Compare Legal.'); }
+  if (!VIEWS[currentView]) currentView = 'home';
+  try{ history.replaceState(null,'','#'+currentView); }catch(e){}
+  route();
+  sb.auth.onAuthStateChange((ev,s)=>{
+    if (ev==='PASSWORD_RECOVERY'){ setTimeout(()=>{ recovering=true; authMode='recover'; SESS=null; currentView='firms'; route(); },0); }
+    else if (ev==='SIGNED_OUT' && SESS){ setTimeout(()=>{ SESS=null; ENQ=null; if(currentView==='portal') go('firms'); },0); }
+  });
+})();
 })();
 </script>

@@ -1,14 +1,21 @@
 # Compare Legal
 
-Prototype of comparelegal.com — a price comparison site for UK high-street legal services (conveyancing, wills and powers of attorney, probate and estates, family).
+Price comparison for UK high-street legal services (conveyancing, wills & attorneys, probate & estates, family) at comparelegal.com.
 
-- `src/app.html` — the whole app (HTML, CSS, vanilla JS). Also published as a Claude artifact preview.
+## Structure
+- `src/app.html` — the whole app (markup, styles, script). Edit this.
 - `build.py` — wraps `src/app.html` into `public/index.html` for static hosting.
-- `render.yaml` — Render static site blueprint with the comparelegal.com domains.
+- `public/vendor/` — bundled supabase-js (no third-party CDN at runtime).
+- `render.yaml` — Render static site config (comparelegal.com and www).
 
-## Prototype limits
-- Sample firms and prices are fictional and clearly labelled.
-- Firm accounts, prices, logos and quote requests are stored in the visitor's browser (localStorage).
+## Backend (Supabase project `comparelegal`, ref dtsxrmmdnyjmplhoyinv, London)
+- `firms` — one row per firm account (created automatically on sign-up from the firm name and nation), plus 18 seeded sample firms (`sample = true`, cannot receive enquiries).
+- `enquiries` — quote requests; anyone can create one for a live, non-sample firm; only that firm can read them.
+- Storage bucket `logos` — public read; each account can only write inside its own folder.
+- Row-level security on everything; the browser only uses the publishable key.
 
-## Next step to production
-Move firms, prices, logos (storage) and enquiries into a database with real authentication (e.g. Supabase Auth + Postgres + Storage), add email delivery for quote requests, and firm verification against regulator records.
+## To do before scaling up
+- Custom SMTP in Supabase Auth (e.g. Resend) so confirmation and password-reset emails reach any address.
+- Email firms when an enquiry arrives (database webhook + edge function).
+- Privacy notice and terms for consumers and firms.
+- Remove sample firms once enough real firms have listed: `delete from firms where sample;`
