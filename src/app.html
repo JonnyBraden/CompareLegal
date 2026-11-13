@@ -56,6 +56,10 @@ button,input,select,textarea{font:inherit;color:inherit}
 .nav button{background:none;border:0;padding:8px 12px;border-radius:var(--r-sm);cursor:pointer;color:var(--muted);font-weight:500}
 .nav button:hover,.nav button[aria-current="page"]{color:var(--ink);background:var(--sunk)}
 .nav .btn{color:var(--accent-ink)}
+.nav a.navlink{padding:8px 12px;border-radius:var(--r-sm);color:var(--muted);font-weight:500;text-decoration:none}
+.nav a.navlink:hover{color:var(--ink);background:var(--sunk)}
+footer nav{display:flex;flex-wrap:wrap;gap:6px 18px;width:100%}
+footer nav a{color:var(--muted)}
 @media (max-width:640px){.nav .hide-sm{display:none}}
 .proto{background:var(--warn-soft);color:var(--warn);font-size:.82rem}
 .proto .wrap{padding-block:7px;display:flex;gap:8px;align-items:center}
@@ -269,6 +273,7 @@ tr.tot td{font-weight:700;background:var(--sunk)}
   <nav class="nav" aria-label="Main">
     <button data-go="results" class="hide-sm">Compare fees</button>
     <button data-go="how" class="hide-sm">How it works</button>
+    <a href="/blog/" class="navlink">Guides</a>
     <button data-go="firms" id="nav-firm">For law firms</button>
   </nav>
 </div></header>
@@ -278,6 +283,7 @@ tr.tot td{font-weight:700;background:var(--sunk)}
 <footer><div class="wrap">
   <div><b style="color:var(--ink)">Compare Legal</b> · comparelegal.com<br>Fees are set by each firm. Always confirm the final quote with the firm before you instruct them.</div>
   <div>Covering England &amp; Wales, Scotland and Northern Ireland</div>
+  <nav aria-label="Guides and local pages"><a href="/blog/">Guides</a><a href="/conveyancing/">Conveyancing solicitors</a><a href="/wills/">Will writing solicitors</a><a href="/probate/">Probate solicitors</a><a href="/family-law/">Divorce solicitors</a><a href="/solicitors/">Solicitors by city</a></nav>
 </div></footer>
 
 <script>
@@ -413,7 +419,21 @@ const state = Object.assign({area:'conveyancing',svc:'purchase',nation:'England'
 if (!cityIn(state.nation,state.city)) state.city=''; if (state.sort==='nearest' && !state.city) state.sort='total';
 const saveSearch = () => { const {compare,...rest}=state; store.set('search',rest); };
 const VIEWS = {home:renderHome,how:renderHome,results:renderResults,firms:renderAuth,portal:renderPortal};
-let currentView = (location.hash||'#home').slice(1);
+function readHash(){
+  const [v,q] = (location.hash||'#home').slice(1).split('?');
+  if (q && !/access_token|type=/.test(q)){
+    const p = new URLSearchParams(q), s = svcById(p.get('svc')||'');
+    if (s){ state.svc = s.id; state.area = s.area; }
+    const n = p.get('nation'); if (n && NATIONS[n]) state.nation = n;
+    const c = p.get('city'); state.city = c && cityIn(state.nation,c) ? c : (p.has('nation') ? '' : state.city);
+    const pr = parseInt(p.get('price'),10); if (pr>0) state.price = pr;
+    state.sort = state.city ? 'nearest' : (state.sort==='nearest' ? 'total' : state.sort);
+    saveSearch();
+    try{ history.replaceState(null,'','#'+v); }catch(e){}
+  }
+  return v||'home';
+}
+let currentView = readHash();
 function go(view, opts={}){
   if (view==='portal' && !session()) view='firms';
   if (view==='firms' && session()) view='portal';
@@ -433,7 +453,7 @@ function route(opts={}){
   else if (!opts.keepScroll) window.scrollTo(0,0);
   renderTray();
 }
-window.addEventListener('popstate',()=>{ currentView=(location.hash||'#home').slice(1); route(); });
+window.addEventListener('popstate',()=>{ currentView=readHash(); route(); });
 document.addEventListener('click',e=>{ const g=e.target.closest('[data-go]'); if(g){ e.preventDefault(); go(g.dataset.go); } });
 
 /* ---------- search desk (shared) ---------- */
