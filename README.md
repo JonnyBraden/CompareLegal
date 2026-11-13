@@ -33,6 +33,11 @@ Price comparison for UK high-street legal services (conveyancing, wills & attorn
 
 ## To do before scaling up
 - Custom SMTP in Supabase Auth (e.g. Resend) so confirmation and password-reset emails reach any address.
-- Email firms when an enquiry arrives (database webhook + edge function).
 - Privacy notice and terms for consumers and firms.
 - Remove sample firms once enough real firms have listed: `delete from firms where sample;`
+
+## Enquiry emails
+- `supabase/functions/notify-enquiry/` emails the firm (or the account owner if the firm has no enquiries email) through Resend, with the client as reply-to. Each enquiry is emailed once (`enquiries.emailed_at`), only for live non-sample firms, and at most 40 an hour per firm.
+- `supabase/migrations/20261113150000_enquiry_emails.sql` adds `emailed_at` and a trigger that calls the function after each insert (pg_net).
+- Function secrets: `RESEND_API_KEY`, `MAIL_FROM`. Deploy with JWT verification off. Without the secrets, the function does nothing and enquiries still appear in the portal.
+- Tests: `node --experimental-strip-types --test tests/notify-enquiry.test.ts`
