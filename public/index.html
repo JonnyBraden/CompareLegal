@@ -249,6 +249,14 @@ tr.tot td{font-weight:700;background:var(--sunk)}
 .svc-h .sum{margin-left:auto;font-size:.85rem;color:var(--muted)}
 .svc-b{padding:16px;display:grid;gap:14px}
 .bands{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tiers{display:grid;gap:8px;max-width:620px}
+.tier-row{display:grid;grid-template-columns:minmax(80px,.8fr) minmax(130px,1.2fr) minmax(120px,1fr) 36px;gap:8px;align-items:center}
+.tier-row.tier-head{font-size:.78rem;font-weight:600;color:var(--muted)}
+.tier-row .from{font-size:.88rem;color:var(--muted)}
+.tier-row button{border:1px solid var(--line);background:none;border-radius:var(--r-sm);cursor:pointer;color:var(--muted);height:36px}
+.tier-row button:disabled{opacity:.35;cursor:default}
+.tier-tables{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+@media (max-width:520px){.tier-row{grid-template-columns:1.35fr 1fr 34px;gap:4px 6px}.tier-row .from{grid-column:1/-1;font-size:.78rem;margin-top:4px}.tier-row .from::before{content:'From '}.tier-row.tier-head span:first-child{display:none}}
 @media (max-width:640px){.bands{grid-template-columns:1fr 1fr}}
 .disb{display:grid;gap:8px}
 .disb-row{display:grid;grid-template-columns:1fr 130px 36px;gap:8px}
@@ -376,14 +384,29 @@ function logo(f,size=52){
   return `<div class="logo" style="${st}background:${esc(f.color||'#24507A')}" aria-hidden="true">${esc(ini)}</div>`;
 }
 const jurOf = f => NATIONS[f.nation]?.jur || 'EW';
-function quote(f, sid, band){
+/* price bands: each firm can set its own; older listings use the standard four */
+function tiersOf(o){
+  if (Array.isArray(o?.tiers) && o.tiers.length) return o.tiers.map((t,i,a)=>({max:i===a.length-1||t.max==null?null:+t.max, fee:t.fee}));
+  return BANDS.map(b=>({max:isFinite(b.max)?b.max:null, fee:o?.bands?.[b.k]??''}));
+}
+const kfmt = n => n>=1e6 ? '£'+(+(n/1e6).toFixed(2))+'m' : '£'+(+(n/1000).toFixed(1))+'k';
+function tierLabel(ts,i,short=false){
+  const t = ts[i], prev = i>0 ? ts[i-1].max : null, f = short ? kfmt : (n=>gbp(n));
+  if (t.max==null) return prev==null ? 'Any property value' : `Over ${f(prev)}`;
+  if (prev==null) return `Up to ${f(t.max)}`;
+  return short ? `${f(prev)}–${f(t.max)}` : `${gbp(prev+1)} – ${gbp(t.max)}`;
+}
+function tierIndex(ts,price){ const i = ts.findIndex(t=>t.max==null || price<=t.max); return i<0 ? ts.length-1 : i; }
+function quote(f, sid, price){
   const s = f.services?.[sid]; const def = svcById(sid); if(!s) return null;
   const disb = (s.disb||[]).reduce((a,d)=>a+(+d.amount||0),0);
   if (s.type==='hourly') return {type:'hourly',rate:+s.rate||0,disb,total:null};
-  const legal = def.banded ? +(s.bands?.[band]||0) : +(s.fee||0);
+  let legal, band = null;
+  if (def.banded){ const ts = tiersOf(s), i = tierIndex(ts, price); legal = +(ts[i]?.fee||0); band = tierLabel(ts,i); }
+  else legal = +(s.fee||0);
   if (!legal) return null;
   const vat = f.vat===false ? 0 : legal*0.2;
-  return {type:s.type,legal,vat,disb,total:legal+vat+disb};
+  return {type:s.type,legal,vat,disb,total:legal+vat+disb,band};
 }
 function feeChip(t){ return t==='fixed'?'<span class="chip fixed">Fixed fee</span>':t==='from'?'<span class="chip from">Starting price</span>':'<span class="chip">Hourly rate</span>'; }
 const ICON_TICK = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -451,9 +474,9 @@ function bindDesk(onSubmit){
 function rerenderDesk(onSubmit){ const old=$('#desk'); old.outerHTML = deskHTML(); bindDesk(onSubmit); }
 
 /* ---------- home ---------- */
-function cheapest(sid, nation, band){
+function cheapest(sid, nation, price){
   const jur = NATIONS[nation].jur; let min=null;
-  allFirms().filter(f=>jurOf(f)===jur).forEach(f=>{ const q=quote(f,sid,band); if(q&&q.total&&(min===null||q.total<min)) min=q.total; });
+  allFirms().filter(f=>jurOf(f)===jur).forEach(f=>{ const q=quote(f,sid,price); if(q&&q.total&&(min===null||q.total<min)) min=q.total; });
   return min;
 }
 function renderHome(){
@@ -477,11 +500,11 @@ function renderHome(){
     <div class="sec-head"><div><h2>High-street law, priced up front</h2><p>Typical starting totals from listed firms in ${esc(state.nation)}, including VAT and disbursements.</p></div></div>
     <div class="tiles">${AREAS.map(a=>{
       const jur = NATIONS[state.nation].jur; const svcs = servicesFor(a.id); const first = svcs[0];
-      const min = cheapest(first.id, state.nation, bandFor(state.price));
+      const min = cheapest(first.id, state.nation, state.price);
       return `<button class="tile" data-tile="${a.id}">
         <h3>${a.id==='probate'&&jur==='SC'?'Executries':a.name}</h3>
         <ul>${svcs.map(s=>`<li>${esc(svcName(s,jur))}</li>`).join('')}</ul>
-        <p class="from muted">${min?`${esc(svcName(first,jur))} from <b class="num" style="color:var(--ink)">${gbp(min)}</b>${first.banded?' <span>for a '+BANDS.find(b=>b.k===bandFor(state.price)).label.toLowerCase()+' home</span>':''}`:'No firms listed yet'}</p>
+        <p class="from muted">${min?`${esc(svcName(first,jur))} from <b class="num" style="color:var(--ink)">${gbp(min)}</b>${first.banded?' <span>for a '+gbp(state.price)+' home</span>':''}`:'No firms listed yet'}</p>
       </button>`; }).join('')}</div>
   </div></section>
 
@@ -521,7 +544,7 @@ function renderHome(){
 function matches(){
   const jur = NATIONS[state.nation].jur, band = bandFor(state.price), town = state.town.toLowerCase();
   const me = session()?.firmId;
-  let rows = allFirms().filter(f=>jurOf(f)===jur && f.services?.[state.svc] && (f.listed!==false || f.id===me)).map(f=>({f,q:quote(f,state.svc,band)})).filter(r=>r.q);
+  let rows = allFirms().filter(f=>jurOf(f)===jur && f.services?.[state.svc] && (f.listed!==false || f.id===me)).map(f=>({f,q:quote(f,state.svc,state.price)})).filter(r=>r.q);
   if (town) rows = rows.filter(({f})=> f.town.toLowerCase().includes(town) || (state.remote && f.remote));
   if (state.fixedOnly) rows = rows.filter(r=>r.q.type==='fixed');
   const key = state.sort;
@@ -554,7 +577,7 @@ function renderResults(){
         <label class="check"><input type="checkbox" id="f-fixed" ${state.fixedOnly?'checked':''}> Fixed fees only</label>
         <label class="check"><input type="checkbox" id="f-remote" ${state.remote?'checked':''}> Include firms that act remotely across ${esc(JUR[jur].label)}</label>
       </div>
-      <div class="notice"><b>What the total includes</b><span>Legal fee, VAT at 20% and disbursements.${def.area==='conveyancing'?` It excludes ${esc(NATIONS[state.nation].tax)}, which depends on your circumstances.`:''}${def.banded?` Fees shown are for the ${BANDS.find(b=>b.k===bandFor(state.price)).label.toLowerCase()} band.`:''}</span></div>
+      <div class="notice"><b>What the total includes</b><span>Legal fee, VAT at 20% and disbursements.${def.area==='conveyancing'?` It excludes ${esc(NATIONS[state.nation].tax)}, which depends on your circumstances.`:''}${def.banded?` Each firm sets its own property value bands. Fees shown are for a ${gbp(state.price)} property.`:''}</span></div>
     </aside>
     <div style="min-width:0">
       <div class="list-top"><p id="count" class="muted"></p>
@@ -635,20 +658,24 @@ document.addEventListener('click',e=>{ const b=e.target.closest('[data-copy]'); 
 function selectText(b){ const dd=b.previousElementSibling; const r=document.createRange(); r.selectNodeContents(dd); const s=getSelection(); s.removeAllRanges(); s.addRange(r); }
 
 function feeTableHTML(f){
-  const jur = jurOf(f), band = bandFor(state.price);
+  const jur = jurOf(f);
+  const sub = sid => timeOf(f,sid) ? `<br><span class="muted" style="font-size:.8rem">${esc(timeOf(f,sid))}</span>` : '';
+  const typ = o => o.type==='fixed'?'Fixed':o.type==='from'?'From':'Hourly';
   return AREAS.map(a=>{
     const svcs = servicesFor(a.id).filter(s=>f.services?.[s.id]); if(!svcs.length) return '';
-    return `<div style="display:grid;gap:10px"><h3 style="font-size:1.05rem">${a.name}</h3><div class="tbl-wrap"><table>
-      <thead><tr><th>Service</th><th>Fee type</th>${svcs.some(s=>s.banded)?BANDS.map(b=>`<th class="r">${b.label.replace('£250,001 – £500,000','£250k–£500k').replace('£500,001 – £1m','£500k–£1m').replace('Up to £250,000','To £250k')}</th>`).join(''):'<th class="r">Fee (ex VAT)</th>'}</tr></thead>
-      <tbody>${svcs.map(s=>{ const o=f.services[s.id];
-        const cells = s.banded ? (o.type==='hourly'?`<td class="r num" colspan="4">${gbp(o.rate)}/hr</td>`:BANDS.map(b=>`<td class="r num" ${b.k===band&&s.id===state.svc?'style="font-weight:700"':''}>${o.bands?.[b.k]?gbp(o.bands[b.k]):'–'}</td>`).join(''))
-          : `<td class="r num" ${svcs.some(x=>x.banded)?'colspan="4"':''}>${o.type==='hourly'?gbp(o.rate)+'/hr':gbp(o.fee)}</td>`;
-        return `<tr><td>${esc(svcName(s,jur))}${timeOf(f,s.id)?`<br><span class="muted" style="font-size:.8rem">${esc(timeOf(f,s.id))}</span>`:''}</td><td>${o.type==='fixed'?'Fixed':o.type==='from'?'From':'Hourly'}</td>${cells}</tr>`; }).join('')}</tbody></table></div></div>`;
+    const tiered = svcs.filter(s=>s.banded && f.services[s.id].type!=='hourly');
+    const flat = svcs.filter(s=>!tiered.includes(s));
+    const tierTables = tiered.map(s=>{ const o=f.services[s.id], ts=tiersOf(o), hit = s.id===state.svc ? tierIndex(ts,state.price) : -1;
+      return `<div class="tbl-wrap"><table><thead><tr><th>${esc(svcName(s,jur))} <span style="text-transform:none;letter-spacing:0;font-weight:400">· ${typ(o)}${timeOf(f,s.id)?' · '+esc(timeOf(f,s.id)):''}</span></th><th class="r">Fee (ex VAT)</th></tr></thead>
+        <tbody>${ts.map((t,i)=>`<tr ${i===hit?'style="font-weight:700"':''}><td>${esc(tierLabel(ts,i))}</td><td class="r num">${+t.fee?gbp(t.fee):'–'}</td></tr>`).join('')}</tbody></table></div>`; }).join('');
+    const flatTable = flat.length ? `<div class="tbl-wrap"><table><thead><tr><th>Service</th><th>Fee type</th><th class="r">Fee (ex VAT)</th></tr></thead>
+      <tbody>${flat.map(s=>{ const o=f.services[s.id]; return `<tr><td>${esc(svcName(s,jur))}${sub(s.id)}</td><td>${typ(o)}</td><td class="r num">${o.type==='hourly'?gbp(o.rate)+'/hr':gbp(o.fee)}</td></tr>`; }).join('')}</tbody></table></div>` : '';
+    return `<div style="display:grid;gap:10px"><h3 style="font-size:1.05rem">${a.name}</h3>${tiered.length?`<div class="tier-tables">${tierTables}</div>`:''}${flatTable}</div>`;
   }).join('');
 }
 function openFirm(id, toQuote=false){
   const f = firmById(id); if(!f) return; const jur = jurOf(f), sid = f.services?.[state.svc]?state.svc:Object.keys(f.services||{})[0];
-  const def = sid ? svcById(sid) : null, o = sid ? f.services[sid] : {}, q = sid ? quote(f,sid,bandFor(state.price)) : null;
+  const def = sid ? svcById(sid) : null, o = sid ? f.services[sid] : {}, q = sid ? quote(f,sid,state.price) : null;
   const s = modal(`
     <div class="m-head">${logo(f,64)}<div style="min-width:0"><h2 style="font-size:1.5rem">${esc(f.name)}</h2><p class="muted" style="font-size:.9rem">${esc(f.town)}, ${esc(f.nation)} · Fees updated ${new Date(f.updated||Date.now()).toLocaleDateString('en-GB',{month:'long',year:'numeric'})}</p></div><button class="x" aria-label="Close">×</button></div>
     <div class="m-body">
@@ -657,7 +684,7 @@ function openFirm(id, toQuote=false){
           ${f.sample?`<div class="notice"><b>Sample listing</b><span>This is an example firm with illustrative prices. It isn't a real firm and can't take enquiries.</span></div>`:''}${f.about?`<p>${esc(f.about)}</p>`:''}
           ${def?`<div><p class="eyebrow">Your quote: ${esc(svcName(def,jur))}${def.banded?` at ${gbp(state.price)}`:''}</p></div>`:'<p class="muted">This firm has not published any prices yet.</p>'}
           ${q && q.type!=='hourly' ? `<div class="tbl-wrap"><table><tbody>
-            <tr><td>Legal fee${q.type==='from'?' (starting price)':''}</td><td class="r num">${gbp(q.legal,2)}</td></tr>
+            <tr><td>Legal fee${q.type==='from'?' (starting price)':''}${q.band?`<br><span class="muted" style="font-size:.82rem">${esc(q.band)} band</span>`:''}</td><td class="r num">${gbp(q.legal,2)}</td></tr>
             <tr><td>VAT at 20%</td><td class="r num">${gbp(q.vat,2)}</td></tr>
             ${(o.disb||[]).map(d=>`<tr><td>${esc(d.label)}</td><td class="r num">${gbp(d.amount,2)}</td></tr>`).join('')}
             <tr class="tot"><td>Total</td><td class="r num"><span class="hl">${gbp(q.total,2)}</span></td></tr></tbody></table></div>`
@@ -698,7 +725,7 @@ function openFirm(id, toQuote=false){
 }
 function openCompare(){
   const band = bandFor(state.price), def = svcById(state.svc), jur = NATIONS[state.nation].jur;
-  const firms = state.compare.map(firmById).filter(Boolean); const qs = firms.map(f=>quote(f,state.svc,band));
+  const firms = state.compare.map(firmById).filter(Boolean); const qs = firms.map(f=>quote(f,state.svc,state.price));
   const totals = qs.map(q=>q?.total).filter(Boolean); const best = Math.min(...totals);
   const row = (label, fn) => `<tr><th scope="row">${label}</th>${firms.map((f,i)=>`<td>${fn(f,qs[i],f.services[state.svc])}</td>`).join('')}</tr>`;
   const s = modal(`
@@ -708,6 +735,7 @@ function openCompare(){
       <tbody>
         ${row('Total',(f,q)=>q?.total?`<b class="num" style="font-size:1.2rem">${q.total===best?`<span class="hl">${gbp(q.total)}</span>`:gbp(q.total)}</b>${q.total===best&&totals.length>1?'<br><span class="chip fixed" style="display:inline-block;margin-top:6px">Lowest total</span>':`<br><span class="muted num" style="font-size:.82rem">+${gbp(q.total-best)}</span>`}`:`<span class="num">${gbp(q.rate)}/hr + VAT</span>`)}
         ${row('Fee type',(f,q)=>feeChip(q.type))}
+        ${def.banded?row('Price band',(f,q)=>`<span style="font-size:.88rem">${esc(q.band||'–')}</span>`):''}
         ${row('Legal fee',(f,q)=>q.legal?`<span class="num">${gbp(q.legal,2)}</span>`:'–')}
         ${row('VAT',(f,q)=>q.vat?`<span class="num">${gbp(q.vat,2)}</span>`:'–')}
         ${row('Disbursements',(f,q,o)=>(o.disb||[]).length?(o.disb.map(d=>`<div style="display:flex;justify-content:space-between;gap:10px;font-size:.85rem"><span class="muted">${esc(d.label)}</span><span class="num">${gbp(d.amount)}</span></div>`).join('')):'<span class="muted">None</span>')}
@@ -885,7 +913,9 @@ function pricesPane(){
 }
 function svcEditor(s,o,jur){
   const on = !!o; o = o || {type:'fixed',disb:[],time:'',inc:''};
-  const fee = s.banded ? `<div class="bands">${BANDS.map(b=>`<label class="f" style="font-weight:500;font-size:.8rem">${b.label}<div class="pre"><span>£</span><input class="in num" data-band="${b.k}" inputmode="decimal" value="${o.bands?.[b.k]??''}"></div></label>`).join('')}</div>`
+  const fee = s.banded ? `<div style="display:grid;gap:8px"><span style="font-size:.88rem;font-weight:600">Fees by property value <span class="muted" style="font-weight:400">(edit the bands to match how you price)</span></span>
+      <div class="tiers" data-tiers>${tierRowsHTML(tiersOf(o))}</div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap"><button type="button" class="btn link" data-tadd style="font-size:.9rem">+ Add a price band</button><button type="button" class="btn link" data-treset style="font-size:.9rem;color:var(--muted)">Reset to standard bands</button></div></div>`
     : `<label class="f" style="max-width:220px">Fee excluding VAT<div class="pre"><span>£</span><input class="in num" data-fee inputmode="decimal" value="${o.fee??''}"></div></label>`;
   return `<div class="svc" data-svc="${s.id}">
     <div class="svc-h"><label class="check"><input type="checkbox" data-on ${on?'checked':''}> ${esc(svcName(s,jur))}</label><span class="sum num" data-sum>${on?summary(s,o):'Not offered'}</span></div>
@@ -900,10 +930,31 @@ function svcEditor(s,o,jur){
       <label class="f">What's included<textarea class="in" data-inc style="min-height:70px" placeholder="${esc(s.inc)}">${esc(o.inc||'')}</textarea></label>
     </div></div>`;
 }
+function tierRowsHTML(ts){
+  return `<div class="tier-row tier-head"><span>From</span><span>Up to</span><span>Fee excluding VAT</span><span></span></div>` + ts.map((t,i)=>{
+    const last = i===ts.length-1;
+    return `<div class="tier-row" data-tier><span class="from num" data-from></span>
+      ${last ? '<span class="muted" style="font-size:.88rem">No upper limit</span>' : `<div class="pre"><span>£</span><input class="in num" data-tmax inputmode="numeric" value="${t.max!=null&&t.max!==''?Number(t.max).toLocaleString('en-GB'):''}" aria-label="Band ends at property value"></div>`}
+      <div class="pre"><span>£</span><input class="in num" data-tfee inputmode="decimal" value="${esc(t.fee??'')}" aria-label="Fee for this band"></div>
+      <button type="button" data-trm aria-label="Remove this band" ${ts.length<2?'disabled':''}>✕</button></div>`; }).join('');
+}
+const numIn = v => parseInt(String(v||'').replace(/[^\d]/g,''),10) || 0;
+function readTiers(el){ const rows = $$('[data-tier]',el); return rows.map((r,i)=>({max: i===rows.length-1 ? null : numIn($('[data-tmax]',r)?.value), fee: parseFloat($('[data-tfee]',r).value)||0})); }
+function refreshTiers(el){
+  const rows = $$('[data-tier]',el); let prev = null;
+  rows.forEach((r,i)=>{ $('[data-from]',r).textContent = i===0 ? '£0' : (prev ? gbp(prev+1) : '–'); prev = i<rows.length-1 ? numIn($('[data-tmax]',r)?.value) : prev; });
+}
+function setTiers(el,ts){ const box = $('[data-tiers]',el); box.innerHTML = tierRowsHTML(ts); refreshTiers(box); }
+function tierProblem(ts){
+  if (!ts.length) return 'add at least one price band';
+  if (ts.some(t=>!(t.fee>0))) return 'add a fee for every price band';
+  let prev = 0; for (let i=0;i<ts.length-1;i++){ const m = ts[i].max; if (!(m>prev)) return 'each band must end at a higher property value than the band before'; prev = m; }
+  return null;
+}
 const disbRow = (d={label:'',amount:''}) => `<div class="disb-row"><input class="in" data-dl placeholder="e.g. Local authority search" value="${esc(d.label)}" aria-label="Disbursement"><div class="pre"><span>£</span><input class="in num" data-da inputmode="decimal" value="${esc(d.amount)}" aria-label="Amount"></div><button type="button" data-drm aria-label="Remove disbursement">✕</button></div>`;
 function summary(s,o){
   if (o.type==='hourly') return o.rate?gbp(o.rate)+'/hr':'Add a rate';
-  if (s.banded){ const v=BANDS.map(b=>+o.bands?.[b.k]).filter(Boolean); return v.length?`${gbp(Math.min(...v))} – ${gbp(Math.max(...v))}`:'Add fees'; }
+  if (s.banded){ const ts=tiersOf(o), v=ts.map(t=>+t.fee).filter(Boolean); return v.length?`${ts.length} band${ts.length===1?'':'s'} · ${gbp(Math.min(...v))} – ${gbp(Math.max(...v))}`:'Add fees'; }
   return o.fee?(o.type==='from'?'From ':'')+gbp(o.fee):'Add a fee';
 }
 function readSvc(el){
@@ -911,7 +962,7 @@ function readSvc(el){
   const o = {type,time:$('[data-time]',el).value.trim(),inc:$('[data-inc]',el).value.trim(),
     disb:$$('.disb-row',el).map(r=>({label:$('[data-dl]',r).value.trim(),amount:parseFloat($('[data-da]',r).value)||0})).filter(d=>d.label)};
   if (type==='hourly') o.rate = parseFloat($('[data-rate]',el).value)||0;
-  else if (s.banded) o.bands = Object.fromEntries($$('[data-band]',el).map(i=>[i.dataset.band,parseFloat(i.value)||0]));
+  else if (s.banded) o.tiers = readTiers(el);
   else o.fee = parseFloat($('[data-fee]',el).value)||0;
   return o;
 }
@@ -969,16 +1020,28 @@ function bindPane(){
       if (e.target.matches('[data-type]')){ const h=e.target.value==='hourly'; $('[data-feewrap]',el).hidden=h; $('[data-ratewrap]',el).hidden=!h; }
       $('[data-sum]',el).textContent = $('[data-on]',el).checked ? summary(svcById(el.dataset.svc),readSvc(el)) : 'Not offered';
     });
-    pf.addEventListener('input',e=>{ const el=e.target.closest('.svc'); if(el && $('[data-on]',el).checked) $('[data-sum]',el).textContent = summary(svcById(el.dataset.svc),readSvc(el)); $('#psum').textContent='Unsaved changes'; });
+    $$('[data-tiers]',pf).forEach(refreshTiers);
+    const touched = el => { if($('[data-on]',el).checked) $('[data-sum]',el).textContent = summary(svcById(el.dataset.svc),readSvc(el)); $('#psum').textContent='Unsaved changes'; };
+    pf.addEventListener('focusout',e=>{ if(e.target.matches('[data-tmax]')){ const v=numIn(e.target.value); e.target.value = v ? v.toLocaleString('en-GB') : ''; } });
+    pf.addEventListener('click',e=>{
+      const b = e.target.closest('[data-tadd],[data-trm],[data-treset]'); if(!b) return; const el = b.closest('.svc'); let ts = readTiers(el);
+      if (b.matches('[data-tadd]')){ if(ts.length>=10){ toast('You can set up to 10 price bands.'); return; } const prev = ts.length>1 ? (ts[ts.length-2].max||0) : 0; ts.splice(ts.length-1,0,{max:prev+250000,fee:''}); }
+      else if (b.matches('[data-trm]')){ const i = $$('[data-tier]',el).indexOf(b.closest('[data-tier]')); ts.splice(i,1); if(ts.length) ts[ts.length-1].max = null; }
+      else { ts = BANDS.map((bd,i)=>({max:isFinite(bd.max)?bd.max:null, fee:ts[i]?.fee||''})); }
+      setTiers(el,ts); touched(el);
+    });
+    pf.addEventListener('input',e=>{ if(e.target.matches('[data-tmax]')) refreshTiers(e.target.closest('[data-tiers]')); const el=e.target.closest('.svc'); if(el && $('[data-on]',el).checked) $('[data-sum]',el).textContent = summary(svcById(el.dataset.svc),readSvc(el)); $('#psum').textContent='Unsaved changes'; });
     pf.addEventListener('click',e=>{
       if (e.target.matches('[data-add]')){ e.target.insertAdjacentHTML('beforebegin',disbRow()); e.target.previousElementSibling.querySelector('input').focus(); }
       if (e.target.matches('[data-drm]')){ e.target.closest('.disb-row').remove(); $('#psum').textContent='Unsaved changes'; }
     });
     pf.addEventListener('submit',e=>{
-      e.preventDefault(); const svcs = {}; const missing=[];
-      $$('.svc',pf).forEach(el=>{ if(!$('[data-on]',el).checked) return; const s=svcById(el.dataset.svc), o=readSvc(el);
-        const ok = o.type==='hourly'?o.rate>0 : s.banded?BANDS.every(b=>o.bands[b.k]>0) : o.fee>0;
-        if(!ok) missing.push(svcName(s,jurOf(draft))); svcs[s.id]=o; });
+      e.preventDefault(); const svcs = {}; const missing=[]; const bandIssues=[];
+      $$('.svc',pf).forEach(el=>{ if(!$('[data-on]',el).checked) return; const s=svcById(el.dataset.svc), o=readSvc(el), nm=svcName(s,jurOf(draft));
+        if (o.type!=='hourly' && s.banded){ const pr = tierProblem(o.tiers); if(pr) bandIssues.push(`${nm}: ${pr}`); }
+        else if (!(o.type==='hourly'?o.rate>0:o.fee>0)) missing.push(nm);
+        svcs[s.id]=o; });
+      if (bandIssues.length){ toast(bandIssues[0].replace(/: (.)/,(m,c)=>': '+c.toUpperCase())+'.'); return; }
       if (missing.length){ toast(`Add a price for: ${missing.join(', ')}.`); return; }
       const btn = $('button[type=submit]',pf); btn.disabled = true;
       saveFirm({...firmById(draft.id), services:svcs}).then(()=>{ toast('Prices saved'); renderPortal(); }).catch(ex=>{ btn.disabled=false; toast(errMsg(ex)); });
