@@ -73,6 +73,6 @@ Yes, if either of you is domiciled in Northern Ireland or has lived there for at
 ## Sources
 
 - [Get a divorce](https://www.gov.uk/divorce) (GOV.UK)
-- [Family court fees](https://www.gov.uk/government/publications/family-court-fees-ex50) (HM Courts and Tribunals Service)
-- [Divorce and dissolution in Scotland](https://www.mygov.scot/divorce) (mygov.scot)
+- [Family court fees](https://www.gov.uk/government/publications/fees-in-the-civil-and-family-courts-main-fees-ex50/family-court-fees-ex50) (HM Courts and Tribunals Service)
+- [Divorce and dissolution in Scotland](https://www.mygov.scot/browse/birth-death-family/divorce-separation) (mygov.scot)
 - [Getting a divorce or dissolving a civil partnership](https://www.nidirect.gov.uk/articles/getting-divorcedissolution-civil-partnership) (nidirect)

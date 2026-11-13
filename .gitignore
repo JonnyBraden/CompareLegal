@@ -10,3 +10,5 @@ public/sitemap.xml
 public/robots.txt
 public/favicon.svg
 __pycache__/
+public/firms/
+public/404.html

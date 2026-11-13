@@ -1,9 +1,8 @@
 <title>Compare Legal: compare solicitors' fees across the UK</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Compare solicitors' fees for conveyancing, wills, probate and family law across England, Wales, Scotland and Northern Ireland.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="preload" href="/fonts/figtree-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/fonts/fonts.css">
 <style>
 /* Layout: a search desk up top, a fee ledger below. Fee totals carry a highlighter mark, the way a client would mark a quote. */
 :root{
@@ -882,6 +881,7 @@ function renderPortal(){
       <div class="box"><p class="eyebrow">Listing checklist</p><ul class="todo">${checklist(f0).map(([l,ok])=>`<li class="${ok?'done':''}"><span class="dot">${ok?'✓':''}</span><span>${l}</span></li>`).join('')}</ul>
         ${!live && isLive(f0)?'<button class="btn sm" id="publish">Publish listing</button>':''}</div>
       <div class="box"><p class="eyebrow">How clients see your price</p><p style="font-size:.88rem" class="muted">Totals are worked out as your fee, plus VAT at 20%, plus the disbursements you list. Keep disbursements up to date so your total stays accurate.</p></div>
+      ${live?badgeBox(f0):''}
       ${live?'<div class="box"><p class="eyebrow">Your listing</p><p style="font-size:.88rem" class="muted">Clients can find you now. To take your listing down, use the button below.</p><button class="btn ghost sm" id="unpublish">Hide listing</button></div>':''}
     </aside></div>`;
   $$('[data-tab]').forEach(b=>b.onclick=()=>{ tab=b.dataset.tab; $$('[data-tab]').forEach(x=>x.setAttribute('aria-selected',x===b)); drawPane(); });
@@ -889,8 +889,19 @@ function renderPortal(){
   $('#view-live').onclick=()=>openFirm(f0.id);
   const setListed = async (on,btn) => { btn.disabled=true; try{ await saveFirm({...firmById(f0.id),listed:on}); toast(on?'Your listing is live':'Your listing is hidden'); renderPortal(); }catch(e){ btn.disabled=false; toast(errMsg(e)); } };
   $('#publish')?.addEventListener('click',e=>setListed(true,e.target));
+  $('#badge-copy')?.addEventListener('click',async()=>{ const t=$('#badge-code'); try{ await navigator.clipboard.writeText(t.value); }catch(e){ t.select(); try{ document.execCommand('copy'); }catch(_){} } toast('Badge code copied'); });
   $('#unpublish')?.addEventListener('click',e=>setListed(false,e.target));
   drawPane();
+}
+/* badge: links to the firm's static profile page, built by site/sitegen.py (same slug rule) */
+const firmSlug = f => String(f.name||'firm').toLowerCase().replace(/&/g,' and ').replace(/~/g,' ').replace(/[’']/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'') + '-' + String(f.id).slice(0,6);
+function badgeCode(f){ return `<a href="https://comparelegal.com/firms/${firmSlug(f)}/" title="Compare our fees on Compare Legal"><img src="https://comparelegal.com/badge.svg" alt="Compare our fees on Compare Legal" width="236" height="60"></a>`; }
+function badgeBox(f){
+  return `<div class="box"><p class="eyebrow">Badge for your website</p>
+    <img src="/badge.svg" alt="" width="236" height="60" style="display:block;margin:4px 0 10px;max-width:100%">
+    <p style="font-size:.88rem" class="muted">Add this to your website so clients can see your fees on Compare Legal. It links to your profile page, which appears within a day of publishing.</p>
+    <textarea class="in mono" id="badge-code" readonly style="min-height:92px;font-size:.72rem;margin-top:8px">${esc(badgeCode(f))}</textarea>
+    <button type="button" class="btn ghost sm" id="badge-copy" style="margin-top:8px">Copy code</button></div>`;
 }
 function drawPane(){
   const p = $('#pane');

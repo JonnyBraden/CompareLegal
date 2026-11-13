@@ -160,3 +160,16 @@ footer{padding-block:40px;border-top:1px solid var(--line);font-size:.9rem;color
 .foot h2{font-family:var(--f-body);font-size:.78rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px}
 .foot ul{list-style:none;padding:0;margin:0;display:grid;gap:6px}
 .foot a{color:var(--muted)}
+
+/* firm profile */
+.fhead{display:flex;gap:18px;align-items:center}
+.flogo{width:72px;height:72px;object-fit:contain;border-radius:12px;background:#fff;border:1px solid var(--line);flex:none}
+.ini.big{width:72px;height:72px;font-size:1.5rem;border-radius:12px;flex:none}
+.fhead .lede{margin-top:6px}
+.about{margin-top:16px;max-width:44em}
+.contact{list-style:none;padding:0;margin:0;display:grid;gap:14px}
+.contact li{display:grid;gap:2px}
+.tbl th[scope=row]{background:transparent;font-weight:600;width:55%}
+.tbl th[scope=row] p{margin-top:4px;font-weight:400}
+.fname a{color:var(--ink);text-decoration:none}
+.fname a:hover b{text-decoration:underline}

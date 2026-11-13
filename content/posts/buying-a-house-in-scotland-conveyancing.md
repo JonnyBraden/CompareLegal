@@ -69,4 +69,4 @@ Commonly 6 to 12 weeks from offer to date of entry, but the date of entry is agr
 
 - [LBTT rates and bands 2026-27](https://www.gov.scot/publications/scottish-budget-2026-2027-scottish-tax-ready-reckoners/pages/4/) (Scottish Government)
 - [Land and Buildings Transaction Tax](https://revenue.scot/taxes/land-buildings-transaction-tax) (Revenue Scotland)
-- [Home Reports](https://www.mygov.scot/home-report) (mygov.scot)
+- [Home Reports](https://www.mygov.scot/buy-home/home-report) (mygov.scot)
