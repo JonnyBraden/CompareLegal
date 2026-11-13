@@ -1,0 +1,18 @@
+# Rebuilds the site every night so new firms appear on the local pages,
+# and city pages with enough firms are offered to Google.
+# Needs a repository secret RENDER_DEPLOY_HOOK (Render > comparelegal > Settings > Deploy Hook).
+name: Nightly rebuild
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Render deploy
+        env:
+          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then echo "RENDER_DEPLOY_HOOK not set"; exit 0; fi
+          curl -fsS -X POST "$HOOK"

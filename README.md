@@ -7,6 +7,21 @@ Price comparison for UK high-street legal services (conveyancing, wills & attorn
 - `build.py` — wraps `src/app.html` into `public/index.html` for static hosting.
 - `public/vendor/` — bundled supabase-js (no third-party CDN at runtime).
 - `render.yaml` — Render static site config (comparelegal.com and www).
+- `content/posts/*.md` — blog guides (Markdown with a short front-matter header). Add a file, push, and it's live.
+- `site/sitegen.py` — builds the static SEO pages at deploy time: `/blog/`, `/blog/<slug>/`, category pages, an RSS feed,
+  `/<service>/`, `/<service>/<nation>/`, `/<service>/<nation>/<city>/` for every city in the app, `/solicitors/`, `sitemap.xml` and `robots.txt`.
+- `site/site.css` — styles for those pages.
+
+## Blog and local pages
+- Services: `conveyancing`, `wills`, `probate`, `family-law`. Nations: `england`, `wales`, `scotland`, `northern-ireland`.
+- Live, non-sample firms are read from Supabase at build time and listed on the nearest city pages (within 25 miles).
+- A city page is `noindex` and left out of the sitemap until at least 3 real firms are within 25 miles
+  (`LOCAL_INDEX_MIN_FIRMS` in `site/sitegen.py`). This stops Google seeing hundreds of near-empty doorway pages.
+- `.github/workflows/rebuild.yml` triggers a nightly Render deploy so new firms show up; it needs the `RENDER_DEPLOY_HOOK` secret.
+- Post front matter: `title`, `short` (breadcrumb), `description`, `date`, `updated`, `category` (a service slug),
+  `nations` (list), `service` (app service id for the call to action). A `## Frequently asked questions` section with `###` questions
+  becomes FAQ structured data automatically. Set `draft: true` to hold a post back.
+- Deep links into the app: `/#results?svc=purchase&nation=Northern%20Ireland&city=Belfast`.
 
 ## Backend (Supabase project `comparelegal`, ref dtsxrmmdnyjmplhoyinv, London)
 - `firms` — one row per firm account (created automatically on sign-up from the firm name and nation), plus 18 seeded sample firms (`sample = true`, cannot receive enquiries).
