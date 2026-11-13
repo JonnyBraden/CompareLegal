@@ -11,6 +11,8 @@ Price comparison for UK high-street legal services (conveyancing, wills & attorn
 - `site/sitegen.py` — builds the static SEO pages at deploy time: `/blog/`, `/blog/<slug>/`, category pages, an RSS feed,
   `/<service>/`, `/<service>/<nation>/`, `/<service>/<nation>/<city>/` for every city in the app, `/solicitors/`, `sitemap.xml` and `robots.txt`.
 - `site/site.css` — styles for those pages.
+- `/firms/<name>-<id6>/` — a profile page per live firm (built from Supabase). The portal's badge code links here; the slug rule is in both `site/sitegen.py` (`firm_slug`) and `src/app.html` (`firmSlug`), keep them in step.
+- `public/fonts/` — self-hosted fonts (no Google Fonts requests). `public/badge.svg` — the firm badge.
 
 ## Blog and local pages
 - Services: `conveyancing`, `wills`, `probate`, `family-law`. Nations: `england`, `wales`, `scotland`, `northern-ireland`.

@@ -65,6 +65,23 @@ AREAS = {
                        services=['divorce', 'finances', 'children']),
 }
 TIMES = {'purchase': '8–12 weeks', 'will1': '1–2 weeks', 'grant': '8–16 weeks', 'divorce': '6–8 months'}
+SVC_NAMES = {  # mirrors SERVICES in src/app.html
+    'purchase': 'Buying a home', 'sale': 'Selling a home', 'remortgage': 'Remortgage',
+    'will1': 'Single will', 'will2': 'Mirror wills for a couple',
+    'poa': {'EW': 'Lasting power of attorney', 'SC': 'Power of attorney', 'NI': 'Enduring power of attorney'},
+    'grant': {'EW': 'Grant of probate only', 'SC': 'Confirmation only', 'NI': 'Grant of probate only'},
+    'estate': {'EW': 'Full estate administration', 'SC': 'Full executry administration', 'NI': 'Full estate administration'},
+    'divorce': 'Uncontested divorce',
+    'finances': {'EW': 'Financial consent order', 'SC': 'Minute of agreement', 'NI': 'Financial consent order'},
+    'children': 'Child arrangements: first consultation',
+}
+BANDED = {'purchase', 'sale', 'remortgage'}
+svc_name = lambda sid, jur: SVC_NAMES[sid] if isinstance(SVC_NAMES[sid], str) else SVC_NAMES[sid][jur]
+
+
+def firm_slug(f):
+    return f"{slugify(f.get('name') or 'firm')}-{str(f.get('id'))[:6]}"
+
 
 # Jurisdiction notes used on local and nation pages. Kept free of rates and fees that
 # change each Budget; the dated guides carry those.
@@ -124,7 +141,7 @@ BANDS = [250000, 500000, 1000000, None]
 def fetch_firms():
     if os.environ.get('FIRMS_JSON'):
         return json.loads(pathlib.Path(os.environ['FIRMS_JSON']).read_text())
-    q = urllib.parse.urlencode({'select': 'id,name,nation,town,address,postcode,phone,website,reg_no,color,vat,services,lat,lng,listed,sample,updated_at',
+    q = urllib.parse.urlencode({'select': 'id,name,nation,town,address,postcode,phone,website,reg_no,about,color,logo_url,remote,vat,services,lat,lng,listed,sample,updated_at',
                                 'listed': 'eq.true', 'sample': 'eq.false'})
     req = urllib.request.Request(f'{SB_URL}/rest/v1/firms?{q}', headers={'apikey': SB_KEY, 'Authorization': f'Bearer {SB_KEY}'})
     try:
@@ -179,7 +196,7 @@ def offers_area(firm, area):
 
 
 # ---------------------------------------------------------------- page shell
-FONT = 'https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap'
+FONT = '/fonts/fonts.css'
 LOGO = '<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="1" y="1" width="28" height="28" rx="7" fill="var(--ink)"/><rect x="7" y="9" width="10" height="3" rx="1.5" fill="var(--paper)"/><rect x="7" y="14" width="16" height="3" rx="1.5" fill="#FFE07A"/><rect x="7" y="19" width="13" height="3" rx="1.5" fill="var(--paper)"/></svg>'
 
 
@@ -236,7 +253,7 @@ def shell(*, title, desc, path, body, ld=(), index=True, og_type='website', acti
 <meta name="twitter:card" content="summary">
 <link rel="alternate" type="application/rss+xml" title="Compare Legal guides" href="/blog/feed.xml">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="/fonts/figtree-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{FONT}">
 <link rel="stylesheet" href="/assets/site.css?v={TODAY:%Y%m%d}">
 {lds}
@@ -422,7 +439,7 @@ def firm_row(f, area, city=None):
     ini = ''.join(w[0] for w in re.sub(r'&', '', f.get('name') or '?').split() if w[:1].isalpha())[:2].upper() or '?'
     dist = f' · {round(f["_d"])} miles' if city and f.get('_d') is not None and f['_d'] >= 1 else ''
     return f'''<li class="firm"><span class="ini" style="background:{e(f.get('color') or '#24507A')}" aria-hidden="true">{e(ini)}</span>
-  <span class="fname"><b>{e(f.get('name'))}</b><small>{e(f.get('town') or '')}{dist}</small></span>
+  <span class="fname"><a href="/firms/{firm_slug(f)}/"><b>{e(f.get('name'))}</b></a><small>{e(f.get('town') or '')}{dist}</small></span>
   <span class="fprice">{price}</span></li>'''
 
 
@@ -600,6 +617,109 @@ def guides_band(ps):
     return f'<section class="band alt"><div class="wrap"><h2>Guides</h2><div class="grid">{"".join(post_card(p) for p in ps[:3])}</div></div></section>'
 
 
+# ---------------------------------------------------------------- firm profiles
+def tier_totals(f, sid):
+    s = f['services'][sid]
+    disb = sum(num(d.get('amount')) for d in (s.get('disb') or []))
+    out, prev = [], None
+    for t_ in tiers_of(s):
+        fee = num(t_['fee'])
+        if fee:
+            vat = 0 if f.get('vat') is False else fee * 0.2
+            mx = t_['max']
+            lab = ('Any price' if prev is None else f'Over {gbp(prev)}') if mx is None else (f'Up to {gbp(mx)}' if prev is None else f'{gbp(prev + 1)} to {gbp(mx)}')
+            out.append((lab, fee + vat + disb))
+        prev = t_['max']
+    return out
+
+
+def firm_services_html(f, jur):
+    rows = []
+    for sid in SVC_NAMES:
+        s = (f.get('services') or {}).get(sid)
+        if not s:
+            continue
+        typ = {'fixed': 'Fixed fee', 'from': 'Starting price', 'hourly': 'Hourly rate'}.get(s.get('type'), '')
+        if s.get('type') == 'hourly':
+            price = f'{gbp(num(s.get("rate")))} an hour + VAT' if num(s.get('rate')) else 'Ask for a quote'
+        elif sid in BANDED:
+            tt = tier_totals(f, sid)
+            price = '<br>'.join(f'{e(l)}: <b>{gbp(v)}</b>' for l, v in tt) if tt else 'Ask for a quote'
+        else:
+            q = quote(f, sid)
+            price = f'<b>{gbp(q["total"])}</b>' if q and q['total'] else 'Ask for a quote'
+        inc = s.get('inc') or ''
+        time = s.get('time') or ''
+        extra = ''.join(x for x in (f'<p class="muted small">{e(inc)}</p>' if inc else '', f'<p class="muted small">Typical timescale: {e(time)}</p>' if time else ''))
+        rows.append(f'<tr><th scope="row">{e(svc_name(sid, jur))}<br><small class="muted">{e(typ)}</small>{extra}</th><td class="num">{price}</td></tr>')
+    return ''.join(rows)
+
+
+def build_firms(firms, cities):
+    pages = []
+    for f in firms:
+        n = f.get('nation')
+        if n not in NATIONS or not f.get('name'):
+            continue
+        N, jur = NATIONS[n], NATIONS[n]['jur']
+        slug = firm_slug(f)
+        path = f'/firms/{slug}/'
+        rows = firm_services_html(f, jur)
+        near_city = None
+        if f.get('lat') is not None:
+            near_city = min(cities[n], key=lambda c: miles(c['lat'], c['lng'], float(f['lat']), float(f['lng'])))
+        areas = [a for a in AREAS if offers_area(f, a)]
+        crumbs = [('Home', '/'), ('Find a solicitor', '/solicitors/'), (f['name'], path)]
+        town = f.get('town') or (near_city['name'] if near_city else n)
+        logo = f'<img class="flogo" src="{e(f["logo_url"])}" alt="{e(f["name"])} logo" width="72" height="72">' if f.get('logo_url') else \
+            f'<span class="ini big" style="background:{e(f.get("color") or "#24507A")}" aria-hidden="true">{e("".join(w[0] for w in re.sub("&", "", f["name"]).split() if w[:1].isalpha())[:2].upper())}</span>'
+        web = f.get('website') or ''
+        if web and not web.startswith('http'):
+            web = 'https://' + web
+        web_label = re.sub(r'^https?://(www\.)?', '', web).rstrip('/')
+        phone_href = re.sub(r'[^0-9+]', '', f.get('phone') or '')
+        no_prices = '<p class="muted">This firm hasn&#39;t listed prices yet.</p>'
+        contact = ''.join(x for x in [
+            f'<li><span class="eyebrow">Address</span>{e(", ".join(p for p in [f.get("address"), f.get("town"), f.get("postcode")] if p))}</li>' if (f.get('address') or f.get('postcode')) else '',
+            f'<li><span class="eyebrow">Phone</span><a href="tel:{e(phone_href)}">{e(f["phone"])}</a></li>' if f.get('phone') else '',
+            f'<li><span class="eyebrow">Website</span><a href="{e(web)}" rel="nofollow noopener" target="_blank">{e(web_label)}</a></li>' if web else '',
+            f'<li><span class="eyebrow">Regulated by</span>{e(N["reg"])}{(" · " + e(f["reg_no"])) if f.get("reg_no") else ""}</li>',
+        ])
+        upd = (f.get('updated_at') or '')[:10]
+        body = f'''<section class="pagehead"><div class="wrap">
+  {crumbs_html(crumbs)}
+  <div class="fhead">{logo}<div><h1>{e(f['name'])}</h1><p class="lede">Solicitors in {e(town)}, {e(n)}{' · acts for clients across ' + e(JUR_LABEL[jur]) + ' remotely' if f.get('remote') else ''}</p></div></div>
+  {f'<p class="about">{e(f["about"])}</p>' if f.get('about') else ''}
+  <a class="btn" href="{app_link(AREAS[areas[0]]['svc'] if areas else 'purchase', n, near_city['name'] if near_city else None)}">Compare with firms near {e(near_city['name'] if near_city else n)}</a>
+</div></section>
+<section class="band"><div class="wrap two">
+  <div><h2>Fees</h2><p class="muted sub">Totals include VAT and the disbursements the firm has listed{(', updated ' + nice_date(upd)) if upd else ''}. Prices are set by the firm; confirm your quote before you instruct them.</p>
+  {f'<div class="tbl"><table><tbody>{rows}</tbody></table></div>' if rows else no_prices}</div>
+  <div><h2>Contact</h2><ul class="contact">{contact}</ul>
+  {('<h2 class="mt">Nearby</h2><ul class="cities">' + ''.join(f'<li><a href="/{a}/{N["slug"]}/{near_city["slug"]}/">{e(AREAS[a]["pro"][jur].capitalize())} in {e(near_city["name"])}</a></li>' for a in areas) + '</ul>') if near_city and areas else ''}</div>
+</div></section>'''
+        ld = [crumbs_ld(crumbs), {k: v for k, v in {
+            '@context': 'https://schema.org', '@type': 'LegalService', 'name': f['name'], 'url': BASE + path,
+            'sameAs': web or None, 'telephone': f.get('phone') or None, 'image': f.get('logo_url') or None,
+            'description': f.get('about') or None, 'areaServed': JUR_LABEL[jur],
+            'address': {k2: v2 for k2, v2 in {'@type': 'PostalAddress', 'streetAddress': f.get('address') or None, 'addressLocality': f.get('town') or None,
+                                               'postalCode': f.get('postcode') or None, 'addressCountry': 'GB'}.items() if v2},
+            'geo': {'@type': 'GeoCoordinates', 'latitude': f['lat'], 'longitude': f['lng']} if f.get('lat') is not None else None}.items() if v}]
+        indexable = bool(rows) and any(quote(f, sid) for sid in SVC_NAMES)
+        write(path, shell(title=f'{f["name"]}, {town}: Fees and Contact Details | Compare Legal',
+                          desc=f'Fees from {f["name"]} in {town}, including VAT and disbursements, with contact details. Compare with other solicitors near {town}.',
+                          path=path, body=body, ld=ld, index=indexable, active='local'))
+        pages.append((path, indexable))
+    return pages
+
+
+def build_404():
+    body = '''<section class="pagehead"><div class="wrap"><h1>Page not found</h1>
+<p class="lede">That page doesn't exist or has moved. New firm listings can take a day to appear here.</p>
+<a class="btn" href="/#results">Compare fees</a> <a class="btn ghost" href="/solicitors/">Find a solicitor by city</a></div></section>'''
+    (PUBLIC / '404.html').write_text(shell(title='Page not found | Compare Legal', desc='Page not found.', path='/404.html', body=body, index=False))
+
+
 # ---------------------------------------------------------------- sitemap etc.
 def build_meta(posts, pages):
     urls = [('/', TODAY.isoformat(), '1.0'), ('/blog/', posts[0]['updated'] if posts else TODAY.isoformat(), '0.8')]
@@ -616,7 +736,7 @@ def build_meta(posts, pages):
     return len(urls)
 
 
-GENERATED = ['blog', 'solicitors', 'assets', *AREAS]
+GENERATED = ['blog', 'solicitors', 'assets', 'firms', *AREAS]
 
 
 def main():
@@ -627,9 +747,11 @@ def main():
     posts = load_posts()
     build_blog(posts, cities)
     pages = build_local(cities, firms, posts)
+    pages += build_firms(firms, cities)
+    build_404()
     n = build_meta(posts, pages)
     idx = sum(1 for _, ok in pages if ok)
-    print(f'sitegen: {len(posts)} posts, {len(pages)} local pages ({idx} indexable), {n} URLs in sitemap')
+    print(f'sitegen: {len(posts)} posts, {len(pages)} local and firm pages ({idx} indexable), {n} URLs in sitemap')
 
 
 if __name__ == '__main__':
