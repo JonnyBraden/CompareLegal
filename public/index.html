@@ -337,6 +337,18 @@ const BANDS = [
 const svcById = id => SERVICES.find(s=>s.id===id);
 const svcName = (s,jur='EW') => typeof s.name==='string' ? s.name : s.name[jur];
 const bandFor = price => (BANDS.find(b=>price<=b.max)||BANDS[3]).k;
+/* cities by nation: [name, lat, lng] */
+const CITIES = {
+  'England':[['Bath',51.3811,-2.359],['Birmingham',52.4862,-1.8904],['Bradford',53.796,-1.7594],['Brighton & Hove',50.8225,-0.1372],['Bristol',51.4545,-2.5879],['Cambridge',52.2053,0.1218],['Canterbury',51.2802,1.0789],['Carlisle',54.8925,-2.9329],['Chelmsford',51.7356,0.4685],['Chester',53.1934,-2.8931],['Chichester',50.8376,-0.7749],['Colchester',51.8959,0.8919],['Coventry',52.4068,-1.5197],['Derby',52.9225,-1.4746],['Doncaster',53.5228,-1.1285],['Durham',54.7761,-1.5733],['Ely',52.399,0.2624],['Exeter',50.7184,-3.5339],['Gloucester',51.8642,-2.2382],['Hereford',52.0565,-2.716],['Hull',53.7676,-0.3274],['Lancaster',54.0466,-2.8007],['Leeds',53.8008,-1.5491],['Leicester',52.6369,-1.1398],['Lichfield',52.6816,-1.8317],['Lincoln',53.2307,-0.5406],['Liverpool',53.4084,-2.9916],['London',51.5074,-0.1278],['Manchester',53.4808,-2.2426],['Milton Keynes',52.0406,-0.7594],['Newcastle upon Tyne',54.9783,-1.6178],['Norwich',52.6309,1.2974],['Nottingham',52.9548,-1.1581],['Oxford',51.752,-1.2577],['Peterborough',52.5695,-0.2405],['Plymouth',50.3755,-4.1427],['Portsmouth',50.8198,-1.088],['Preston',53.7632,-2.7031],['Ripon',54.1381,-1.524],['Salford',53.4875,-2.2901],['Salisbury',51.0688,-1.7945],['Sheffield',53.3811,-1.4701],['Southampton',50.9097,-1.4044],['Southend-on-Sea',51.5459,0.7077],['St Albans',51.752,-0.336],['Stoke-on-Trent',53.0027,-2.1794],['Sunderland',54.9069,-1.3838],['Truro',50.2632,-5.051],['Wakefield',53.6833,-1.4977],['Wells',51.209,-2.6476],['Winchester',51.0632,-1.308],['Wolverhampton',52.5862,-2.1288],['Worcester',52.1936,-2.2216],['York',53.96,-1.0873]],
+  'Wales':[['Bangor',53.2274,-4.1293],['Cardiff',51.4816,-3.1791],['Newport',51.5842,-2.9977],['St Asaph',53.2577,-3.442],['St Davids',51.8812,-5.266],['Swansea',51.6214,-3.9436],['Wrexham',53.0466,-2.9925]],
+  'Scotland':[['Aberdeen',57.1497,-2.0943],['Dundee',56.462,-2.9707],['Dunfermline',56.0717,-3.4522],['Edinburgh',55.9533,-3.1883],['Glasgow',55.8642,-4.2518],['Inverness',57.4778,-4.2247],['Perth',56.395,-3.4308],['Stirling',56.1165,-3.9369]],
+  'Northern Ireland':[['Armagh',54.3503,-6.6528],['Bangor',54.66,-5.6689],['Belfast',54.5973,-5.9301],['Derry~Londonderry',54.9966,-7.3086],['Lisburn',54.5162,-6.058],['Newry',54.1751,-6.3402]]
+};
+const cityIn = (nation,name) => (CITIES[nation]||[]).find(c=>c[0]===name);
+const cityAnywhere = name => { const n = String(name||'').trim().toLowerCase().replace(/^derry$|^londonderry$/,'derry~londonderry'); for (const k in CITIES){ const c = CITIES[k].find(c=>c[0].toLowerCase()===n); if(c) return c; } return null; };
+function miles(aLat,aLng,bLat,bLng){ const R=3958.8, r=Math.PI/180, dLa=(bLat-aLat)*r, dLo=(bLng-aLng)*r; const h=Math.sin(dLa/2)**2+Math.cos(aLat*r)*Math.cos(bLat*r)*Math.sin(dLo/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
+const fmtMiles = d => d<1 ? 'Under a mile' : `${Math.round(d)} mile${Math.round(d)===1?'':'s'}`;
+const cityOptions = (nation,sel) => `<option value="">Anywhere in ${esc(nation)}</option>${(CITIES[nation]||[]).map(c=>`<option ${c[0]===sel?'selected':''}>${esc(c[0])}</option>`).join('')}`;
 
 const TIMES = {purchase:'8–12 weeks',sale:'8–12 weeks',remortgage:'3–5 weeks',will1:'1–2 weeks',will2:'1–2 weeks',poa:'2–3 weeks',grant:'8–16 weeks',estate:'6–12 months',divorce:'6–8 months',finances:'4–8 weeks',children:'Within 5 working days'};
 
@@ -351,8 +363,8 @@ const store = {
   set(k,v){ mem[k]=v; try{ localStorage.setItem('cl:'+k, JSON.stringify(v)); return true; }catch(e){ return false; } }
 };
 let FIRMS = [], SESS = null, ENQ = null, recovering = false;
-const fromRow = r => ({id:r.id,owner:r.owner,name:r.name,nation:r.nation,town:r.town,address:r.address,phone:r.phone,email:r.email,website:r.website,regNo:r.reg_no,about:r.about,color:r.color,logo:r.logo_url||null,remote:r.remote,vat:r.vat,services:r.services||{},listed:r.listed,sample:r.sample,updated:r.updated_at});
-const toRow = f => ({name:f.name,nation:f.nation,town:f.town||'',address:f.address||'',phone:f.phone||'',email:f.email||'',website:f.website||'',reg_no:f.regNo||'',about:f.about||'',color:f.color||'#24507A',logo_url:f.logo||null,remote:!!f.remote,vat:f.vat!==false,services:f.services||{},listed:!!f.listed});
+const fromRow = r => ({id:r.id,owner:r.owner,name:r.name,nation:r.nation,town:r.town,address:r.address,phone:r.phone,email:r.email,website:r.website,regNo:r.reg_no,about:r.about,color:r.color,logo:r.logo_url||null,remote:r.remote,vat:r.vat,services:r.services||{},listed:r.listed,sample:r.sample,updated:r.updated_at,postcode:r.postcode||'',lat:r.lat,lng:r.lng});
+const toRow = f => ({name:f.name,nation:f.nation,town:f.town||'',address:f.address||'',phone:f.phone||'',email:f.email||'',website:f.website||'',reg_no:f.regNo||'',about:f.about||'',color:f.color||'#24507A',logo_url:f.logo||null,remote:!!f.remote,vat:f.vat!==false,services:f.services||{},listed:!!f.listed,postcode:f.postcode||'',lat:f.lat??null,lng:f.lng??null});
 async function loadFirms(){ const {data,error} = await sb.from('firms').select('*').order('name'); if(error) throw error; FIRMS = data.map(fromRow); }
 const allFirms = () => FIRMS;
 const firmById = id => FIRMS.find(f=>f.id===id);
@@ -412,7 +424,8 @@ function feeChip(t){ return t==='fixed'?'<span class="chip fixed">Fixed fee</spa
 const ICON_TICK = '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
 /* ---------- state + routing ---------- */
-const state = Object.assign({area:'conveyancing',svc:'purchase',nation:'England',price:325000,town:'',remote:true,fixedOnly:false,sort:'total',compare:[]}, store.get('search',{}), {compare:[]});
+const state = Object.assign({area:'conveyancing',svc:'purchase',nation:'England',price:325000,city:'',fixedOnly:false,sort:'total',compare:[]}, store.get('search',{}), {compare:[]});
+if (!cityIn(state.nation,state.city)) state.city=''; if (state.sort==='nearest' && !state.city) state.sort='total';
 const saveSearch = () => { const {compare,...rest}=state; store.set('search',rest); };
 const VIEWS = {home:renderHome,how:renderHome,results:renderResults,firms:renderAuth,portal:renderPortal};
 let currentView = (location.hash||'#home').slice(1);
@@ -451,9 +464,9 @@ function deskHTML(){
         <select class="in" id="d-nation">${Object.keys(NATIONS).map(n=>`<option ${n===state.nation?'selected':''}>${n}</option>`).join('')}</select></label>
       ${def.banded ? `<label class="f">${state.svc==='remortgage'?'Property value':state.svc==='sale'?'Sale price':'Purchase price'}
         <div class="pre"><span>£</span><input class="in num" id="d-price" inputmode="numeric" value="${Number(state.price).toLocaleString('en-GB')}"></div></label>`
-      : `<label class="f">Town or city <small>(optional)</small><input class="in" id="d-town" value="${esc(state.town)}" placeholder="e.g. Belfast"></label>`}
+      : `<label class="f">Nearest city <small>(optional)</small><select class="in" id="d-city">${cityOptions(state.nation,state.city)}</select></label>`}
     </div>
-    ${def.banded ? `<label class="f">Town or city <small>(optional)</small><input class="in" id="d-town" value="${esc(state.town)}" placeholder="e.g. Leeds"></label>`:''}
+    ${def.banded ? `<label class="f">Nearest city <small>(optional)</small><select class="in" id="d-city">${cityOptions(state.nation,state.city)}</select></label>`:''}
     <button class="btn" type="submit">Compare fees</button>
     <p class="desk-note">Totals include VAT and the costs firms pay on your behalf, such as searches and registration fees.${def.area==='conveyancing'?` They exclude ${NATIONS[state.nation].tax}.`:''}</p>
   </form>`;
@@ -462,7 +475,9 @@ function readDesk(){
   const svc = $('#d-svc')?.value; if (svc) state.svc = svc;
   const n = $('#d-nation')?.value; if (n) state.nation = n;
   const p = $('#d-price')?.value; if (p!=null){ const v = parseInt(p.replace(/[^\d]/g,''),10); if(v) state.price=v; }
-  const t = $('#d-town'); if (t) state.town = t.value.trim();
+  const c = $('#d-city'); if (c) state.city = c.value;
+  if (!cityIn(state.nation,state.city)) state.city = '';
+  state.sort = state.city ? 'nearest' : (state.sort==='nearest' ? 'total' : state.sort);
 }
 function bindDesk(onSubmit){
   const d = $('#desk'); if(!d) return;
@@ -542,18 +557,17 @@ function renderHome(){
 
 /* ---------- results ---------- */
 function matches(){
-  const jur = NATIONS[state.nation].jur, band = bandFor(state.price), town = state.town.toLowerCase();
+  const jur = NATIONS[state.nation].jur, c = cityIn(state.nation,state.city);
   const me = session()?.firmId;
-  let rows = allFirms().filter(f=>jurOf(f)===jur && f.services?.[state.svc] && (f.listed!==false || f.id===me)).map(f=>({f,q:quote(f,state.svc,state.price)})).filter(r=>r.q);
-  if (town) rows = rows.filter(({f})=> f.town.toLowerCase().includes(town) || (state.remote && f.remote));
+  let rows = allFirms().filter(f=>jurOf(f)===jur && f.services?.[state.svc] && (f.listed!==false || f.id===me))
+    .map(f=>({f,q:quote(f,state.svc,state.price),dist:(c && f.lat!=null && f.lng!=null) ? miles(c[1],c[2],f.lat,f.lng) : null})).filter(r=>r.q);
   if (state.fixedOnly) rows = rows.filter(r=>r.q.type==='fixed');
-  const key = state.sort;
+  const key = (state.sort==='nearest' && !c) ? 'total' : state.sort;
+  const tot = r => key==='legal' ? (r.q.legal??Infinity) : (r.q.total??Infinity);
   rows.sort((a,b)=>{
     if (key==='name') return a.f.name.localeCompare(b.f.name);
-    const av = key==='legal' ? (a.q.legal??Infinity) : (a.q.total??Infinity);
-    const bv = key==='legal' ? (b.q.legal??Infinity) : (b.q.total??Infinity);
-    if (town){ const al=a.f.town.toLowerCase().includes(town)?0:1, bl=b.f.town.toLowerCase().includes(town)?0:1; if(al!==bl) return al-bl; }
-    return av-bv;
+    if (key==='nearest'){ const ad=a.dist??Infinity, bd=b.dist??Infinity; if (ad!==bd) return ad-bd; }
+    return tot(a)-tot(b);
   });
   return rows;
 }
@@ -566,8 +580,9 @@ function renderResults(){
     <form class="res-bar" id="rbar">
       <label class="f">Service<select class="in" id="r-svc">${AREAS.map(a=>`<optgroup label="${a.name}">${servicesFor(a.id).map(s=>`<option value="${s.id}" ${s.id===state.svc?'selected':''}>${esc(svcName(s,jur))}</option>`).join('')}</optgroup>`).join('')}</select></label>
       <label class="f">Nation<select class="in" id="r-nation">${Object.keys(NATIONS).map(n=>`<option ${n===state.nation?'selected':''}>${n}</option>`).join('')}</select></label>
-      <label class="f">${def.banded?'Price':'Town'}${def.banded?`<div class="pre"><span>£</span><input class="in num" id="r-price" inputmode="numeric" value="${Number(state.price).toLocaleString('en-GB')}"></div>`:`<input class="in" id="r-town" value="${esc(state.town)}" placeholder="Any">`}</label>
-      ${def.banded?`<label class="f">Town<input class="in" id="r-town" value="${esc(state.town)}" placeholder="Any"></label>`:'<span></span>'}
+      ${def.banded?`<label class="f">Price<div class="pre"><span>£</span><input class="in num" id="r-price" inputmode="numeric" value="${Number(state.price).toLocaleString('en-GB')}"></div></label>`:''}
+      <label class="f">Nearest city<select class="in" id="r-city">${cityOptions(state.nation,state.city)}</select></label>
+      ${def.banded?'':'<span></span>'}
       <button class="btn" type="submit">Update</button>
     </form>
   </div></div>
@@ -575,40 +590,39 @@ function renderResults(){
     <aside class="filters" aria-label="Filters">
       <div class="fgroup"><span class="eyebrow">Refine</span>
         <label class="check"><input type="checkbox" id="f-fixed" ${state.fixedOnly?'checked':''}> Fixed fees only</label>
-        <label class="check"><input type="checkbox" id="f-remote" ${state.remote?'checked':''}> Include firms that act remotely across ${esc(JUR[jur].label)}</label>
       </div>
       <div class="notice"><b>What the total includes</b><span>Legal fee, VAT at 20% and disbursements.${def.area==='conveyancing'?` It excludes ${esc(NATIONS[state.nation].tax)}, which depends on your circumstances.`:''}${def.banded?` Each firm sets its own property value bands. Fees shown are for a ${gbp(state.price)} property.`:''}</span></div>
     </aside>
     <div style="min-width:0">
       <div class="list-top"><p id="count" class="muted"></p>
         <label class="muted" style="display:flex;gap:8px;align-items:center;font-size:.88rem">Sort by
-          <select class="in" id="sort"><option value="total">Lowest total</option><option value="legal">Lowest legal fee</option><option value="name">Firm name</option></select></label></div>
+          <select class="in" id="sort">${state.city?`<option value="nearest">Nearest to ${esc(state.city)}</option>`:''}<option value="total">Lowest total</option><option value="legal">Lowest legal fee</option><option value="name">Firm name</option></select></label></div>
       <div class="cards" id="cards"></div>
     </div>
   </div>`;
   $('#sort').value = state.sort;
   const bar = $('#rbar');
-  const readBar = ()=>{ state.svc=$('#r-svc').value; state.area=svcById(state.svc).area; state.nation=$('#r-nation').value; const p=$('#r-price'); if(p){ const v=parseInt(p.value.replace(/[^\d]/g,''),10); if(v) state.price=v; } const t=$('#r-town'); state.town=t?t.value.trim():''; };
+  const readBar = ()=>{ state.svc=$('#r-svc').value; state.area=svcById(state.svc).area; state.nation=$('#r-nation').value; const p=$('#r-price'); if(p){ const v=parseInt(p.value.replace(/[^\d]/g,''),10); if(v) state.price=v; } const prevCity=state.city; state.city=$('#r-city')?.value||''; if(!cityIn(state.nation,state.city)) state.city=''; if(state.city!==prevCity || (!state.city && state.sort==='nearest')) state.sort = state.city ? 'nearest' : (state.sort==='nearest'?'total':state.sort); };
   bar.addEventListener('submit',e=>{ e.preventDefault(); readBar(); saveSearch(); state.compare=[]; renderResults(); renderTray(); });
   $('#r-svc').addEventListener('change',()=>{ readBar(); saveSearch(); state.compare=[]; renderResults(); renderTray(); });
   $('#r-nation').addEventListener('change',()=>{ readBar(); saveSearch(); state.compare=[]; renderResults(); renderTray(); });
+  $('#r-city').addEventListener('change',()=>{ readBar(); saveSearch(); renderResults(); renderTray(); });
   $('#f-fixed').addEventListener('change',e=>{ state.fixedOnly=e.target.checked; saveSearch(); drawCards(); });
-  $('#f-remote').addEventListener('change',e=>{ state.remote=e.target.checked; saveSearch(); drawCards(); });
   $('#sort').addEventListener('change',e=>{ state.sort=e.target.value; saveSearch(); drawCards(); });
   drawCards();
 }
 function drawCards(){
-  const rows = matches(), jur = NATIONS[state.nation].jur, me = session()?.firmId, town = state.town.toLowerCase();
-  $('#count').innerHTML = `<b style="color:var(--ink)">${rows.length}</b> firm${rows.length===1?'':'s'} in ${esc(JUR[jur].label)}${state.town?` near ${esc(state.town)}`:''}`;
+  const rows = matches(), jur = NATIONS[state.nation].jur, me = session()?.firmId;
+  $('#count').innerHTML = `<b style="color:var(--ink)">${rows.length}</b> firm${rows.length===1?'':'s'} in ${esc(JUR[jur].label)}${state.city&&state.sort==='nearest'?`, nearest to ${esc(state.city)} first`:''}`;
   const cards = $('#cards');
-  if (!rows.length){ cards.innerHTML = `<div class="empty"><h3>No firms match yet</h3><p class="muted">Try removing the town, or include firms that act remotely.</p><button class="btn ghost sm" id="clr">Clear town</button></div>`; $('#clr').onclick=()=>{ state.town=''; saveSearch(); renderResults(); }; return; }
-  cards.innerHTML = rows.map(({f,q})=>{
-    const s = f.services[state.svc]; const away = town && !f.town.toLowerCase().includes(town);
+  if (!rows.length){ cards.innerHTML = `<div class="empty"><h3>No firms match yet</h3><p class="muted">${state.fixedOnly?'Try including firms that don’t offer a fixed fee.':`No listed firms offer this service in ${esc(JUR[jur].label)} yet.`}</p></div>`; return; }
+  cards.innerHTML = rows.map(({f,q,dist})=>{
+    const s = f.services[state.svc]; const away = dist!=null && dist>25;
     return `<article class="card ${f.id===me?'mine':''}">
       ${logo(f)}
       <div style="min-width:0">
         <h3>${esc(f.name)}</h3>
-        <div class="meta"><span>${esc(f.town)}, ${esc(f.nation)}</span><span>${JUR[jurOf(f)].short} regulated</span></div>
+        <div class="meta"><span>${esc(f.town)}, ${esc(f.nation)}</span>${dist!=null?`<span>${fmtMiles(dist)} from ${esc(state.city)}</span>`:''}<span>${JUR[jurOf(f)].short} regulated</span></div>
         <div class="chips">${feeChip(q.type)}${f.remote?`<span class="chip">${away?'Acts remotely':'Remote appointments'}</span>`:''}${timeOf(f,state.svc)?`<span class="chip">${esc(timeOf(f,state.svc))}</span>`:''}${f.id===me?'<span class="chip mine">Your listing</span>':''}${f.sample?'<span class="chip">Sample firm</span>':''}</div>
         ${incOf(f,state.svc)?`<p class="inc">${esc(incOf(f,state.svc))}</p>`:''}
       </div>
@@ -741,7 +755,7 @@ function openCompare(){
         ${row('Disbursements',(f,q,o)=>(o.disb||[]).length?(o.disb.map(d=>`<div style="display:flex;justify-content:space-between;gap:10px;font-size:.85rem"><span class="muted">${esc(d.label)}</span><span class="num">${gbp(d.amount)}</span></div>`).join('')):'<span class="muted">None</span>')}
         ${row('Included',f=>`<span style="font-size:.88rem">${esc(incOf(f,state.svc)||'Not stated')}</span>`)}
         ${row('Timescale',f=>esc(timeOf(f,state.svc)||'Not stated'))}
-        ${row('Location',f=>`${esc(f.town)}${f.remote?'<br><span class="muted" style="font-size:.85rem">Also acts remotely</span>':''}`)}
+        ${row('Location',f=>{ const c=cityIn(state.nation,state.city); const d=(c&&f.lat!=null)?miles(c[1],c[2],f.lat,f.lng):null; return `${esc(f.town)}${d!=null?`<br><span class="muted" style="font-size:.85rem">${fmtMiles(d)} from ${esc(state.city)}</span>`:''}${f.remote?'<br><span class="muted" style="font-size:.85rem">Also acts remotely</span>':''}`; })}
         ${row('Regulator',f=>`${JUR[jurOf(f)].short}`)}
         ${row('',f=>f.sample?'<span class="chip">Sample firm</span>':`<button class="btn sm" data-q2="${f.id}">Request a quote</button>`)}
       </tbody></table></div></div>`, true);
@@ -829,7 +843,7 @@ function checklist(f){
   const priced = Object.keys(f.services||{}).length;
   return [
     ['Firm name and nation', !!(f.name&&f.nation)],
-    ['Town and address', !!(f.town&&f.address)],
+    ['Town, address and postcode', !!(f.town&&f.address&&f.postcode)],
     ['Phone and email', !!(f.phone&&f.email)],
     ['Regulator number', !!f.regNo],
     ['Logo uploaded', !!f.logo],
@@ -893,8 +907,9 @@ function detailsPane(){
       <label class="f">${jur==='EW'?'SRA number':'Membership or firm number'}<input class="in mono" id="p-regno" value="${esc(f.regNo)}"></label></div>
     <label class="f">About the firm <small>Up to 300 characters, shown on your profile</small><textarea class="in" id="p-about" maxlength="300">${esc(f.about)}</textarea></label>
     <h3 style="margin-top:6px">Contact</h3>
+    <label class="f">Address<input class="in" id="p-address" value="${esc(f.address)}" autocomplete="street-address" placeholder="Street address"></label>
     <div class="row2"><label class="f">Town or city<input class="in" id="p-town" value="${esc(f.town)}"></label>
-      <label class="f">Address<input class="in" id="p-address" value="${esc(f.address)}" autocomplete="street-address"></label></div>
+      <label class="f">Postcode <small>Used to show clients how far away you are</small><input class="in" id="p-postcode" value="${esc(f.postcode||'')}" autocomplete="postal-code" maxlength="10" style="text-transform:uppercase"></label></div>
     <div class="row2"><label class="f">Phone<input class="in" id="p-phone" type="tel" value="${esc(f.phone)}"></label>
       <label class="f">Enquiries email<input class="in" id="p-email" type="email" value="${esc(f.email)}"></label></div>
     <label class="f">Website<input class="in" id="p-web" value="${esc(f.website)}" placeholder="www.yourfirm.co.uk"></label>
@@ -1010,6 +1025,9 @@ function bindPane(){
     detf.addEventListener('submit',async e=>{ e.preventDefault(); captureDetails(); if(!draft.name){ toast('Add your firm name.'); return; }
       const keep = {...firmById(draft.id), ...draft, services:firmById(draft.id).services, listed:firmById(draft.id).listed};
       const btn = $('button[type=submit]',detf); btn.disabled = true;
+      const prev = firmById(draft.id), loc = await locate(keep);
+      if (keep.postcode && !loc.found){ btn.disabled=false; toast('We couldn’t find that postcode. Check it and try again.'); return; }
+      Object.assign(keep, {lat:loc.lat, lng:loc.lng}); if (loc.postcode) keep.postcode = loc.postcode;
       try{ await saveFirm(keep); toast('Details saved'); renderPortal(); }catch(ex){ btn.disabled=false; toast(errMsg(ex)); } });
   }
   const pf = $('#pricef');
@@ -1049,9 +1067,19 @@ function bindPane(){
   }
 
 }
+async function locate(f){
+  const pc = (f.postcode||'').replace(/\s+/g,'').toUpperCase();
+  if (pc){
+    try{ const res = await fetch('https://api.postcodes.io/postcodes/'+encodeURIComponent(pc)); const r = await res.json();
+      if (r && r.status===200 && r.result) return {found:true, lat:r.result.latitude, lng:r.result.longitude, postcode:r.result.postcode};
+      if (res.status===404) return {found:false}; }catch(e){}
+    const c = cityAnywhere(f.town); return {found:true, lat:f.lat ?? (c?c[1]:null), lng:f.lng ?? (c?c[2]:null)};
+  }
+  const c = cityAnywhere(f.town); return c ? {found:true, lat:c[1], lng:c[2]} : {found:true, lat:null, lng:null};
+}
 function captureDetails(){
   const v = id => $(id)?.value.trim() ?? '';
-  Object.assign(draft,{name:v('#p-name'),nation:$('#p-nation').value,regNo:v('#p-regno'),about:v('#p-about'),town:v('#p-town'),address:v('#p-address'),phone:v('#p-phone'),email:v('#p-email'),website:v('#p-web'),remote:$('#p-remote').checked,vat:$('#p-vat').checked});
+  Object.assign(draft,{name:v('#p-name'),nation:$('#p-nation').value,regNo:v('#p-regno'),about:v('#p-about'),town:v('#p-town'),address:v('#p-address'),postcode:v('#p-postcode').toUpperCase(),phone:v('#p-phone'),email:v('#p-email'),website:v('#p-web'),remote:$('#p-remote').checked,vat:$('#p-vat').checked});
 }
 
 /* ---------- boot ---------- */
