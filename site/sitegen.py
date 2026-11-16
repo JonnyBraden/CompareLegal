@@ -225,7 +225,7 @@ def offers_area(firm, area):
 
 # ---------------------------------------------------------------- page shell
 FONT = '/fonts/fonts.css'
-LOGO = '<svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="1" y="1" width="28" height="28" rx="7" fill="var(--ink)"/><rect x="7" y="9" width="10" height="3" rx="1.5" fill="var(--paper)"/><rect x="7" y="14" width="16" height="3" rx="1.5" fill="#FFE07A"/><rect x="7" y="19" width="13" height="3" rx="1.5" fill="var(--paper)"/></svg>'
+LOGO = '<svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="17" fill="#0E6B4F"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M32 17v29"/><path d="M23 47h18"/><path d="M13 24l38-8"/></g><rect x="7" y="33" width="18" height="6" rx="3" fill="#FFC94A"/><rect x="40" y="25" width="18" height="6" rx="3" fill="#fff"/></svg>'
 
 
 def app_link(svc, nation=None, city=None):
@@ -281,7 +281,9 @@ def shell(*, title, desc, path, body, ld=(), index=True, og_type='website', acti
 <meta name="twitter:card" content="summary">
 <link rel="alternate" type="application/rss+xml" title="Compare Legal guides" href="/blog/feed.xml">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#0E6B4F">
 <link rel="preload" href="/fonts/figtree-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{FONT}">
 <link rel="stylesheet" href="/assets/site.css?v={TODAY:%Y%m%d}">
 <script src="/consent.js" defer></script>
@@ -297,7 +299,7 @@ def shell(*, title, desc, path, body, ld=(), index=True, og_type='website', acti
 {body}
 </main>
 <footer><div class="wrap foot">
-  <div><b>Compare Legal</b><p>Compare solicitors' fees for conveyancing, wills, probate and family law across England, Wales, Scotland and Northern Ireland. Fees are set by each firm; always confirm the final quote before you instruct them.</p></div>
+  <div><b>{LOGO.replace('width="34" height="34"', 'width="28" height="28"')}Compare Legal</b><p>Compare solicitors' fees for conveyancing, wills, probate and family law across England, Wales, Scotland and Northern Ireland. Fees are set by each firm; always confirm the final quote before you instruct them.</p></div>
   <div><h2>Fees by service</h2><ul>{foot_links}</ul></div>
   <div><h2>Guides</h2><ul><li><a href="/blog/">All guides</a></li><li><a href="/solicitors/">Solicitors by city</a></li><li><a href="/#firms">List your firm</a></li><li><a href="/about/">About Compare Legal</a></li><li><a href="#cookies" data-cookie-settings>Cookie settings</a></li></ul></div>
 </div></footer>
@@ -836,7 +838,7 @@ def build_meta(posts, pages):
     body = ''.join(f'<url><loc>{BASE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>' for u, d, pr in urls)
     (PUBLIC / 'sitemap.xml').write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{body}</urlset>\n')
     (PUBLIC / 'robots.txt').write_text(f'User-agent: *\nAllow: /\nDisallow: /vendor/\n\nSitemap: {BASE}/sitemap.xml\n')
-    (PUBLIC / 'favicon.svg').write_text(LOGO.replace('var(--ink)', '#15212C').replace('var(--paper)', '#F5F7F6').replace('width="28" height="28" ', 'xmlns="http://www.w3.org/2000/svg" '))
+    (PUBLIC / 'favicon.svg').write_text(LOGO.replace('width="34" height="34" ', 'xmlns="http://www.w3.org/2000/svg" '))
     assets = PUBLIC / 'assets'
     assets.mkdir(exist_ok=True)
     shutil.copy(ROOT / 'site' / 'site.css', assets / 'site.css')
