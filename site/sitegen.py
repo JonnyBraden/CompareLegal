@@ -28,6 +28,18 @@ TODAY = dt.date.today()
 LOCAL_RADIUS_MILES = 25
 LOCAL_INDEX_MIN_FIRMS = 3
 
+# Date the page templates last changed in a way that matters to readers. Used as the
+# sitemap lastmod for generated pages, so it doesn't reset to "today" on every build.
+TEMPLATE_DATE = '2026-11-16'
+
+# Named solicitor who reviews the guides. None = guides are credited to "the Compare Legal
+# team". To switch on, set e.g.:
+# REVIEWER = {'name': 'Jonny Braden', 'job': 'Solicitor', 'bio': 'One or two sentences.', 'url': 'https://www.linkedin.com/in/...'}
+REVIEWER = None
+
+# Public contact address shown on the About page for corrections. None hides the line.
+CONTACT_EMAIL = None
+
 SB_URL = 'https://dtsxrmmdnyjmplhoyinv.supabase.co'
 SB_KEY = 'sb_publishable_gyrD_o-zaQ2XvgFLTUBgrQ_3r0MYZ3g'
 
@@ -77,6 +89,11 @@ SVC_NAMES = {  # mirrors SERVICES in src/app.html
 }
 BANDED = {'purchase', 'sale', 'remortgage'}
 svc_name = lambda sid, jur: SVC_NAMES[sid] if isinstance(SVC_NAMES[sid], str) else SVC_NAMES[sid][jur]
+
+
+def lastmod(*firm_lists):
+    dates = [TEMPLATE_DATE] + [str(f.get('updated_at') or '')[:10] for fl in firm_lists for f in fl if f.get('updated_at')]
+    return max(dates)
 
 
 def firm_slug(f):
@@ -282,7 +299,7 @@ def shell(*, title, desc, path, body, ld=(), index=True, og_type='website', acti
 <footer><div class="wrap foot">
   <div><b>Compare Legal</b><p>Compare solicitors' fees for conveyancing, wills, probate and family law across England, Wales, Scotland and Northern Ireland. Fees are set by each firm; always confirm the final quote before you instruct them.</p></div>
   <div><h2>Fees by service</h2><ul>{foot_links}</ul></div>
-  <div><h2>Guides</h2><ul><li><a href="/blog/">All guides</a></li><li><a href="/solicitors/">Solicitors by city</a></li><li><a href="/#firms">List your firm</a></li><li><a href="#cookies" data-cookie-settings>Cookie settings</a></li></ul></div>
+  <div><h2>Guides</h2><ul><li><a href="/blog/">All guides</a></li><li><a href="/solicitors/">Solicitors by city</a></li><li><a href="/#firms">List your firm</a></li><li><a href="/about/">About Compare Legal</a></li><li><a href="#cookies" data-cookie-settings>Cookie settings</a></li></ul></div>
 </div></footer>
 </body>
 </html>
@@ -312,7 +329,7 @@ def load_posts():
             nations = [nations]
         posts.append(dict(slug=f.stem, title=meta['title'], desc=meta['description'], date=meta['date'],
                           updated=meta.get('updated', meta['date']), cat=meta['category'], nations=nations,
-                          svc=meta.get('service', AREAS[meta['category']]['svc']), html=html_body, heads=heads, faqs=faqs,
+                          svc=meta.get('service', AREAS[meta['category']]['svc']), summary=meta.get('summary'), html=html_body, heads=heads, faqs=faqs,
                           mins=max(2, round(words / 220)), url=f'/blog/{f.stem}/', short=meta.get('short', meta['title'])))
     posts.sort(key=lambda p: (p['date'], p['updated']), reverse=True)
     return posts
@@ -397,10 +414,11 @@ def build_blog(posts, cities):
   {crumbs_html(crumbs)}
   <h1>{e(p['title'])}</h1>
   <p class="lede">{e(p['desc'])}</p>
-  <p class="meta">By the Compare Legal team · Updated <time datetime="{p['updated']}">{nice_date(p['updated'])}</time> · {p['mins']} min read</p>
+  <p class="meta">{byline()} · Updated <time datetime="{p['updated']}">{nice_date(p['updated'])}</time> · {p['mins']} min read</p>
 </div></header>
 <div class="wrap postgrid">
   <div class="prose">
+    {f'<div class="answer"><p class="eyebrow">Short answer</p><p>{e(p["summary"])}</p></div>' if p.get('summary') else ''}
     {f'<nav class="toc" aria-label="Contents"><p class="eyebrow">In this guide</p><ol>{toc}</ol></nav>' if toc else ''}
     {p['html']}
     <p class="disclaimer">This guide is general information about the law and fees at the date shown, not legal advice for your situation. Rates and court fees change, so check the official sources linked above or ask a solicitor before you rely on a figure.</p>
@@ -421,6 +439,8 @@ def build_blog(posts, cities):
             'datePublished': p['date'], 'dateModified': p['updated'], 'inLanguage': 'en-GB',
             'mainEntityOfPage': BASE + p['url'], 'url': BASE + p['url'],
             'author': {'@type': 'Organization', 'name': 'Compare Legal', 'url': BASE + '/'},
+            **({'reviewedBy': person_ld(), 'lastReviewed': p['updated']} if REVIEWER else {}),
+            **({'abstract': p['summary']} if p.get('summary') else {}),
             'publisher': {'@type': 'Organization', 'name': 'Compare Legal', 'url': BASE + '/', 'logo': {'@type': 'ImageObject', 'url': BASE + '/logo.png'}},
             'about': CATS[p['cat']], 'spatialCoverage': [{'@type': 'Place', 'name': n} for n in p['nations']]}]
         if p['faqs']:
@@ -494,7 +514,7 @@ def local_faqs(area, nation, city, near, summary):
 
 
 def build_local(cities, firms, posts):
-    pages = []  # (path, indexable)
+    pages = []  # (path, indexable, lastmod)
     for f in firms:
         if f.get('lat') is None or f.get('lng') is None:
             f['_ok'] = False
@@ -518,7 +538,7 @@ def build_local(cities, firms, posts):
         write(f'/{area}/', shell(title=f'Compare {A["name"]} Fees | Solicitors Across the UK | Compare Legal',
                                  desc=f'Compare {A["pro"]["EW"]} fees for {A["what"]} in England, Wales, Scotland and Northern Ireland. Totals include VAT and disbursements.',
                                  path=f'/{area}/', body=body, ld=[crumbs_ld(crumbs)], active='local'))
-        pages.append((f'/{area}/', True))
+        pages.append((f'/{area}/', True, lastmod([f for f in firms if offers_area(f, area)])))
         for n, N in NATIONS.items():
             jur = N['jur']
             nfirms = [f for f in firms if f.get('nation') == n and offers_area(f, area)]
@@ -541,7 +561,7 @@ def build_local(cities, firms, posts):
             write(f'/{area}/{N["slug"]}/', shell(title=f'{pro.title()} in {n}: Compare Fees | Compare Legal',
                                                 desc=f'Compare {pro} in {n}. See fixed fees for {A["what"]}, including VAT and disbursements, and how the process works in {n}.',
                                                 path=f'/{area}/{N["slug"]}/', body=body, ld=[crumbs_ld(ncrumbs), faq_ld(faqs)], active='local'))
-            pages.append((f'/{area}/{N["slug"]}/', True))
+            pages.append((f'/{area}/{N["slug"]}/', True, lastmod(nfirms)))
             for c in cities[n]:
                 near = []
                 for f in nfirms:
@@ -590,7 +610,7 @@ def build_local(cities, firms, posts):
                 write(path, shell(title=f'{pro.title()} in {c["name"]}: Compare Fees | Compare Legal',
                                   desc=f'Compare {pro} in {c["name"]}. Fixed fees for {A["what"]}, with VAT and disbursements included, from firms near {c["name"]}.',
                                   path=path, body=body, ld=ld, index=indexable, active='local'))
-                pages.append((path, indexable))
+                pages.append((path, indexable, lastmod(near)))
     # A–Z hub
     blocks = ''.join(f'<section class="band{" alt" if i % 2 else ""}"><div class="wrap"><h2><a href="/{a}/">{e(A["name"])}</a></h2><div class="cityblocks">{city_links(a, list(NATIONS), cities)}</div></div></section>' for i, (a, A) in enumerate(AREAS.items()))
     crumbs = [('Home', '/'), ('Find a solicitor', '/solicitors/')]
@@ -599,7 +619,7 @@ def build_local(cities, firms, posts):
     write('/solicitors/', shell(title='Find a Solicitor Near You: Compare Fees by City | Compare Legal',
                                 desc='Compare conveyancing, wills, probate and divorce solicitors by city across England, Wales, Scotland and Northern Ireland.',
                                 path='/solicitors/', body=body, ld=[crumbs_ld(crumbs)], active='local'))
-    pages.append(('/solicitors/', True))
+    pages.append(('/solicitors/', True, lastmod(firms)))
     return pages
 
 
@@ -721,8 +741,82 @@ def build_firms(firms, cities):
         write(path, shell(title=f'{f["name"]}, {town}: Fees and Contact Details | Compare Legal',
                           desc=f'Fees from {f["name"]} in {town}, including VAT and disbursements, with contact details. Compare with other solicitors near {town}.',
                           path=path, body=body, ld=ld, index=indexable, active='local'))
-        pages.append((path, indexable))
+        pages.append((path, indexable, lastmod([f])))
     return pages
+
+
+def byline():
+    if REVIEWER:
+        return f'Reviewed by <a href="/about/#reviewer">{e(REVIEWER["name"])}</a>, {e(REVIEWER["job"].lower())}'
+    return 'By the Compare Legal team'
+
+
+def person_ld():
+    return {k: v for k, v in {'@type': 'Person', 'name': REVIEWER['name'], 'jobTitle': REVIEWER['job'],
+                              'url': BASE + '/about/#reviewer', 'sameAs': REVIEWER.get('url')}.items() if v}
+
+
+def build_about(posts, firms):
+    n_cities = len(load_cities_flat())
+    reviewer = f'''<section class="band" id="reviewer"><div class="wrap narrow prose"><h2>Who checks the guides</h2>
+<p><b>{e(REVIEWER["name"])}</b>, {e(REVIEWER["job"].lower())}. {e(REVIEWER.get("bio", ""))}</p></div></section>''' if REVIEWER else ''
+    contact = f'<p>Spotted a mistake, or want a listing checked? Email <a href="mailto:{e(CONTACT_EMAIL)}">{e(CONTACT_EMAIL)}</a> and we will look at it within two working days.</p>' if CONTACT_EMAIL else \
+        '<p>Spotted a mistake? Firms can correct their own listing at any time from the firm portal.</p>'
+    crumbs = [('Home', '/'), ('About', '/about/')]
+    body = f'''<section class="pagehead"><div class="wrap narrow">
+  {crumbs_html(crumbs)}
+  <h1>About Compare Legal</h1>
+  <p class="lede">Compare Legal is a free, independent price comparison site for high-street legal services in the UK: conveyancing, wills and powers of attorney, probate and estates, and family law. It covers England, Wales, Scotland and Northern Ireland.</p>
+</div></section>
+<section class="band"><div class="wrap narrow prose">
+  <h2>Why it exists</h2>
+  <p>Most people instruct a solicitor only a few times in their life, usually at a stressful moment, and quotes are hard to compare. One firm quotes a low legal fee and lists searches and registration fees separately; another quotes a single total. Compare Legal shows every firm's price in the same format, with VAT and disbursements added in, so you can compare like with like before you get in touch.</p>
+  <h2>How prices are collected</h2>
+  <ul>
+    <li><b>Firms set their own prices.</b> Each firm enters its fees, value bands and disbursements in the Compare Legal firm portal and can change them at any time. The date a listing was last updated is shown on the firm's page.</li>
+    <li><b>Totals are worked out the same way for everyone.</b> We add VAT to the legal fee where the firm charges it, then add the disbursements the firm has listed. For conveyancing, the fee is taken from the firm's band for the property price you enter.</li>
+    <li><b>Quotes are a guide, not a contract.</b> A firm's written quote and terms of business, given after it knows the details of your matter, are what count. Always confirm the final price before you instruct a firm.</li>
+    <li><b>Sample firms are labelled.</b> While the site is new, some listings in the comparison tool are clearly marked as sample firms with illustrative prices. They never appear on the city or firm pages.</li>
+  </ul>
+  <h2>Independence</h2>
+  <ul>
+    <li>Listing is free for firms, and firms cannot pay to be ranked higher. Results are sorted by price or distance, whichever you choose.</li>
+    <li>Compare Legal does not take a referral fee or commission from firms for enquiries.</li>
+    <li>We only show firms qualified in the jurisdiction your matter is in, because property and succession law differ between England and Wales, Scotland and Northern Ireland.</li>
+  </ul>
+  <h2>Where we cover</h2>
+  <p>Fee pages for {len(AREAS)} services in {n_cities} cities across all four UK nations, and {len(posts)} guides explaining what each service costs and how the law differs between the nations. A city page is only offered to search engines once at least {LOCAL_INDEX_MIN_FIRMS} real firms are listed within {LOCAL_RADIUS_MILES} miles, so you won't land on an empty page from a search.</p>
+  <h2>How the guides are written</h2>
+  <p>Every guide shows the date it was last updated and links to official sources for fees, tax rates and court charges, such as GOV.UK, nidirect, Revenue Scotland, the Welsh Revenue Authority and the regulators. We review guides when official figures change. Guides are general information, not legal advice for your situation.</p>
+  {contact}
+</div></section>
+{reviewer}'''
+    ld = [crumbs_ld(crumbs), {'@context': 'https://schema.org', '@type': 'AboutPage', 'url': BASE + '/about/', 'name': 'About Compare Legal',
+                              'about': {'@id': BASE + '/#org'}, 'inLanguage': 'en-GB'},
+          {'@context': 'https://schema.org', '@type': 'Organization', '@id': BASE + '/#org', 'name': 'Compare Legal', 'url': BASE + '/',
+           'logo': BASE + '/logo.png', 'areaServed': 'GB', 'description': 'Independent price comparison for UK high-street legal services.',
+           **({'email': CONTACT_EMAIL} if CONTACT_EMAIL else {})}]
+    if REVIEWER:
+        ld.append({'@context': 'https://schema.org', **person_ld()})
+    write('/about/', shell(title='About Compare Legal: How We Compare Solicitors\' Fees', path='/about/', body=body, ld=ld,
+                           desc='How Compare Legal collects and compares solicitors\' fees, how firms are listed, and why results are never paid for.'))
+
+
+def load_cities_flat():
+    return [c for cs in load_cities().values() for c in cs]
+
+
+def build_llms(posts):
+    lines = ['# Compare Legal', '',
+             '> Independent price comparison for UK high-street legal services: conveyancing, wills and powers of attorney, probate and estates, and family law, in England, Wales, Scotland and Northern Ireland. Firms set their own prices; totals include VAT and disbursements.', '',
+             'Guides are dated and link to official sources for fees and tax rates. They are general information, not legal advice.', '',
+             '## Guides']
+    lines += [f'- [{p["title"]}]({BASE}{p["url"]}): {p.get("summary") or p["desc"]}' for p in posts]
+    lines += ['', '## Compare fees by service']
+    for a, A in AREAS.items():
+        lines.append(f'- [{A["name"]}]({BASE}/{a}/): ' + ', '.join(f'[{n}]({BASE}/{a}/{N["slug"]}/)' for n, N in NATIONS.items()))
+    lines += ['', '## About', f'- [About Compare Legal and how prices are compared]({BASE}/about/)', f'- [Compare fees (interactive)]({BASE}/)', '']
+    (PUBLIC / 'llms.txt').write_text('\n'.join(lines))
 
 
 def build_404():
@@ -734,10 +828,11 @@ def build_404():
 
 # ---------------------------------------------------------------- sitemap etc.
 def build_meta(posts, pages):
-    urls = [('/', TODAY.isoformat(), '1.0'), ('/blog/', posts[0]['updated'] if posts else TODAY.isoformat(), '0.8')]
-    urls += [(f'/blog/category/{k}/', TODAY.isoformat(), '0.5') for k in CATS if any(p['cat'] == k for p in posts)]
+    newest = lambda ps: max([TEMPLATE_DATE] + [p['updated'] for p in ps])
+    urls = [('/', newest(posts), '1.0'), ('/blog/', newest(posts), '0.8'), ('/about/', TEMPLATE_DATE, '0.5')]
+    urls += [(f'/blog/category/{k}/', newest([p for p in posts if p['cat'] == k]), '0.5') for k in CATS if any(p['cat'] == k for p in posts)]
     urls += [(p['url'], p['updated'], '0.7') for p in posts]
-    urls += [(u, TODAY.isoformat(), '0.6') for u, ok in pages if ok]
+    urls += [(u, d, '0.6') for u, ok, d in pages if ok]
     body = ''.join(f'<url><loc>{BASE}{u}</loc><lastmod>{d}</lastmod><priority>{pr}</priority></url>' for u, d, pr in urls)
     (PUBLIC / 'sitemap.xml').write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{body}</urlset>\n')
     (PUBLIC / 'robots.txt').write_text(f'User-agent: *\nAllow: /\nDisallow: /vendor/\n\nSitemap: {BASE}/sitemap.xml\n')
@@ -748,7 +843,7 @@ def build_meta(posts, pages):
     return len(urls)
 
 
-GENERATED = ['blog', 'solicitors', 'assets', 'firms', *AREAS]
+GENERATED = ['blog', 'solicitors', 'assets', 'firms', 'about', *AREAS]
 
 
 def main():
@@ -761,8 +856,10 @@ def main():
     pages = build_local(cities, firms, posts)
     pages += build_firms(firms, cities)
     build_404()
+    build_about(posts, firms)
+    build_llms(posts)
     n = build_meta(posts, pages)
-    idx = sum(1 for _, ok in pages if ok)
+    idx = sum(1 for _, ok, _d in pages if ok)
     print(f'sitegen: {len(posts)} posts, {len(pages)} local and firm pages ({idx} indexable), {n} URLs in sitemap')
 
 

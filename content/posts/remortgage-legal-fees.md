@@ -2,6 +2,7 @@
 title: "Remortgage legal fees: do you need a solicitor, and what does it cost?"
 short: Remortgage legal fees
 description: When a remortgage needs a solicitor or conveyancer, how lenders' free legal packages work, and what a remortgage quote should include across the UK.
+summary: You only need a conveyancer if you switch lenders; a product transfer with your existing lender usually needs no legal work. A remortgage quote should include the legal fee, VAT, the registration fee for the new lender's charge, searches or search insurance, and ID and bank transfer fees. Lenders' free legal packages can be good value for a simple remortgage but often exclude extras such as a transfer of equity.
 date: 2026-11-13
 updated: 2026-11-13
 category: conveyancing

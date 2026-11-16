@@ -12,3 +12,5 @@ public/favicon.svg
 __pycache__/
 public/firms/
 public/404.html
+public/about/
+public/llms.txt

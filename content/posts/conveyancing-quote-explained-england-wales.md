@@ -2,6 +2,7 @@
 title: "Conveyancing fees in England and Wales: what a quote should include"
 short: Conveyancing quotes explained
 description: How to read a conveyancing quote in England and Wales, which disbursements to expect, why fees differ between firms and cities, and the questions to ask before you instruct.
+summary: Every conveyancing quote in England and Wales should show three things: the firm's legal fee, VAT at 20% on that fee, and disbursements such as searches, the HM Land Registry fee, ID checks and a bank transfer fee. Leasehold, new-build, shared ownership and unregistered properties cost extra. Stamp Duty Land Tax (or Land Transaction Tax in Wales) is collected by your conveyancer but is the same whichever firm you use.
 date: 2026-11-13
 updated: 2026-11-13
 category: conveyancing
