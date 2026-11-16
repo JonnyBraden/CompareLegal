@@ -2,6 +2,7 @@
 title: "How much does a divorce cost? England and Wales, Scotland and Northern Ireland"
 short: Divorce costs across the UK
 description: Court fees and solicitors' fees for an uncontested divorce in each part of the UK, the grounds you need, and why the financial settlement is a separate cost.
+summary: In England and Wales the court fee for a divorce is £628 (from July 2026), and a consent order to make a financial agreement binding costs another £62. An agreed divorce is often handled for a fixed fee; most of the cost comes from disputes over money or children, which are usually charged by the hour. Scotland and Northern Ireland have their own grounds and procedures, and Northern Ireland has not adopted no-fault divorce.
 date: 2026-11-13
 updated: 2026-11-13
 category: family-law

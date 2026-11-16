@@ -2,6 +2,7 @@
 title: "Stamp duty across the UK: SDLT, LTT and LBTT compared"
 short: Stamp duty across the UK
 description: Property tax rates in England and Northern Ireland, Wales and Scotland side by side for 2026-27, with worked examples and first-time buyer rules.
+summary: England and Northern Ireland charge Stamp Duty Land Tax, Wales charges Land Transaction Tax and Scotland charges Land and Buildings Transaction Tax, each with different bands. On a £300,000 main home in 2026-27 the tax is £5,000 in England and NI (£0 for first-time buyers), £4,500 in Wales and £4,600 in Scotland (£4,000 for first-time buyers).
 date: 2026-11-13
 updated: 2026-11-13
 category: conveyancing

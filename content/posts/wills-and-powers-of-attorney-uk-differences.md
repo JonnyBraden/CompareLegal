@@ -2,6 +2,7 @@
 title: "Wills and powers of attorney: how the rules differ across the UK"
 short: Wills and powers of attorney
 description: Signing and witnessing rules for wills in England and Wales, Scotland and Northern Ireland, what happens on marriage, and which power of attorney you need where you live.
+summary: The rules for making a valid will differ across the UK: Scotland needs one witness and lets you make a will from age 12, while England, Wales and Northern Ireland need two witnesses and a minimum age of 18. Powers of attorney differ too: lasting powers of attorney in England and Wales (£92 each to register), continuing and welfare powers in Scotland, and enduring powers of attorney for money and property in Northern Ireland.
 date: 2026-11-13
 updated: 2026-11-13
 category: wills

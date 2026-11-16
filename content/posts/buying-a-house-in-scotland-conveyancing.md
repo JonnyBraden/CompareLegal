@@ -2,6 +2,7 @@
 title: "Buying a house in Scotland: missives, Home Reports and LBTT explained"
 short: Buying a house in Scotland
 description: How conveyancing works in Scotland, from offers over and closing dates to missives and LBTT, and what a Scottish solicitor's quote should include.
+summary: Buying in Scotland differs from England: sellers provide a Home Report, many homes sell by offers over with a closing date, and the deal becomes binding when missives are concluded, often weeks before the date of entry. Buyers pay Land and Buildings Transaction Tax to Revenue Scotland, for example £4,600 on a £300,000 home for someone who is not a first-time buyer. Your solicitor must be qualified in Scots law.
 date: 2026-11-13
 updated: 2026-11-13
 category: conveyancing

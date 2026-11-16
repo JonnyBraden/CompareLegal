@@ -173,3 +173,8 @@ footer{padding-block:40px;border-top:1px solid var(--line);font-size:.9rem;color
 .tbl th[scope=row] p{margin-top:4px;font-weight:400}
 .fname a{color:var(--ink);text-decoration:none}
 .fname a:hover b{text-decoration:underline}
+
+/* Short answer box at the top of guides */
+.answer{background:var(--accent-soft);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:var(--r-sm);padding:16px 20px;margin:0 0 28px}
+.answer p{margin:0}
+.answer .eyebrow{margin-bottom:6px}

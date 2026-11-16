@@ -2,6 +2,7 @@
 title: "Probate costs in 2026: England and Wales, Scotland and Northern Ireland"
 short: Probate costs across the UK
 description: Court fees for probate and confirmation in each part of the UK, how solicitors charge for estate administration, and when you may not need a grant at all.
+summary: In England and Wales the probate court fee is £526 for estates worth more than £5,000 (from 13 July 2026). In Scotland, confirmation is free up to £50,000, then £351 up to £250,000 and £705 above that. Solicitors' fees are on top, plus VAT: from a few hundred pounds for a grant-only service to several thousand for full estate administration.
 date: 2026-11-13
 updated: 2026-11-13
 category: probate

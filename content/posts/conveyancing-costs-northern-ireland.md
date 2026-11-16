@@ -2,6 +2,7 @@
 title: How much does conveyancing cost in Northern Ireland?
 short: Conveyancing costs in NI
 description: What a Northern Ireland conveyancing quote should include, how the process differs from England, and how stamp duty works on an NI purchase.
+summary: A conveyancing quote in Northern Ireland has three parts: the solicitor's legal fee, VAT at 20% on that fee, and outlays such as searches and Land Registry NI fees, so compare the total rather than the headline fee. Your solicitor must be qualified in Northern Ireland. Buyers pay Stamp Duty Land Tax at the same rates as England, and first-time buyers pay none on the first £300,000.
 date: 2026-11-13
 updated: 2026-11-13
 category: conveyancing

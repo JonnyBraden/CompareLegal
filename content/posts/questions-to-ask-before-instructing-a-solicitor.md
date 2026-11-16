@@ -2,6 +2,7 @@
 title: "Choosing a solicitor: 10 questions to ask before you instruct"
 short: Questions to ask a solicitor
 description: What to ask a solicitor or conveyancer before you sign up, from what the fee covers to who will handle your case, so you can compare firms on more than price.
+summary: Before you instruct a solicitor, ask whether the fee is fixed and what would make it go up, whether the total includes VAT and all disbursements, what you pay if the matter falls through, who will handle your case, how quickly they reply, who regulates them and how to complain. Get the answers in writing in the client care letter.
 date: 2026-11-13
 updated: 2026-11-13
 category: conveyancing

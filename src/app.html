@@ -257,6 +257,11 @@ tr.tot td{font-weight:700;background:var(--sunk)}
 .enq .top-l{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
 .toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:8px;z-index:90;font-size:.92rem;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
 .save-bar{display:flex;gap:10px;justify-content:flex-end;align-items:center;border-top:1px solid var(--line);padding-top:16px;flex-wrap:wrap}
+.guides{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.guide{display:grid;gap:6px;align-content:start;padding:20px;border:1px solid var(--line);border-radius:12px;background:var(--surface);text-decoration:none;color:var(--ink)}
+.guide:hover{border-color:var(--accent)}
+.guide b{font-size:1.02rem;line-height:1.35}
+.guide .muted{font-size:.9rem}
 </style>
 
 <div class="proto" role="note"><div class="wrap">
@@ -544,6 +549,11 @@ function renderHome(){
       <div class="jur"><h3>Northern Ireland</h3><p>Solicitors regulated by the Law Society of Northern Ireland. Attorneys are appointed under enduring powers of attorney.</p></div>
     </div>
   </div></section>
+
+  ${(window.CL_GUIDES||[]).length?`<section class="band"><div class="wrap">
+    <div class="sec-head"><div><h2>Guides to legal fees</h2><p>What each service costs and how the law differs across the UK. <a href="/blog/">All guides</a></p></div></div>
+    <div class="guides">${window.CL_GUIDES.map(g=>`<a class="guide" href="${esc(g.u)}"><span class="eyebrow">${esc(g.c)}</span><b>${esc(g.t)}</b><span class="muted">${esc(g.d)}</span></a>`).join('')}</div>
+  </div></section>`:''}
 
   <section class="band"><div class="wrap"><div class="cta">
     <div><h2>Run a high-street practice?</h2><p>List your fees on Compare Legal and receive enquiries from clients who already know your price. Set it up once and update it whenever your fees change.</p>
