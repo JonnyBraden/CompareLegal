@@ -13,6 +13,7 @@ Price comparison for UK high-street legal services (conveyancing, wills & attorn
 - `site/site.css` — styles for those pages.
 - `/firms/<name>-<id6>/` — a profile page per live firm (built from Supabase). The portal's badge code links here; the slug rule is in both `site/sitegen.py` (`firm_slug`) and `src/app.html` (`firmSlug`), keep them in step.
 - `public/fonts/` — self-hosted fonts (no Google Fonts requests). `public/badge.svg` — the firm badge.
+- Search-result icon: pages link `favicon.ico`, `favicon-96.png`, `favicon-192.png` and `apple-touch-icon.png` (raster, because Google's favicon guidelines don't list SVG). Regenerate all four from the `LOGO` mark if the logo changes, and keep the URLs the same.
 - Look and feel: Bricolage Grotesque for headings and prices, Figtree for body text, evergreen `#0E6B4F` with a gold highlighter `#FFC94A`. The colour tokens at the top of `src/app.html` and `site/site.css` must match. The logo mark is the `LOGO` constant in `site/sitegen.py` (also inline in `src/app.html`, `public/badge.svg` and `public/logo.png`).
 
 ## Blog and local pages

@@ -280,7 +280,10 @@ def shell(*, title, desc, path, body, ld=(), index=True, og_type='website', acti
 <meta property="og:locale" content="en_GB">
 <meta name="twitter:card" content="summary">
 <link rel="alternate" type="application/rss+xml" title="Compare Legal guides" href="/blog/feed.xml">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0E6B4F">
 <link rel="preload" href="/fonts/figtree-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
