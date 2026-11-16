@@ -64,7 +64,10 @@ doc = f"""<!doctype html>
 <meta property="og:url" content="https://comparelegal.com/">
 <meta property="og:locale" content="en_GB">
 <link rel="alternate" type="application/rss+xml" title="Compare Legal guides" href="/blog/feed.xml">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <style>:root{{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}}body{{margin:0}}img{{max-width:100%}}[hidden]{{display:none!important}}</style>
 <script src="/vendor/supabase-2.119.0.js"></script>
 <script src="/consent.js" defer></script>
