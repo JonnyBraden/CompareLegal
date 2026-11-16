@@ -83,6 +83,16 @@ def firm_slug(f):
     return f"{slugify(f.get('name') or 'firm')}-{str(f.get('id'))[:6]}"
 
 
+# Listings go live without approval, so keep obvious test or placeholder accounts
+# (name or town like "Test", "asdf", "xxx") off the public pages and the sitemap.
+PLACEHOLDER = re.compile(r'^\s*(test\w*|asdf\w*|qwerty\w*|x{2,}|n/?a|none|tbc|-+)?\s*$', re.I)
+
+
+def is_placeholder(f):
+    return any(f.get(k) and PLACEHOLDER.match(str(f[k])) for k in ('name', 'town')) or \
+        bool(re.search(r'\btest\b', f.get('name') or '', re.I))
+
+
 # Jurisdiction notes used on local and nation pages. Kept free of rates and fees that
 # change each Budget; the dated guides carry those.
 NOTES = {
@@ -147,8 +157,9 @@ def fetch_firms():
     try:
         with urllib.request.urlopen(req, timeout=20) as r:
             rows = json.load(r)
-        print(f'sitegen: {len(rows)} live firms from Supabase')
-        return rows
+        kept = [f for f in rows if not is_placeholder(f)]
+        print(f'sitegen: {len(rows)} live firms from Supabase, {len(rows) - len(kept)} test/placeholder listings skipped')
+        return kept
     except Exception as ex:  # build must not fail because the database is unreachable
         print(f'sitegen: could not load firms ({ex}); building without listings')
         return []
