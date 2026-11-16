@@ -284,6 +284,7 @@ def shell(*, title, desc, path, body, ld=(), index=True, og_type='website', acti
 <link rel="preload" href="/fonts/figtree-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{FONT}">
 <link rel="stylesheet" href="/assets/site.css?v={TODAY:%Y%m%d}">
+<script src="/consent.js" defer></script>
 {lds}
 </head>
 <body>
@@ -298,7 +299,7 @@ def shell(*, title, desc, path, body, ld=(), index=True, og_type='website', acti
 <footer><div class="wrap foot">
   <div><b>Compare Legal</b><p>Compare solicitors' fees for conveyancing, wills, probate and family law across England, Wales, Scotland and Northern Ireland. Fees are set by each firm; always confirm the final quote before you instruct them.</p></div>
   <div><h2>Fees by service</h2><ul>{foot_links}</ul></div>
-  <div><h2>Guides</h2><ul><li><a href="/blog/">All guides</a></li><li><a href="/solicitors/">Solicitors by city</a></li><li><a href="/#firms">List your firm</a></li><li><a href="/about/">About Compare Legal</a></li></ul></div>
+  <div><h2>Guides</h2><ul><li><a href="/blog/">All guides</a></li><li><a href="/solicitors/">Solicitors by city</a></li><li><a href="/#firms">List your firm</a></li><li><a href="/about/">About Compare Legal</a></li><li><a href="#cookies" data-cookie-settings>Cookie settings</a></li></ul></div>
 </div></footer>
 </body>
 </html>
