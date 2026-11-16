@@ -777,9 +777,9 @@ def build_about(posts, firms):
     <li><b>Quotes are a guide, not a contract.</b> A firm's written quote and terms of business, given after it knows the details of your matter, are what count. Always confirm the final price before you instruct a firm.</li>
     <li><b>Sample firms are labelled.</b> While the site is new, some listings in the comparison tool are clearly marked as sample firms with illustrative prices. They never appear on the city or firm pages.</li>
   </ul>
-  <h2>Independence</h2>
+  <h2>How firms are listed</h2>
   <ul>
-    <li>Listing is free for firms, and firms cannot pay to be ranked higher. Results are sorted by price or distance, whichever you choose.</li>
+    <li>Firms can list for free.</li>
     <li>Compare Legal does not take a referral fee or commission from firms for enquiries.</li>
     <li>We only show firms qualified in the jurisdiction your matter is in, because property and succession law differ between England and Wales, Scotland and Northern Ireland.</li>
   </ul>
@@ -798,7 +798,7 @@ def build_about(posts, firms):
     if REVIEWER:
         ld.append({'@context': 'https://schema.org', **person_ld()})
     write('/about/', shell(title='About Compare Legal: How We Compare Solicitors\' Fees', path='/about/', body=body, ld=ld,
-                           desc='How Compare Legal collects and compares solicitors\' fees, how firms are listed, and why results are never paid for.'))
+                           desc='How Compare Legal collects and compares solicitors\' fees, and how firms are listed.'))
 
 
 def load_cities_flat():
