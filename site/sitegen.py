@@ -225,7 +225,7 @@ def offers_area(firm, area):
 
 # ---------------------------------------------------------------- page shell
 FONT = '/fonts/fonts.css'
-LOGO = '<svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="17" fill="#2A36E0"/><path d="M44.5 19.5a17.5 17.5 0 1 0 0 25" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/><rect x="27" y="28.5" width="26" height="7" rx="3.5" fill="#FFD84A"/></svg>'
+LOGO = '<svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="17" fill="#0E6B4F"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M32 17v29"/><path d="M23 47h18"/><path d="M13 24l38-8"/></g><rect x="7" y="33" width="18" height="6" rx="3" fill="#FFC94A"/><rect x="40" y="25" width="18" height="6" rx="3" fill="#fff"/></svg>'
 
 
 def app_link(svc, nation=None, city=None):
@@ -281,7 +281,7 @@ def shell(*, title, desc, path, body, ld=(), index=True, og_type='website', acti
 <meta name="twitter:card" content="summary">
 <link rel="alternate" type="application/rss+xml" title="Compare Legal guides" href="/blog/feed.xml">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#2A36E0">
+<meta name="theme-color" content="#0E6B4F">
 <link rel="preload" href="/fonts/figtree-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{FONT}">

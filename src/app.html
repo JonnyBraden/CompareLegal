@@ -1,35 +1,35 @@
 <title>Compare Legal: compare solicitors' fees across the UK</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Compare solicitors' fees for conveyancing, wills, probate and family law across England, Wales, Scotland and Northern Ireland.">
-<meta name="theme-color" content="#2A36E0">
+<meta name="theme-color" content="#0E6B4F">
 <link rel="preload" href="/fonts/figtree-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/fonts/fonts.css">
 <style>
-/* Look: ultramarine ink and a yellow highlighter. Wherever a total appears it carries the highlighter mark, the way a client marks the figure on a quote. */
+/* Look: evergreen ink and a gold highlighter. Wherever a total appears it carries the highlighter mark, the way a client marks the figure on a quote. */
 :root{
-  --paper:#F4F5FB; --surface:#FFFFFF; --sunk:#ECEEF8; --ink:#11143A; --muted:#565B7A; --line:#DDE0EF;
-  --accent:#2A36E0; --accent-ink:#FFFFFF; --accent-soft:#E7E9FD;
-  --mark:#FFD84A; --mark-ink:#11143A; --good:#17794A; --good-soft:#DDF3E7; --warn:#8F5200; --warn-soft:#FFF1CC; --danger:#B3261E;
-  --deep:#11143A; --hero-a:#2A36E0; --hero-b:#161B8C;
-  --shadow:0 1px 2px rgba(17,20,58,.05),0 10px 30px rgba(17,20,58,.08);
-  --shadow-lg:0 2px 6px rgba(17,20,58,.08),0 28px 60px rgba(17,20,58,.22);
+  --paper:#F3F6F1; --surface:#FFFFFF; --sunk:#E6ECE4; --ink:#0F2A20; --muted:#54665C; --line:#D6DED4;
+  --accent:#0E6B4F; --accent-ink:#FFFFFF; --accent-soft:#DDEFE6;
+  --mark:#FFC94A; --mark-ink:#0F2A20; --good:#17794A; --good-soft:#DDF3E7; --warn:#8F5200; --warn-soft:#FFF1CC; --danger:#B3261E;
+  --deep:#0B261C; --hero-a:#12694E; --hero-b:#0A3A2B;
+  --shadow:0 1px 2px rgba(15,42,32,.05),0 10px 30px rgba(15,42,32,.08);
+  --shadow-lg:0 2px 6px rgba(15,42,32,.08),0 28px 60px rgba(15,42,32,.22);
   --f-display:"Bricolage Grotesque","Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   --r:14px; --r-sm:10px; --r-lg:28px; --wrap:1180px;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --paper:#0A0C22; --surface:#13163A; --sunk:#1B1F4B; --ink:#ECEDFB; --muted:#A4A8CB; --line:#2A2F66;
-  --accent:#96A0FF; --accent-ink:#0A0C22; --accent-soft:#20255C;
-  --mark:#FFD84A; --mark-ink:#11143A; --good:#6FD3A0; --good-soft:#143A2B; --warn:#F2BE6A; --warn-soft:#3D2E12; --danger:#FF8F85;
-  --deep:#070818; --hero-a:#2531C9; --hero-b:#11155F;
+  --paper:#08140F; --surface:#0F2219; --sunk:#163025; --ink:#E8F2EC; --muted:#9DB3A7; --line:#24443A;
+  --accent:#5FD3A4; --accent-ink:#08140F; --accent-soft:#153A2C;
+  --mark:#FFC94A; --mark-ink:#0F2A20; --good:#6FD3A0; --good-soft:#143A2B; --warn:#F2BE6A; --warn-soft:#3D2E12; --danger:#FF8F85;
+  --deep:#050D0A; --hero-a:#0F5A43; --hero-b:#082C21;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.3); --shadow-lg:0 2px 6px rgba(0,0,0,.3),0 28px 60px rgba(0,0,0,.5); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#0A0C22; --surface:#13163A; --sunk:#1B1F4B; --ink:#ECEDFB; --muted:#A4A8CB; --line:#2A2F66;
-  --accent:#96A0FF; --accent-ink:#0A0C22; --accent-soft:#20255C;
-  --mark:#FFD84A; --mark-ink:#11143A; --good:#6FD3A0; --good-soft:#143A2B; --warn:#F2BE6A; --warn-soft:#3D2E12; --danger:#FF8F85;
-  --deep:#070818; --hero-a:#2531C9; --hero-b:#11155F;
+  --paper:#08140F; --surface:#0F2219; --sunk:#163025; --ink:#E8F2EC; --muted:#9DB3A7; --line:#24443A;
+  --accent:#5FD3A4; --accent-ink:#08140F; --accent-soft:#153A2C;
+  --mark:#FFC94A; --mark-ink:#0F2A20; --good:#6FD3A0; --good-soft:#143A2B; --warn:#F2BE6A; --warn-soft:#3D2E12; --danger:#FF8F85;
+  --deep:#050D0A; --hero-a:#0F5A43; --hero-b:#082C21;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.3); --shadow-lg:0 2px 6px rgba(0,0,0,.3),0 28px 60px rgba(0,0,0,.5); color-scheme:dark}
 
 *{box-sizing:border-box}
@@ -70,7 +70,7 @@ button,input,select,textarea{font:inherit;color:inherit}
 @media (max-width:640px){.nav .hide-sm{display:none}.top .wrap{gap:10px;min-height:60px}.nav #nav-firm{padding:8px 14px;font-size:.9rem;margin-left:2px}.nav a.navlink{padding:8px 10px}}
 @media (max-width:480px){.top .wrap{gap:6px;padding-left:14px;padding-right:14px}.brand{gap:8px}.brand svg{width:30px;height:30px}.brand b{font-size:1.08rem}.nav a.navlink{padding:8px 7px;font-size:.88rem}.nav #nav-firm{padding:8px 11px;font-size:.84rem}}
 @media (max-width:350px){.brand b{font-size:.98rem}.nav #nav-firm{padding:7px 9px}}
-.proto{background:var(--deep);color:#DADCF5;font-size:.84rem}
+.proto{background:var(--deep);color:#D5E5DC;font-size:.84rem}
 .proto .wrap{padding-block:8px;display:flex;gap:10px;align-items:center}
 .proto svg{color:var(--mark);flex:none}
 
@@ -94,7 +94,7 @@ textarea.in{min-height:96px;resize:vertical}
 .check input{width:18px;height:18px;margin-top:2px;accent-color:var(--accent);flex:none}
 .pre{position:relative}.pre span{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}.pre .in{padding-left:27px}
 
-/* hero: an inset ultramarine panel; the search desk sits on it and hangs over its lower edge */
+/* hero: an inset evergreen panel; the search desk sits on it and hangs over its lower edge */
 .hero{position:relative;margin:10px 10px 0;border-radius:var(--r-lg);background:radial-gradient(120% 90% at 85% 0%,var(--hero-a) 0%,var(--hero-b) 100%);color:#fff;padding-block:76px 0;isolation:isolate}
 .hero-art{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:-1;pointer-events:none}
 .hero-art svg{position:absolute;right:-90px;top:-70px;width:860px;height:auto;transform:rotate(-9deg);opacity:.9}
@@ -115,7 +115,7 @@ textarea.in{min-height:96px;resize:vertical}
 .areas{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--sunk);padding:5px;border-radius:14px}
 .areas button{border:0;background:none;padding:11px 6px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.86rem;color:var(--muted);line-height:1.2;transition:background-color .15s,color .15s}
 .areas button:hover{color:var(--ink)}
-.areas button[aria-pressed="true"]{background:var(--ink);color:var(--paper);box-shadow:0 2px 8px rgba(17,20,58,.25)}
+.areas button[aria-pressed="true"]{background:var(--ink);color:var(--paper);box-shadow:0 2px 8px rgba(15,42,32,.25)}
 @media (max-width:460px){.areas{grid-template-columns:repeat(2,1fr)}}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:520px){.row2{grid-template-columns:1fr}}
@@ -155,7 +155,7 @@ section.band.alt{background:var(--surface);border-block:1px solid var(--line)}
 .jur{background:var(--paper);border-radius:20px;padding:26px;display:grid;gap:10px;align-content:start}
 .jur h3::before{content:"";display:block;width:36px;height:6px;border-radius:3px;background:var(--accent);margin-bottom:16px}
 .jur:nth-child(2) h3::before{background:var(--mark)}
-.jur:nth-child(3) h3::before{background:var(--good)}
+.jur:nth-child(3) h3::before{background:var(--ink)}
 .jur p{color:var(--muted);font-size:.96rem}
 .cta{position:relative;overflow:hidden;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center;background:radial-gradient(120% 120% at 100% 0%,var(--hero-a) 0%,var(--hero-b) 70%);color:#fff;border-radius:var(--r-lg);padding:56px}
 .cta h2{color:#fff}
@@ -164,13 +164,13 @@ section.band.alt{background:var(--surface);border-block:1px solid var(--line)}
 .cta li{display:flex;gap:12px;align-items:flex-start}
 .cta li svg{color:var(--mark);flex:none;margin-top:4px}
 .cta .btn{background:var(--mark);color:var(--mark-ink);margin-top:26px;padding:13px 26px}
-.cta .btn:hover{box-shadow:0 8px 22px rgba(255,216,74,.35)}
+.cta .btn:hover{box-shadow:0 8px 22px rgba(255,201,74,.35)}
 @media (max-width:760px){.cta{grid-template-columns:1fr;padding:30px 24px;gap:26px;border-radius:22px}section.band{padding-block:56px}.hero+section.band{padding-top:88px}}
-footer{margin-top:24px;padding-block:44px;background:var(--deep);font-size:.88rem;color:#A9ADD3}
+footer{margin-top:24px;padding-block:44px;background:var(--deep);font-size:.88rem;color:#9DB3A7}
 footer .wrap{display:flex;flex-wrap:wrap;gap:14px 28px;justify-content:space-between}
 footer .fbrand{display:flex;align-items:center;gap:10px;color:#fff;font-family:var(--f-display);font-weight:700;font-size:1.2rem;letter-spacing:-.03em;margin-bottom:10px}
 footer nav{display:flex;flex-wrap:wrap;gap:8px 22px;width:100%;margin-top:14px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12)}
-footer nav a{color:#DADCF5;text-decoration:none}
+footer nav a{color:#D5E5DC;text-decoration:none}
 footer nav a:hover{color:var(--mark);text-decoration:underline}
 
 /* results */
@@ -215,7 +215,7 @@ footer nav a:hover{color:var(--mark);text-decoration:underline}
 @media (max-width:640px){.cmp-toggle{justify-content:flex-start}}
 .cmp-toggle input{accent-color:var(--accent);width:16px;height:16px}
 .empty{background:var(--surface);border:1.5px dashed var(--line);border-radius:20px;padding:44px 28px;text-align:center;display:grid;gap:10px;justify-items:center}
-.tray{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--deep);color:#fff;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -10px 30px rgba(17,20,58,.25)}
+.tray{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--deep);color:#fff;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -10px 30px rgba(15,42,32,.25)}
 .tray .wrap{display:flex;align-items:center;gap:14px;padding-block:14px;flex-wrap:wrap}
 .tray .slots{display:flex;gap:8px;flex-wrap:wrap;flex:1;min-width:0}
 .tray .slot{background:rgba(255,255,255,.12);padding:6px 12px;border-radius:99px;font-size:.85rem;display:flex;gap:8px;align-items:center;max-width:100%}
@@ -223,7 +223,7 @@ footer nav a:hover{color:var(--mark);text-decoration:underline}
 .tray .btn{background:var(--mark);color:var(--mark-ink)}
 
 /* modal */
-.scrim{position:fixed;inset:0;z-index:70;background:rgba(8,10,34,.6);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;padding:max(24px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.scrim{position:fixed;inset:0;z-index:70;background:rgba(5,13,10,.6);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);display:flex;justify-content:center;align-items:flex-start;overflow-y:auto;padding:max(24px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
 .modal{background:var(--surface);border-radius:24px;width:min(860px,100%);box-shadow:var(--shadow-lg);overflow:hidden;animation:modal-in .22s ease-out}
 @keyframes modal-in{from{opacity:0;transform:translateY(12px) scale(.985)}}
 .modal.wide{width:min(1040px,100%)}
@@ -258,7 +258,7 @@ tr.tot td{font-weight:700;background:var(--sunk)}
 .auth .panel .btn{padding:13px 22px}
 .seg{display:grid;grid-template-columns:1fr 1fr;background:var(--sunk);padding:5px;border-radius:14px;gap:4px}
 .seg button{border:0;background:none;padding:10px;border-radius:10px;font-weight:600;cursor:pointer;color:var(--muted)}
-.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);box-shadow:0 2px 8px rgba(17,20,58,.25)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);box-shadow:0 2px 8px rgba(15,42,32,.25)}
 .perks{display:grid;gap:14px;margin-top:30px}
 .perk{display:grid;grid-template-columns:36px 1fr;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px}
 .perk svg{color:var(--accent-ink);background:var(--accent);border-radius:50%;width:32px;height:32px;padding:8px;margin-top:0}
@@ -326,7 +326,7 @@ tr.tot td{font-weight:700;background:var(--sunk)}
 
 <header class="top"><div class="wrap">
   <button class="brand" data-go="home" aria-label="Compare Legal home">
-    <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="17" fill="#2A36E0"/><path d="M44.5 19.5a17.5 17.5 0 1 0 0 25" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/><rect x="27" y="28.5" width="26" height="7" rx="3.5" fill="#FFD84A"/></svg>
+    <svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="17" fill="#0E6B4F"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M32 17v29"/><path d="M23 47h18"/><path d="M13 24l38-8"/></g><rect x="7" y="33" width="18" height="6" rx="3" fill="#FFC94A"/><rect x="40" y="25" width="18" height="6" rx="3" fill="#fff"/></svg>
     <b>Compare Legal</b>
   </button>
   <nav class="nav" aria-label="Main">
@@ -340,7 +340,7 @@ tr.tot td{font-weight:700;background:var(--sunk)}
 <main id="app"></main>
 
 <footer><div class="wrap">
-  <div><div class="fbrand"><svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="17" fill="#2A36E0"/><path d="M44.5 19.5a17.5 17.5 0 1 0 0 25" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/><rect x="27" y="28.5" width="26" height="7" rx="3.5" fill="#FFD84A"/></svg>Compare Legal</div>Fees are set by each firm. Always confirm the final quote with the firm before you instruct them.</div>
+  <div><div class="fbrand"><svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="17" fill="#0E6B4F"/><g fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M32 17v29"/><path d="M23 47h18"/><path d="M13 24l38-8"/></g><rect x="7" y="33" width="18" height="6" rx="3" fill="#FFC94A"/><rect x="40" y="25" width="18" height="6" rx="3" fill="#fff"/></svg>Compare Legal</div>Fees are set by each firm. Always confirm the final quote with the firm before you instruct them.</div>
   <div>Covering England &amp; Wales, Scotland and Northern Ireland</div>
   <nav aria-label="Guides and local pages"><a href="/blog/">Guides</a><a href="/conveyancing/">Conveyancing solicitors</a><a href="/wills/">Will writing solicitors</a><a href="/probate/">Probate solicitors</a><a href="/family-law/">Divorce solicitors</a><a href="/solicitors/">Solicitors by city</a><a href="#cookies" data-cookie-settings>Cookie settings</a></nav>
 </div></footer>

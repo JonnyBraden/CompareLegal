@@ -1,21 +1,21 @@
 /* Shared styles for the static guide and local pages. Same palette and type as the app (src/app.html). */
 :root{
-  --paper:#F4F5FB; --surface:#FFFFFF; --sunk:#ECEEF8; --ink:#11143A; --muted:#565B7A; --line:#DDE0EF;
-  --accent:#2A36E0; --accent-ink:#FFFFFF; --accent-soft:#E7E9FD;
-  --mark:#FFD84A; --mark-ink:#11143A; --good:#17794A; --good-soft:#DDF3E7; --warn:#8F5200; --warn-soft:#FFF1CC; --danger:#B3261E;
-  --deep:#11143A; --hero-a:#2A36E0; --hero-b:#161B8C;
-  --shadow:0 1px 2px rgba(17,20,58,.05),0 10px 30px rgba(17,20,58,.08);
-  --shadow-lg:0 2px 6px rgba(17,20,58,.08),0 28px 60px rgba(17,20,58,.22);
+  --paper:#F3F6F1; --surface:#FFFFFF; --sunk:#E6ECE4; --ink:#0F2A20; --muted:#54665C; --line:#D6DED4;
+  --accent:#0E6B4F; --accent-ink:#FFFFFF; --accent-soft:#DDEFE6;
+  --mark:#FFC94A; --mark-ink:#0F2A20; --good:#17794A; --good-soft:#DDF3E7; --warn:#8F5200; --warn-soft:#FFF1CC; --danger:#B3261E;
+  --deep:#0B261C; --hero-a:#12694E; --hero-b:#0A3A2B;
+  --shadow:0 1px 2px rgba(15,42,32,.05),0 10px 30px rgba(15,42,32,.08);
+  --shadow-lg:0 2px 6px rgba(15,42,32,.08),0 28px 60px rgba(15,42,32,.22);
   --f-display:"Bricolage Grotesque","Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
   --r:14px; --r-sm:10px; --r-lg:28px; --wrap:1180px;
 }
 @media (prefers-color-scheme:dark){:root{
-  --paper:#0A0C22; --surface:#13163A; --sunk:#1B1F4B; --ink:#ECEDFB; --muted:#A4A8CB; --line:#2A2F66;
-  --accent:#96A0FF; --accent-ink:#0A0C22; --accent-soft:#20255C;
-  --mark:#FFD84A; --mark-ink:#11143A; --good:#6FD3A0; --good-soft:#143A2B; --warn:#F2BE6A; --warn-soft:#3D2E12; --danger:#FF8F85;
-  --deep:#070818; --hero-a:#2531C9; --hero-b:#11155F;
+  --paper:#08140F; --surface:#0F2219; --sunk:#163025; --ink:#E8F2EC; --muted:#9DB3A7; --line:#24443A;
+  --accent:#5FD3A4; --accent-ink:#08140F; --accent-soft:#153A2C;
+  --mark:#FFC94A; --mark-ink:#0F2A20; --good:#6FD3A0; --good-soft:#143A2B; --warn:#F2BE6A; --warn-soft:#3D2E12; --danger:#FF8F85;
+  --deep:#050D0A; --hero-a:#0F5A43; --hero-b:#082C21;
   --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.3); --shadow-lg:0 2px 6px rgba(0,0,0,.3),0 28px 60px rgba(0,0,0,.5); color-scheme:dark}}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
@@ -64,7 +64,7 @@ img{max-width:100%}
 .btn.ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
 .btn.ghost:hover{background:var(--sunk);box-shadow:none}
 
-/* page header: the same ultramarine panel as the home page */
+/* page header: the same evergreen panel as the home page */
 .pagehead{position:relative;margin:10px 10px 0;border-radius:var(--r-lg);padding-block:36px 56px;background:radial-gradient(120% 120% at 90% 0%,var(--hero-a) 0%,var(--hero-b) 100%);color:#fff;overflow:hidden}
 .pagehead::after{content:"";position:absolute;right:-60px;top:-40px;width:520px;height:340px;pointer-events:none;opacity:.08;transform:rotate(-9deg);background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 340'><rect x='0' y='0' width='300' height='26' rx='13' fill='%23fff'/><rect x='120' y='58' width='240' height='26' rx='13' fill='%23fff'/><rect x='40' y='116' width='210' height='26' rx='13' fill='%23fff'/><rect x='180' y='174' width='170' height='26' rx='13' fill='%23fff'/><rect x='80' y='232' width='260' height='26' rx='13' fill='%23fff'/><rect x='0' y='290' width='220' height='26' rx='13' fill='%23fff'/></svg>") no-repeat}
 .pagehead>.wrap{position:relative;z-index:1}
@@ -74,7 +74,7 @@ img{max-width:100%}
 .pagehead a{color:#fff}
 .pagehead .eyebrow{color:var(--mark)}
 .pagehead .btn{background:var(--mark);color:var(--mark-ink)}
-.pagehead .btn:hover{box-shadow:0 8px 22px rgba(255,216,74,.35)}
+.pagehead .btn:hover{box-shadow:0 8px 22px rgba(255,201,74,.35)}
 .pagehead .btn.ghost{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.3)}
 .crumbs ol{list-style:none;display:flex;flex-wrap:wrap;gap:4px 0;padding:0;margin:0 0 22px;font-size:.86rem;color:rgba(255,255,255,.7)}
 .crumbs li+li::before{content:"/";margin:0 8px;color:rgba(255,255,255,.35)}
@@ -187,20 +187,20 @@ a.card:hover{border-color:var(--accent)}
 .ctabox .muted,.ctabox p{color:rgba(255,255,255,.84)}
 .ctabox a:not(.btn){color:#fff}
 .ctabox .btn{margin-top:10px;background:var(--mark);color:var(--mark-ink)}
-.ctabox .btn:hover{box-shadow:0 8px 22px rgba(255,216,74,.35)}
+.ctabox .btn:hover{box-shadow:0 8px 22px rgba(255,201,74,.35)}
 .sidecities .cityblock{margin-top:12px}
 .sidecities .cityblock h3{font-size:1rem;margin-bottom:6px}
 .sidecities .cities{font-size:.92rem}
 
 /* footer */
-footer{padding-block:52px;font-size:.9rem;color:#A9ADD3;background:var(--deep)}
+footer{padding-block:52px;font-size:.9rem;color:#9DB3A7;background:var(--deep)}
 .foot{display:grid;grid-template-columns:2fr 1fr 1fr;gap:32px}
 @media (max-width:720px){.foot{grid-template-columns:1fr}}
 .foot b{display:flex;align-items:center;gap:10px;color:#fff;font-family:var(--f-display);font-weight:700;font-size:1.2rem;letter-spacing:-.03em}
 .foot p{margin-top:12px;max-width:36em}
 .foot h2{font-family:var(--f-body);font-size:.86rem;font-weight:700;letter-spacing:0;color:#fff;margin-bottom:12px}
 .foot ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}
-.foot a{color:#DADCF5;text-decoration:none}
+.foot a{color:#D5E5DC;text-decoration:none}
 .foot a:hover{color:var(--mark);text-decoration:underline}
 
 /* firm profile */
