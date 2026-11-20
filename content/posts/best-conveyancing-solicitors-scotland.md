@@ -1,7 +1,8 @@
 ---
 title: "Best-reviewed conveyancing solicitors in Scotland: Glasgow, Edinburgh, Aberdeen and Dundee"
+seo_title: "Best conveyancers in Scotland"
 short: Top-rated Scottish conveyancers
-description: The highest-rated conveyancing solicitors on Google in Glasgow, Edinburgh, Aberdeen and Dundee, and what their clients say makes them good. Ratings checked November 2026.
+description: "Highest-rated conveyancing solicitors on Google in Glasgow, Edinburgh, Aberdeen and Dundee, and what their clients praise. Ratings checked in November 2026."
 date: 2026-11-16
 updated: 2026-11-16
 category: conveyancing

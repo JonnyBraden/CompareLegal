@@ -1,7 +1,8 @@
 ---
 title: "Buying a house in Scotland: missives, Home Reports and LBTT explained"
+seo_title: "Buying a house in Scotland"
 short: Buying a house in Scotland
-description: How conveyancing works in Scotland, from offers over and closing dates to missives and LBTT, and what a Scottish solicitor's quote should include.
+description: "How Scottish conveyancing works, from the Home Report and offers over to missives and LBTT, and what a solicitor's quote should include before you bid."
 summary: Buying in Scotland differs from England: sellers provide a Home Report, many homes sell by offers over with a closing date, and the deal becomes binding when missives are concluded, often weeks before the date of entry. Buyers pay Land and Buildings Transaction Tax to Revenue Scotland, for example £4,600 on a £300,000 home for someone who is not a first-time buyer. Your solicitor must be qualified in Scots law.
 date: 2026-11-13
 updated: 2026-11-13
@@ -41,7 +42,7 @@ Scotland's property tax is Land and Buildings Transaction Tax (LBTT), paid to Re
 
 First-time buyers get a nil-rate band of £175,000 instead of £145,000, which saves up to £600. Unlike England, the relief has no upper price limit. If you're buying an additional home, the Additional Dwelling Supplement adds 8% of the whole price.
 
-On a £300,000 home, a buyer who isn't a first-time buyer pays £4,600 in LBTT. Your solicitor submits the LBTT return, which is due within 30 days of the date of entry, usually even when no tax is payable.
+On a £300,000 home, a buyer who isn't a first-time buyer pays £4,600 in LBTT. The [comparison of SDLT, LTT and LBTT](/blog/stamp-duty-sdlt-ltt-lbtt-compared/) shows how that bill compares with England, Wales and Northern Ireland. Your solicitor submits the LBTT return, which is due within 30 days of the date of entry, usually even when no tax is payable.
 
 ## What a Scottish conveyancing quote should include
 
@@ -49,6 +50,8 @@ On a £300,000 home, a buyer who isn't a first-time buyer pays £4,600 in LBTT. 
 - **VAT** at 20% on the fee.
 - **Outlays**, including the Registers of Scotland registration dues, search reports, and any fee for submitting the LBTT return electronically.
 - **Extras** that are common in Scotland, such as a charge for noting interest and submitting offers for each property you bid on, or for acting on a new build.
+
+You can [compare conveyancing fees in Scotland](/conveyancing/scotland/) once you know which lines to expect. For the equivalent in England and Wales, see [what a conveyancing quote should include](/blog/conveyancing-quote-explained-england-wales/). [Questions to ask before you instruct](/blog/questions-to-ask-before-instructing-a-solicitor/) apply here too.
 
 Your solicitor must be qualified in Scots law and is regulated by the [Law Society of Scotland](https://www.lawscot.org.uk/). A firm from England or Wales can't act on a Scottish purchase.
 

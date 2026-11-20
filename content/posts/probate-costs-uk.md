@@ -1,5 +1,6 @@
 ---
 title: "Probate costs in 2026: England and Wales, Scotland and Northern Ireland"
+seo_title: "Probate costs across the UK"
 short: Probate costs across the UK
 description: Court fees for probate and confirmation in each part of the UK, how solicitors charge for estate administration, and when you may not need a grant at all.
 summary: In England and Wales the probate court fee is £526 for estates worth more than £5,000 (from 13 July 2026). In Scotland, confirmation is free up to £50,000, then £351 up to £250,000 and £705 above that. Solicitors' fees are on top, plus VAT: from a few hundred pounds for a grant-only service to several thousand for full estate administration.
@@ -9,7 +10,7 @@ category: probate
 nations: [England, Wales, Scotland, Northern Ireland]
 service: grant
 ---
-When someone dies, the person dealing with their estate usually needs legal authority before banks and other organisations will release money or property. That authority has a different name, and a different court fee, in each part of the UK. This guide covers the official fees, what solicitors charge, and how to compare quotes.
+When someone dies, the person dealing with their estate usually needs legal authority before banks and other organisations will release money or property. That authority has a different name, and a different court fee, in each part of the UK. This guide covers the official fees, what solicitors charge, and how to compare quotes. [Compare probate fees](/probate/) for a grant-only service or full administration.
 
 ## The official court fees
 
@@ -33,7 +34,7 @@ Scotland has no probate. Executors apply to the sheriff court for **confirmation
 
 ### Northern Ireland
 
-Applications go to the Probate Office in the Royal Courts of Justice in Belfast, which handles grants for the whole of Northern Ireland. You can make a personal application yourself through nidirect or instruct a solicitor. The law on who inherits when there's no will also differs from England and Wales.
+Applications go to the Probate Office in the Royal Courts of Justice in Belfast, which handles grants for the whole of Northern Ireland. You can make a personal application yourself through nidirect or instruct a solicitor. The law on who inherits when there's no will also differs from England and Wales. [Wills and powers of attorney across the UK](/blog/wills-and-powers-of-attorney-uk-differences/) sets out those differences.
 
 ## What solicitors charge
 
@@ -44,7 +45,7 @@ Solicitors usually offer two levels of service.
 
 Firms regulated by the Solicitors Regulation Authority in England and Wales must publish their prices for uncontested probate where all the assets are in the UK. That makes it easier to compare like with like.
 
-Remember that VAT at 20% is charged on the legal fee, and disbursements such as the court fee, copies of the grant, property valuations and notices in The Gazette are added on top.
+Remember that VAT at 20% is charged on the legal fee, and disbursements such as the court fee, copies of the grant, property valuations and notices in The Gazette are added on top. Before you instruct, use [questions to ask a solicitor](/blog/questions-to-ask-before-instructing-a-solicitor/).
 
 ## Inheritance tax
 
@@ -52,7 +53,7 @@ Inheritance tax applies across the whole UK, with the same rules in England, Wal
 
 ## When you might not need a grant
 
-You may not need probate or confirmation if the estate is small, or if everything was owned jointly and passes automatically to the survivor. Each bank or building society sets its own limit for releasing money without a grant, so ask each one. Property owned solely by the person who died almost always needs a grant before it can be sold.
+You may not need probate or confirmation if the estate is small, or if everything was owned jointly and passes automatically to the survivor. Each bank or building society sets its own limit for releasing money without a grant, so ask each one. Property owned solely by the person who died almost always needs a grant before it can be sold. Selling that home is a separate job: [compare conveyancing fees](/conveyancing/) as well as the grant.
 
 ## Frequently asked questions
 

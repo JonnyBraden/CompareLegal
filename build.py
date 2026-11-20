@@ -50,7 +50,15 @@ guides_js = json.dumps([{'t': p['title'], 'u': p['url'], 'd': p['desc'], 'c': si
 src = src.replace('</style>', f'</style>\n<script>window.CL_GUIDES={guides_js};</script>', 1)
 head_end = src.index('</style>') + len('</style>')
 head, body = src[:head_end], src[head_end:]
-ld = '''<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://comparelegal.com/#org","name":"Compare Legal","url":"https://comparelegal.com/","areaServed":"GB"},{"@type":"WebSite","@id":"https://comparelegal.com/#site","name":"Compare Legal","url":"https://comparelegal.com/","inLanguage":"en-GB","publisher":{"@id":"https://comparelegal.com/#org"}}]}</script>'''
+home_desc = "Compare solicitors' fees for conveyancing, wills, probate and family law in England, Wales, Scotland and Northern Ireland. Totals include VAT and disbursements."
+graph = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {k: v for k, v in sitegen.organization_node().items() if k != '@context'},
+        {k: v for k, v in sitegen.website_node().items() if k != '@context'},
+    ],
+}
+ld = '<script type="application/ld+json">' + json.dumps(graph, ensure_ascii=False).replace('</', '<\\/') + '</script>'
 doc = f"""<!doctype html>
 <html lang="en-GB">
 <head>
@@ -60,9 +68,17 @@ doc = f"""<!doctype html>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Compare Legal">
 <meta property="og:title" content="Compare Legal: compare solicitors' fees across the UK">
-<meta property="og:description" content="Compare solicitors' fees for conveyancing, wills, probate and family law across the UK.">
+<meta property="og:description" content="{html.escape(home_desc, quote=True)}">
 <meta property="og:url" content="https://comparelegal.com/">
 <meta property="og:locale" content="en_GB">
+<meta property="og:image" content="https://comparelegal.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Compare Legal">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Compare Legal: compare solicitors' fees across the UK">
+<meta name="twitter:description" content="{html.escape(home_desc, quote=True)}">
+<meta name="twitter:image" content="https://comparelegal.com/og.png">
 <link rel="alternate" type="application/rss+xml" title="Compare Legal guides" href="/blog/feed.xml">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">

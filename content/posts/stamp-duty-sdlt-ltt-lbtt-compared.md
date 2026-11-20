@@ -1,7 +1,8 @@
 ---
 title: "Stamp duty across the UK: SDLT, LTT and LBTT compared"
+seo_title: "Stamp duty across the UK"
 short: Stamp duty across the UK
-description: Property tax rates in England and Northern Ireland, Wales and Scotland side by side for 2026-27, with worked examples and first-time buyer rules.
+description: "SDLT, LTT and LBTT compared for 2026-27, with the bands, first-time buyer rules and worked examples for England, Northern Ireland, Wales and Scotland."
 summary: England and Northern Ireland charge Stamp Duty Land Tax, Wales charges Land Transaction Tax and Scotland charges Land and Buildings Transaction Tax, each with different bands. On a £300,000 main home in 2026-27 the tax is £5,000 in England and NI (£0 for first-time buyers), £4,500 in Wales and £4,600 in Scotland (£4,000 for first-time buyers).
 date: 2026-11-13
 updated: 2026-11-13
@@ -11,7 +12,7 @@ service: purchase
 ---
 The UK has three different taxes on buying a home. England and Northern Ireland share Stamp Duty Land Tax (SDLT). Wales has Land Transaction Tax (LTT), and Scotland has Land and Buildings Transaction Tax (LBTT). The same house price can mean a very different tax bill depending on where the property is.
 
-Your conveyancer works out the tax, files the return and usually pays it for you from your funds. The tax is the same whichever firm you use, so it isn't something to compare on, but you need to budget for it.
+Your conveyancer works out the tax, files the return and usually pays it for you from your funds. The tax is the same whichever firm you use, so it isn't something to compare on, but you need to budget for it. What you can compare is the legal fee: see [conveyancing quotes in England and Wales](/blog/conveyancing-quote-explained-england-wales/), [conveyancing costs in Northern Ireland](/blog/conveyancing-costs-northern-ireland/) and [buying in Scotland](/blog/buying-a-house-in-scotland-conveyancing/). Then [compare conveyancing fees](/conveyancing/) with the tax kept separate.
 
 ## Rates for a main home in 2026-27
 

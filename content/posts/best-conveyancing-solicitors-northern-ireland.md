@@ -1,7 +1,8 @@
 ---
 title: "Best-reviewed conveyancing solicitors in Northern Ireland: Belfast, Derry, Lisburn and Newry"
+seo_title: "Best conveyancers in Northern Ireland"
 short: Top-rated NI conveyancers
-description: The highest-rated conveyancing solicitors on Google in Belfast, Derry~Londonderry, Lisburn and Newry, and what their clients say makes them good. Ratings checked November 2026.
+description: "Highest-rated conveyancing solicitors on Google in Belfast, Derry, Lisburn and Newry, and what their clients praise. Ratings checked in November 2026."
 date: 2026-11-16
 updated: 2026-11-16
 category: conveyancing

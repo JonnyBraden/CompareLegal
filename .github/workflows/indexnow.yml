@@ -1,0 +1,76 @@
+# After a push to main, Render builds and publishes the static site.
+# Wait for that deploy, then tell IndexNow about every URL in the live sitemap.
+# The key file is already published at /f7cc5042990deaa27f1e1c34a7ca37f6.txt.
+name: IndexNow
+on:
+  push:
+    branches: [main]
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for the Render deploy
+        run: sleep 240
+      - name: Submit sitemap URLs to IndexNow
+        run: |
+          python3 << 'PY'
+          import json
+          import sys
+          import time
+          import urllib.error
+          import urllib.request
+          import xml.etree.ElementTree as ET
+
+          sitemap = 'https://comparelegal.com/sitemap.xml'
+          key = 'f7cc5042990deaa27f1e1c34a7ca37f6'
+          host = 'comparelegal.com'
+          ns = {'s': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+
+          def fetch_sitemap():
+              req = urllib.request.Request(sitemap, headers={'User-Agent': 'CompareLegal-IndexNow'})
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  return response.read()
+
+          xml_bytes = None
+          last_error = None
+          for attempt in range(3):
+              try:
+                  xml_bytes = fetch_sitemap()
+                  break
+              except Exception as ex:
+                  last_error = ex
+                  print(f'sitemap fetch failed ({ex}); retrying', file=sys.stderr)
+                  time.sleep(30)
+          if xml_bytes is None:
+              print(f'Could not fetch sitemap: {last_error}', file=sys.stderr)
+              sys.exit(1)
+
+          root = ET.fromstring(xml_bytes)
+          urls = [loc.text.strip() for loc in root.findall('.//s:loc', ns) if loc.text and loc.text.strip()]
+          if not urls:
+              print('Sitemap contained no URLs', file=sys.stderr)
+              sys.exit(1)
+
+          payload = {
+              'host': host,
+              'key': key,
+              'keyLocation': f'https://{host}/{key}.txt',
+              'urlList': urls,
+          }
+          post = urllib.request.Request(
+              'https://api.indexnow.org/indexnow',
+              data=json.dumps(payload).encode(),
+              headers={'Content-Type': 'application/json; charset=utf-8', 'User-Agent': 'CompareLegal-IndexNow'},
+              method='POST',
+          )
+          try:
+              with urllib.request.urlopen(post, timeout=60) as response:
+                  body = response.read().decode('utf-8', 'replace')
+                  print(f'IndexNow {response.status} for {len(urls)} URLs')
+                  if body.strip():
+                      print(body)
+          except urllib.error.HTTPError as ex:
+              err = ex.read().decode('utf-8', 'replace')
+              print(f'IndexNow HTTP {ex.code}: {err}', file=sys.stderr)
+              sys.exit(1)
+          PY

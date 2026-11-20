@@ -1,7 +1,8 @@
 ---
 title: "Conveyancing fees in England and Wales: what a quote should include"
+seo_title: "Conveyancing fees in England and Wales"
 short: Conveyancing quotes explained
-description: How to read a conveyancing quote in England and Wales, which disbursements to expect, why fees differ between firms and cities, and the questions to ask before you instruct.
+description: "How to read a conveyancing quote in England and Wales, which disbursements to expect, why fees differ, and what to ask a firm before you instruct them."
 summary: Every conveyancing quote in England and Wales should show three things: the firm's legal fee, VAT at 20% on that fee, and disbursements such as searches, the HM Land Registry fee, ID checks and a bank transfer fee. Leasehold, new-build, shared ownership and unregistered properties cost extra. Stamp Duty Land Tax (or Land Transaction Tax in Wales) is collected by your conveyancer but is the same whichever firm you use.
 date: 2026-11-13
 updated: 2026-11-13
@@ -27,7 +28,7 @@ Since December 2018, firms regulated by the Solicitors Regulation Authority must
 - **Identity and anti-money-laundering checks**, charged per person.
 - **A bank transfer fee** for sending your money on completion.
 
-The tax, Stamp Duty Land Tax in England or Land Transaction Tax in Wales, is collected by your conveyancer but isn't a legal cost. It's the same whoever you instruct.
+The tax, Stamp Duty Land Tax in England or Land Transaction Tax in Wales, is collected by your conveyancer but isn't a legal cost. It's the same whoever you instruct. The [comparison of SDLT, LTT and LBTT](/blog/stamp-duty-sdlt-ltt-lbtt-compared/) sets the three taxes side by side.
 
 ## Extras that push the price up
 
@@ -43,7 +44,7 @@ A good quote lists these as separate supplements so you can see whether they app
 
 ## Why fees vary between firms and cities
 
-Fees reflect each firm's overheads, how much of the work is done by qualified lawyers, and how many cases each lawyer handles. Firms in central London and the South East often charge more, but many firms act for buyers anywhere in England and Wales, so a local firm isn't required. What a local firm can offer is face-to-face meetings and knowledge of the area, for example local searches, flood risk or common leasehold arrangements in a particular development.
+Fees reflect each firm's overheads, how much of the work is done by qualified lawyers, and how many cases each lawyer handles. Firms in central London and the South East often charge more, but many firms act for buyers anywhere in England and Wales, so a local firm isn't required. You can [compare conveyancing fees in England](/conveyancing/england/) and [in Wales](/conveyancing/wales/) with VAT and disbursements in the total. What a local firm can offer is face-to-face meetings and knowledge of the area, for example local searches, flood risk or common leasehold arrangements in a particular development.
 
 Very low fees can mean high caseloads and slow replies. Look at what's included, who will handle your file, and how the firm communicates, not just the price.
 
@@ -53,6 +54,8 @@ Very low fees can mean high caseloads and slow replies. Look at what's included,
 - Is there a charge if the purchase falls through?
 - Are any fees paid to the estate agent or broker who referred me? Firms must tell you about referral fees.
 - Who will handle my case, and are they qualified?
+
+There is a longer checklist in [questions to ask before instructing a solicitor](/blog/questions-to-ask-before-instructing-a-solicitor/).
 
 ## Frequently asked questions
 
