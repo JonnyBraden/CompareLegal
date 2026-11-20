@@ -1,5 +1,6 @@
 ---
 title: "Choosing a solicitor: 10 questions to ask before you instruct"
+seo_title: "Questions to ask a solicitor"
 short: Questions to ask a solicitor
 description: What to ask a solicitor or conveyancer before you sign up, from what the fee covers to who will handle your case, so you can compare firms on more than price.
 summary: Before you instruct a solicitor, ask whether the fee is fixed and what would make it go up, whether the total includes VAT and all disbursements, what you pay if the matter falls through, who will handle your case, how quickly they reply, who regulates them and how to complain. Get the answers in writing in the client care letter.
@@ -9,7 +10,7 @@ category: conveyancing
 nations: [England, Wales, Scotland, Northern Ireland]
 service: purchase
 ---
-Comparing fees is the first step, but the cheapest quote isn't always the best value. A few questions before you instruct a firm will tell you whether the price is complete, who will do the work and what happens if things change. These apply whether you need a conveyancer, a will, help with an estate or a divorce, anywhere in the UK.
+Comparing fees is the first step, but the cheapest quote isn't always the best value. A few questions before you instruct a firm will tell you whether the price is complete, who will do the work and what happens if things change. These apply whether you are [comparing conveyancing fees](/conveyancing/), [making a will](/wills/), [dealing with an estate](/probate/) or [getting a divorce](/family-law/), anywhere in the UK.
 
 ## About the price
 

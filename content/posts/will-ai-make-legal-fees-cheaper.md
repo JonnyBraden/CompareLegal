@@ -1,7 +1,8 @@
 ---
 title: "Will AI make legal fees cheaper? What to ask your solicitor"
+seo_title: "Will AI make legal fees cheaper?"
 short: AI and legal fees
-description: Transactional law firms are adopting AI, which may change how deals are priced. High-street work such as conveyancing, wills, probate and family law has far fewer tools built for it, so prices may not fall as quickly as people expect.
+description: "Why AI may cut fees on commercial deals sooner than on conveyancing, wills, probate or family law, and the questions to ask before you instruct a solicitor."
 date: 2026-11-16
 updated: 2026-11-16
 category: conveyancing
@@ -45,7 +46,7 @@ How the firm charges matters as much as whether it uses AI.
 
 **Hourly rates.** These are more common on commercial and transactional work. If you are billed for time spent, fewer hours should usually mean a lower bill, provided the firm records time honestly and does not raise its rate to cancel out the saving. Ask whether the estimate already assumes the use of AI.
 
-**Fixed fees.** These are the norm for conveyancing, wills, uncontested probate and uncontested divorce. A fixed fee can be good value if the scope is clear, because you know the legal fee in advance. It also means the firm, not you, keeps the benefit of any time saved unless the quoted fee comes down. Ask what is included, what would make the fee go up, and whether the quote reflects the firm's use of AI.
+**Fixed fees.** These are the norm for conveyancing, wills, uncontested probate and uncontested divorce. A fixed fee can be good value if the scope is clear, because you know the legal fee in advance. It also means the firm, not you, keeps the benefit of any time saved unless the quoted fee comes down. Ask what is included, what would make the fee go up, and whether the quote reflects the firm's use of AI. See [what a conveyancing quote should include](/blog/conveyancing-quote-explained-england-wales/) and [probate costs across the UK](/blog/probate-costs-uk/).
 
 **Capped fees.** A cap limits what you pay for the agreed work. Check what sits outside the cap, and whether AI use is already built into the estimate beneath it.
 
@@ -53,7 +54,7 @@ VAT and disbursements sit on top of the legal fee. Compare the total, not just t
 
 ## Questions to ask your solicitor about AI and fees
 
-Get the answers in writing before you instruct the firm.
+Get the answers in writing before you instruct the firm. The wider checklist is in [questions to ask before instructing a solicitor](/blog/questions-to-ask-before-instructing-a-solicitor/).
 
 | Question | Why it matters |
 | --- | --- |

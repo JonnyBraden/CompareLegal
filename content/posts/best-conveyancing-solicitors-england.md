@@ -1,7 +1,8 @@
 ---
 title: "Best-reviewed conveyancing solicitors in England: Manchester, Birmingham, Leeds and Bristol"
+seo_title: "Best conveyancers in England"
 short: Top-rated English conveyancers
-description: The highest-rated conveyancing solicitors and conveyancers on Google in Manchester, Birmingham, Leeds and Bristol, and what their clients say makes them good. Ratings checked November 2026.
+description: "Highest-rated conveyancing solicitors on Google in Manchester, Birmingham, Leeds and Bristol, and what their clients praise. Ratings checked in November 2026."
 date: 2026-11-16
 updated: 2026-11-16
 category: conveyancing

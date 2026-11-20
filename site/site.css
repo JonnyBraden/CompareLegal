@@ -216,6 +216,15 @@ footer{padding-block:52px;font-size:.9rem;color:#9DB3A7;background:var(--deep)}
 .fname a{color:var(--ink);text-decoration:none}
 .fname a:hover b{text-decoration:underline}
 
+/* Category hubs */
+.hubintro{max-width:760px;font-size:1.05rem}
+.hubintro p+p{margin-top:1em}
+.nationguides{display:grid;grid-template-columns:1fr 1fr;gap:28px 48px}
+@media (max-width:700px){.nationguides{grid-template-columns:1fr}}
+.nationguides h3{font-size:1.35rem;margin-bottom:6px}
+.nationguides ul{margin:8px 0 0;padding-left:1.15em}
+.nationguides li+li{margin-top:.4em}
+
 /* Short answer box at the top of guides */
 .answer{background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--mark);border-radius:var(--r);padding:20px 24px;margin:0 0 30px;box-shadow:var(--shadow)}
 .answer p{margin:0}

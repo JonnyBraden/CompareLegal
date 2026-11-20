@@ -1,7 +1,8 @@
 ---
 title: How much does conveyancing cost in Northern Ireland?
+seo_title: "Conveyancing costs in Northern Ireland"
 short: Conveyancing costs in NI
-description: What a Northern Ireland conveyancing quote should include, how the process differs from England, and how stamp duty works on an NI purchase.
+description: "What a Northern Ireland conveyancing quote should include, how the process and land registers differ from England, and how stamp duty works on a purchase."
 summary: A conveyancing quote in Northern Ireland has three parts: the solicitor's legal fee, VAT at 20% on that fee, and outlays such as searches and Land Registry NI fees, so compare the total rather than the headline fee. Your solicitor must be qualified in Northern Ireland. Buyers pay Stamp Duty Land Tax at the same rates as England, and first-time buyers pay none on the first £300,000.
 date: 2026-11-13
 updated: 2026-11-13
@@ -9,7 +10,7 @@ category: conveyancing
 nations: [Northern Ireland]
 service: purchase
 ---
-Buying a home in Northern Ireland involves the same broad costs as anywhere in the UK: your solicitor's fee, VAT, the third-party costs they pay for you, and stamp duty. But NI has its own property law, its own land registers and its own solicitors' profession, so a quote from a firm in England won't tell you much. This guide explains what an NI quote should contain and what makes fees go up.
+Buying a home in Northern Ireland involves the same broad costs as anywhere in the UK: your solicitor's fee, VAT, the third-party costs they pay for you, and stamp duty. But NI has its own property law, its own land registers and its own solicitors' profession, so a quote from a firm in England won't tell you much. The [guide to conveyancing quotes in England and Wales](/blog/conveyancing-quote-explained-england-wales/) covers that system. This guide explains what an NI quote should contain and what makes fees go up. When you know that, you can [compare conveyancing fees in Northern Ireland](/conveyancing/northern-ireland/).
 
 ## What goes into a conveyancing quote
 
@@ -26,7 +27,7 @@ Stamp Duty Land Tax is usually collected by your solicitor too, but it's a tax, 
 - **A separate profession.** Your solicitor must be qualified in Northern Ireland and is regulated by the [Law Society of Northern Ireland](https://www.lawsoc-ni.org/). A firm qualified only in England and Wales can't act on an NI property.
 - **Two land registers.** Most titles are registered at Land Registry NI, part of Land & Property Services. Some older titles are still unregistered and recorded in the Registry of Deeds. Unregistered titles mean reading through older deeds, so expect a higher fee or an extra charge.
 - **Different searches.** Searches in NI include property certificates from the district council and statutory bodies, and a search against the seller in the Enforcement of Judgments Office. These are outlays and should be itemised in your quote.
-- **Stamp duty is the same as England.** Northern Ireland uses Stamp Duty Land Tax at the same rates as England, unlike Scotland and Wales, which have their own property taxes.
+- **Stamp duty is the same as England.** Northern Ireland uses Stamp Duty Land Tax at the same rates as England, unlike Scotland and Wales, which have their own property taxes. See [SDLT, LTT and LBTT compared](/blog/stamp-duty-sdlt-ltt-lbtt-compared/).
 
 ## Stamp duty on a Northern Ireland purchase
 
@@ -52,7 +53,7 @@ Many homes in Northern Ireland sell for less than the UK average, so plenty of b
 - **Shared ownership or co-ownership**, for example through Co-Ownership Housing, which means dealing with a third party.
 - **A mortgage lender's own requirements**, which some firms charge for separately.
 
-Ask each firm whether its fee is fixed, and what would make it rise, before you instruct them.
+Ask each firm whether its fee is fixed, and what would make it rise, before you instruct them. [Questions to ask before you instruct](/blog/questions-to-ask-before-instructing-a-solicitor/) lists the others.
 
 ## Frequently asked questions
 

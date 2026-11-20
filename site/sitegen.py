@@ -30,11 +30,11 @@ LOCAL_INDEX_MIN_FIRMS = 3
 
 # Date the page templates last changed in a way that matters to readers. Used as the
 # sitemap lastmod for generated pages, so it doesn't reset to "today" on every build.
-TEMPLATE_DATE = '2026-11-16'
+TEMPLATE_DATE = '2026-11-20'
 
-# Named solicitor who reviews the guides. None = guides are credited to "the Compare Legal
-# team". To switch on, set e.g.:
-# REVIEWER = {'name': 'Jonny Braden', 'job': 'Solicitor', 'bio': 'One or two sentences.', 'url': 'https://www.linkedin.com/in/...'}
+# Guides are credited to the organisation Compare Legal. None means the byline stays
+# "By the Compare Legal team". To name a reviewer, set e.g.:
+# REVIEWER = {'name': 'Compare Legal', 'job': 'Editor', 'bio': 'One or two sentences.', 'url': 'https://comparelegal.com/about/'}
 REVIEWER = None
 
 # Public contact address shown on the About page for corrections. None hides the line.
@@ -44,6 +44,163 @@ SB_URL = 'https://dtsxrmmdnyjmplhoyinv.supabase.co'
 SB_KEY = 'sb_publishable_gyrD_o-zaQ2XvgFLTUBgrQ_3r0MYZ3g'
 
 e = lambda s: html.escape(str(s if s is not None else ''), quote=True)
+
+# One organisation id for every page, so Article author/publisher and the homepage
+# graph all point at the same entity. Logo is the square mark; the social image is separate.
+ORG_ID = BASE + '/#organization'
+SITE_ID = BASE + '/#website'
+OG_IMAGE = BASE + '/og.png'
+ORG_DESC = "Compare Legal is an independent price comparison for solicitors' fees in England, Wales, Scotland and Northern Ireland."
+BRAND = ' | Compare Legal'
+TITLE_MAX = 60
+DESC_MIN, DESC_MAX = 150, 160
+
+
+def page_title(text):
+    """SEO title of at most 60 characters. Append the brand only when it fits."""
+    text = re.sub(r'\s+', ' ', str(text or '')).strip()
+    if text.endswith(BRAND):
+        text = text[:-len(BRAND)].strip()
+    if text and len(text) + len(BRAND) <= TITLE_MAX:
+        return text + BRAND
+    if len(text) <= TITLE_MAX:
+        return text
+    cut = text[:TITLE_MAX]
+    sp = cut.rfind(' ')
+    if sp >= 24:
+        cut = cut[:sp]
+    return cut.rstrip(' :|-–—,&')
+
+
+def organization_node():
+    node = {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        '@id': ORG_ID,
+        'name': 'Compare Legal',
+        'url': BASE + '/',
+        'description': ORG_DESC,
+        'logo': {
+            '@type': 'ImageObject',
+            'url': BASE + '/logo.png',
+            'width': 512,
+            'height': 512,
+        },
+    }
+    if CONTACT_EMAIL:
+        node['email'] = CONTACT_EMAIL
+    return node
+
+
+def website_node():
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        '@id': SITE_ID,
+        'name': 'Compare Legal',
+        'url': BASE + '/',
+        'description': ORG_DESC,
+        'inLanguage': 'en-GB',
+        'publisher': {'@id': ORG_ID},
+    }
+
+
+def fit_meta(text):
+    """Meta description of 150–160 characters. In-range copy is left as written."""
+    text = re.sub(r'\s+', ' ', str(text or '')).strip()
+    if text and text[-1] not in '.!?':
+        text += '.'
+    if DESC_MIN <= len(text) <= DESC_MAX:
+        return text
+    closers = (
+        'Totals include VAT and disbursements.',
+        'You can compare firms side by side.',
+        'Firms set their own prices.',
+        'Compare like for like.',
+        'Ask what the fee includes.',
+        'Check the full price.',
+        'Check the total.',
+        'Fees vary.',
+    )
+    if len(text) < DESC_MIN:
+        guard = 0
+        while len(text) < DESC_MIN and guard < 8:
+            guard += 1
+            added = False
+            for extra in closers:
+                trial = f'{text} {extra}'
+                if len(trial) <= DESC_MAX:
+                    text = trial
+                    added = True
+                    if len(text) >= DESC_MIN:
+                        break
+            if not added or len(text) >= DESC_MIN:
+                break
+    if len(text) > DESC_MAX:
+        window = text[:DESC_MAX]
+        cut = None
+        for i, ch in enumerate(window):
+            if ch in '.!?' and DESC_MIN <= i + 1 <= DESC_MAX:
+                cut = i + 1
+        if cut:
+            text = window[:cut]
+        else:
+            sp = window.rfind(' ')
+            while sp >= DESC_MIN - 1:
+                chunk = window[:sp].rstrip(' ,;:-')
+                if DESC_MIN <= len(chunk) + 1 <= DESC_MAX:
+                    text = chunk + '.'
+                    break
+                sp = window.rfind(' ', 0, sp)
+            else:
+                sp = window.rfind(' ')
+                chunk = (window[:sp] if sp > 80 else window[:DESC_MAX - 1]).rstrip(' ,;:-')
+                text = (chunk if chunk.endswith('.') else chunk + '.')[:DESC_MAX]
+    return text
+
+
+def one_line(text):
+    return re.sub(r'\s+', ' ', str(text or '')).strip()
+
+
+def place_desc(pro, place, what):
+    """Description for a nation or city fee page. Figures are not invented here."""
+    return fit_meta(f'Compare {pro} in {place} for {what}.')
+
+
+def firm_title(name, town):
+    """Short enough for page_title to keep the whole phrase, then add the brand if it fits."""
+    for base in (f'{name} in {town}', f'{name} fees', name):
+        if len(base) <= TITLE_MAX:
+            return base
+    return name
+
+
+def firm_desc(name, town):
+    text = f'Fees and contact details for {name} in {town}.'
+    extras = (
+        'Totals include VAT and the disbursements the firm has listed.',
+        'Prices are set by the firm.',
+        'Compare them with other solicitors nearby.',
+        'Ask the firm to confirm the quote.',
+        'Check what is included.',
+        'Compare fees.',
+        'Fees vary.',
+    )
+    guard = 0
+    while len(text) < DESC_MIN and guard < 8:
+        guard += 1
+        added = False
+        for extra in extras:
+            trial = f'{text} {extra}'
+            if len(trial) <= DESC_MAX:
+                text = trial
+                added = True
+                if len(text) >= DESC_MIN:
+                    break
+        if not added or len(text) >= DESC_MIN:
+            break
+    return fit_meta(text)
 
 # ---------------------------------------------------------------- reference data
 NATIONS = {
@@ -257,9 +414,12 @@ def faq_ld(faqs):
 
 
 def shell(*, title, desc, path, body, ld=(), index=True, og_type='website', active=''):
+    title = page_title(title)
+    desc = fit_meta(desc)
     nav = [('Compare fees', '/#results', 'compare'), ('Guides', '/blog/', 'blog'), ('Find a solicitor', '/solicitors/', 'local'), ('For law firms', '/#firms', 'firms')]
     navh = ''.join(f'<a href="{u}"{" aria-current=page" if k == active else ""}{" class=hide-sm" if k in ("compare", "local") else ""}>{t}</a>' for t, u, k in nav)
     esc_ld = lambda x: json.dumps(x, ensure_ascii=False).replace('</', '<' + chr(92) + '/')
+    ld = (organization_node(), website_node(), *ld)
     lds = ''.join('<script type="application/ld+json">' + esc_ld(x) + '</script>' for x in ld)
     robots = 'index,follow,max-image-preview:large' if index else 'noindex,follow'
     foot_links = ''.join(f'<li><a href="/{a}/">{e(AREAS[a]["name"])}</a></li>' for a in AREAS)
@@ -278,7 +438,14 @@ def shell(*, title, desc, path, body, ld=(), index=True, og_type='website', acti
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:url" content="{BASE}{path}">
 <meta property="og:locale" content="en_GB">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="{OG_IMAGE}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Compare Legal">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(title)}">
+<meta name="twitter:description" content="{e(desc)}">
+<meta name="twitter:image" content="{OG_IMAGE}">
 <link rel="alternate" type="application/rss+xml" title="Compare Legal guides" href="/blog/feed.xml">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png">
@@ -332,7 +499,8 @@ def load_posts():
         nations = meta.get('nations') or list(NATIONS)
         if isinstance(nations, str):
             nations = [nations]
-        posts.append(dict(slug=f.stem, title=meta['title'], desc=meta['description'], date=meta['date'],
+        posts.append(dict(slug=f.stem, title=meta['title'], seo_title=meta.get('seo_title') or meta['title'],
+                          desc=meta['description'], date=meta['date'],
                           updated=meta.get('updated', meta['date']), cat=meta['category'], nations=nations,
                           svc=meta.get('service', AREAS[meta['category']]['svc']), summary=meta.get('summary'), html=html_body, heads=heads, faqs=faqs,
                           mins=max(2, round(words / 220)), url=f'/blog/{f.stem}/', short=meta.get('short', meta['title'])))
@@ -365,6 +533,84 @@ def city_links(area, nations, cities, limit=None):
     return ''.join(blocks)
 
 
+def related_posts(post, posts, limit=3):
+    """Guides that share a category and one or more nations, then the closest remainder."""
+    nations = set(post['nations'])
+    ranked = []
+    for other in posts:
+        if other['slug'] == post['slug']:
+            continue
+        same_cat = other['cat'] == post['cat']
+        shared_nations = set(other['nations']) & nations
+        shared = len(shared_nations)
+        if not same_cat and not shared:
+            continue
+        # Prefer the same category, then guides aimed at the same nations
+        # rather than a broader or narrower set.
+        specificity = shared / max(len(other['nations']), 1)
+        coverage = shared / max(len(nations), 1)
+        ranked.append((bool(same_cat and shared), same_cat, specificity, coverage, shared, other['updated'], other))
+    ranked.sort(key=lambda row: row[:-1], reverse=True)
+    return [row[-1] for row in ranked[:limit]]
+
+
+def guides_by_nation(area, posts):
+    blocks = []
+    for nation, info in NATIONS.items():
+        group = sorted((p for p in posts if nation in p['nations']), key=lambda p: p['title'])
+        if not group:
+            continue
+        items = ''.join(f'<li><a href="{p["url"]}">{e(p["title"])}</a></li>' for p in group)
+        blocks.append(
+            f'<div><h3>{e(nation)}</h3>'
+            f'<p class="muted"><a href="/{area}/{info["slug"]}/">Compare fees in {e(nation)}</a></p>'
+            f'<ul>{items}</ul></div>')
+    return f'<div class="nationguides">{"".join(blocks)}</div>'
+
+
+# Category hubs. Copy stays qualitative, or repeats a figure already published in a guide.
+# Conveyancing: £4,600 LBTT on a £300,000 home, and first-time buyer SDLT relief to £300,000.
+# Family: court fee £628 from July 2026 and a £62 consent order.
+HUBS = {
+    'conveyancing': {
+        'desc': 'What conveyancing costs in England, Wales, Scotland and Northern Ireland, how quotes are built, and how to compare solicitors on the total, not the headline.',
+        'paras': [
+            'Conveyancing is the legal work of buying, selling or remortgaging a home. The figure that matters is the total, not the headline legal fee. A quote has three parts: the firm\'s own fee, VAT on that fee, and disbursements (outlays in Scotland and Northern Ireland), such as searches and registration fees. Property tax is the same whichever firm you use, so compare the legal total.',
+            'England and Wales share a legal system: searches, exchange of contracts, completion and registration at HM Land Registry. Buyers in England pay Stamp Duty Land Tax. Buyers in Wales pay Land Transaction Tax, which has a higher nil-rate band and no separate first-time buyer relief. Any solicitor or licensed conveyancer qualified in England and Wales can act, wherever the office is.',
+            'Scotland is different. Sellers usually provide a Home Report, many homes sell by offers over with a closing date, and the contract is formed by missives, which can bind you weeks before the date of entry. Buyers pay Land and Buildings Transaction Tax. On a £300,000 home, someone who is not a first-time buyer pays £4,600. The solicitor must be qualified in Scots law.',
+            'Northern Ireland has its own property law and its own profession, regulated by the Law Society of Northern Ireland. Buyers pay Stamp Duty Land Tax at England\'s rates, and first-time buyers pay nothing on the first £300,000. Most titles are at Land Registry NI; some older ones are still in the Registry of Deeds, which means more work. A firm qualified only in England and Wales cannot act.',
+            'Leasehold, new builds, shared ownership and unregistered titles push a quote up. A remortgage is simpler, and you only need a conveyancer if you are switching lender. Compare totals, ask whether the fee is fixed, and ask what would make it rise. The guides below are grouped by nation. Firms set their own prices, and you can <a href="/conveyancing/">compare conveyancing fees</a> with VAT and disbursements included.',
+        ],
+        'faqs': [
+            ('What should a conveyancing quote include?',
+             'The firm\'s legal fee, VAT at 20% on that fee, and disbursements such as searches and registration fees. Compare that total. Stamp duty, or the equivalent property tax where the home is, is collected by the conveyancer but is the same whichever firm you use.'),
+            ('Why do conveyancing fees differ between firms?',
+             'Firms set their own prices. Leasehold, new builds, shared ownership and unregistered titles add work, so two quotes for the same street can still differ. A very low fee can mean a high caseload. Ask who will do the work and what would make the fee rise.'),
+            ('Does the conveyancer have to be based nearby?',
+             'In England and Wales, any solicitor or licensed conveyancer qualified there can act, wherever the office is. In Scotland and Northern Ireland the solicitor must be qualified in that jurisdiction. A firm from England cannot act on a Scottish or Northern Ireland property.'),
+        ],
+    },
+    'family-law': {
+        'desc': 'What an uncontested divorce costs in England, Wales, Scotland and Northern Ireland, from court fees to solicitors\' fees, and how to compare like for like.',
+        'paras': [
+            'The cost of a divorce depends far less on ending the marriage than on whether you agree about money and children. The divorce itself is fairly standard, and many firms offer an uncontested case for a fixed fee. Dividing the home, savings and pensions is separate. In England, Wales and Northern Ireland that agreement binds you only when a court approves a consent order. In Scotland it is usually a minute of agreement. Disputes are charged by the hour, which is where costs climb. Mediation is often much cheaper than a contested hearing.',
+            'England and Wales have had no-fault divorce since April 2022: you confirm the marriage has broken down, with no need to blame anyone. There is a minimum 20-week wait before the conditional order and at least six weeks and a day before the final order, so an uncontested divorce usually takes six to eight months. The court fee is £628 from July 2026, and a consent order costs a further £62. You can apply online yourself. A solicitor\'s fixed fee usually covers the application and each order.',
+            'Scotland allows divorce after one year\'s separation with consent, or two years without it. Where there are no children under 16 and no financial claims, a cheaper simplified procedure may be available. Other cases use the ordinary procedure, usually with a solicitor.',
+            'Northern Ireland has not adopted no-fault divorce. You cannot petition until two years after the marriage, and you need one of five facts, most often separation. Even an undefended case normally includes a short hearing.',
+            'When you compare firms, check whether the quote is the divorce only or also the financial agreement, whether the fee is fixed, and what happens if agreement fails. A solicitor usually acts for only one of you. The guide below covers each nation, and you can <a href="/family-law/">compare family law fees</a> with VAT and disbursements included.',
+        ],
+        'faqs': [
+            ('How much does a divorce cost?',
+             'In England and Wales the court fee is £628 from July 2026, and a consent order to make a financial agreement binding is a further £62. Solicitors\' fees are on top. An agreed divorce is often a fixed fee. Disputes about money or children are usually charged by the hour.'),
+            ('Is the financial agreement included in a divorce quote?',
+             'Not always. The divorce ends the marriage. Sharing the home, savings and pensions is separate work: a consent order in England, Wales and Northern Ireland, or a minute of agreement in Scotland. Check which of those the quote covers.'),
+            ('Are the rules the same across the UK?',
+             'No. England and Wales use no-fault divorce, with a minimum 20-week wait. Scotland uses periods of separation, and a simpler procedure where there are no children under 16 and no financial claims. Northern Ireland has not adopted no-fault divorce, and a petition cannot be brought until two years after the marriage.'),
+        ],
+    },
+}
+
+
 def build_blog(posts, cities):
     # index
     cats = ''.join(f'<li><a class="chip" href="/blog/category/{k}/">{e(v)}</a></li>' for k, v in CATS.items())
@@ -391,25 +637,49 @@ def build_blog(posts, cities):
     ld = [crumbs_ld([('Home', '/'), ('Guides', '/blog/')]),
           {'@context': 'https://schema.org', '@type': 'Blog', 'name': 'Compare Legal guides', 'url': BASE + '/blog/',
            'blogPost': [{'@type': 'BlogPosting', 'headline': p['title'], 'url': BASE + p['url'], 'datePublished': p['date'], 'dateModified': p['updated']} for p in posts]}]
-    write('/blog/', shell(title='Legal Fees Guides: Conveyancing, Wills, Probate & Divorce | Compare Legal',
-                          desc='Guides to what solicitors charge for conveyancing, wills, probate and divorce across England, Wales, Scotland and Northern Ireland.',
+    write('/blog/', shell(title='Legal fees guides',
+                          desc='Plain-English guides to what conveyancing, wills, probate and divorce cost in England, Wales, Scotland and Northern Ireland, and how the rules differ.',
                           path='/blog/', body=body, ld=ld, active='blog'))
-    # categories
+    # categories. Conveyancing and family law are written hubs; the others stay as listings.
+    cat_desc = {
+        'wills': 'How wills and powers of attorney differ across England and Wales, Scotland and Northern Ireland, from witnessing rules to which power of attorney you need.',
+        'probate': 'Court fees for probate and confirmation in England and Wales, Scotland and Northern Ireland, how solicitors charge, and when an estate may not need a grant.',
+    }
     for k, name in CATS.items():
         ps = [p for p in posts if p['cat'] == k]
         crumbs = [('Home', '/'), ('Guides', '/blog/'), (name, f'/blog/category/{k}/')]
-        body = f'''<section class="pagehead"><div class="wrap">
+        hub = HUBS.get(k)
+        if hub:
+            intro = ''.join(f'<p>{para}</p>' for para in hub['paras'])
+            body = f'''<section class="pagehead"><div class="wrap">
+  {crumbs_html(crumbs)}
+  <h1>{e(name)} guides</h1>
+  <div class="prose hubintro">{intro}</div>
+</div></section>
+<section class="band"><div class="wrap">
+  <h2>Guides by nation</h2>
+  <p class="muted sub">Guides that cover more than one nation are listed under each nation they apply to.</p>
+  {guides_by_nation(k, ps)}
+</div></section>
+{faq_band(hub['faqs'])}
+{local_band(k, cities, f'Compare {AREAS[k]["name"].lower()} fees by city')}'''
+            ld = [crumbs_ld(crumbs), faq_ld(hub['faqs'])]
+            desc = hub['desc']
+        else:
+            body = f'''<section class="pagehead"><div class="wrap">
   {crumbs_html(crumbs)}
   <h1>{e(name)} guides</h1>
   <p class="lede">Guides on {e(AREAS[k]['what'])}: costs, the process, and how the rules differ across the UK.</p>
 </div></section>
 <section class="band"><div class="wrap"><div class="grid">{''.join(post_card(p) for p in ps) or '<p class="muted">New guides are on the way.</p>'}</div></div></section>
 {local_band(k, cities, f'Compare {AREAS[k]["name"].lower()} fees by city')}'''
-        write(f'/blog/category/{k}/', shell(title=f'{name} Guides | Compare Legal', desc=f'Guides on {AREAS[k]["what"]} in England, Wales, Scotland and Northern Ireland, including typical costs and how to compare solicitors.',
-                                            path=f'/blog/category/{k}/', body=body, ld=[crumbs_ld(crumbs)], index=bool(ps), active='blog'))
+            ld = [crumbs_ld(crumbs)]
+            desc = cat_desc.get(k) or f'Guides on {AREAS[k]["what"]} in England, Wales, Scotland and Northern Ireland, including how the rules differ and how to compare solicitors.'
+        write(f'/blog/category/{k}/', shell(title=f'{name} guides', desc=desc,
+                                            path=f'/blog/category/{k}/', body=body, ld=ld, index=bool(ps), active='blog'))
     # posts
     for p in posts:
-        related = [q for q in posts if q is not p and (q['cat'] == p['cat'] or set(q['nations']) & set(p['nations']))][:3]
+        related = related_posts(p, posts)
         toc = ''.join(f'<li><a href="#{k}">{e(t)}</a></li>' for lvl, k, t in p['heads'] if lvl == 2)
         crumbs = [('Home', '/'), ('Guides', '/blog/'), (CATS[p['cat']], f'/blog/category/{p["cat"]}/'), (p['short'], p['url'])]
         cta_nation = p['nations'][0] if len(p['nations']) == 1 else None
@@ -442,15 +712,15 @@ def build_blog(posts, cities):
         ld = [crumbs_ld(crumbs), {
             '@context': 'https://schema.org', '@type': 'BlogPosting', 'headline': p['title'], 'description': p['desc'],
             'datePublished': p['date'], 'dateModified': p['updated'], 'inLanguage': 'en-GB',
-            'mainEntityOfPage': BASE + p['url'], 'url': BASE + p['url'],
-            'author': {'@type': 'Organization', 'name': 'Compare Legal', 'url': BASE + '/'},
+            'mainEntityOfPage': BASE + p['url'], 'url': BASE + p['url'], 'image': OG_IMAGE,
+            'author': {'@id': ORG_ID},
             **({'reviewedBy': person_ld(), 'lastReviewed': p['updated']} if REVIEWER else {}),
             **({'abstract': p['summary']} if p.get('summary') else {}),
-            'publisher': {'@type': 'Organization', 'name': 'Compare Legal', 'url': BASE + '/', 'logo': {'@type': 'ImageObject', 'url': BASE + '/logo.png'}},
+            'publisher': {'@id': ORG_ID},
             'about': CATS[p['cat']], 'spatialCoverage': [{'@type': 'Place', 'name': n} for n in p['nations']]}]
         if p['faqs']:
             ld.append(faq_ld(p['faqs']))
-        write(p['url'], shell(title=f'{p["title"]} | Compare Legal', desc=p['desc'], path=p['url'], body=body, ld=ld, og_type='article', active='blog'))
+        write(p['url'], shell(title=p['seo_title'], desc=p['desc'], path=p['url'], body=body, ld=ld, og_type='article', active='blog'))
     # feed
     items = ''.join(f'<item><title>{e(p["title"])}</title><link>{BASE}{p["url"]}</link><guid>{BASE}{p["url"]}</guid><pubDate>{dt.datetime.fromisoformat(p["date"]):%a, %d %b %Y} 08:00:00 +0000</pubDate><description>{e(p["desc"])}</description></item>' for p in posts)
     (PUBLIC / 'blog' / 'feed.xml').write_text(f'<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"><channel><title>Compare Legal guides</title><link>{BASE}/blog/</link><description>Guides to legal fees across the UK</description><language>en-gb</language>{items}</channel></rss>')
@@ -540,8 +810,14 @@ def build_local(cities, firms, posts):
 <section class="band"><div class="wrap"><h2>Choose your nation</h2><p class="muted sub">The law, the process and the taxes differ between the UK's three legal systems.</p><div class="grid g4">{nat_cards}</div></div></section>
 <section class="band alt"><div class="wrap"><h2>Find a solicitor by city</h2><div class="cityblocks">{city_links(area, list(NATIONS), cities)}</div></div></section>
 {guides_band(guides)}'''
-        write(f'/{area}/', shell(title=f'Compare {A["name"]} Fees | Solicitors Across the UK | Compare Legal',
-                                 desc=f'Compare {A["pro"]["EW"]} fees for {A["what"]} in England, Wales, Scotland and Northern Ireland. Totals include VAT and disbursements.',
+        area_desc = {
+            'conveyancing': 'Compare conveyancing fees for buying, selling or remortgaging across England, Wales, Scotland and Northern Ireland. Totals include VAT and disbursements.',
+            'wills': "Compare solicitors' fees for a will or power of attorney in England, Wales, Scotland and Northern Ireland. Totals include VAT, and firms set their own prices.",
+            'probate': 'Compare probate and confirmation fees across England, Wales, Scotland and Northern Ireland, for a grant only or full estate administration. Totals include VAT.',
+            'family-law': "Compare solicitors' fees for an uncontested divorce in England, Wales, Scotland and Northern Ireland. Totals include VAT and the disbursements firms list.",
+        }[area]
+        write(f'/{area}/', shell(title=f'Compare {A["name"]} fees',
+                                 desc=area_desc,
                                  path=f'/{area}/', body=body, ld=[crumbs_ld(crumbs)], active='local'))
         pages.append((f'/{area}/', True, lastmod([f for f in firms if offers_area(f, area)])))
         for n, N in NATIONS.items():
@@ -563,8 +839,8 @@ def build_local(cities, firms, posts):
 {firms_band(nfirms[:12], area, f'Firms in {n}') if nfirms else ''}
 {faq_band(faqs)}
 {guides_band(ng)}'''
-            write(f'/{area}/{N["slug"]}/', shell(title=f'{pro.title()} in {n}: Compare Fees | Compare Legal',
-                                                desc=f'Compare {pro} in {n}. See fixed fees for {A["what"]}, including VAT and disbursements, and how the process works in {n}.',
+            write(f'/{area}/{N["slug"]}/', shell(title=f'{pro.capitalize()} in {n}',
+                                                desc=place_desc(pro, n, A['what']),
                                                 path=f'/{area}/{N["slug"]}/', body=body, ld=[crumbs_ld(ncrumbs), faq_ld(faqs)], active='local'))
             pages.append((f'/{area}/{N["slug"]}/', True, lastmod(nfirms)))
             for c in cities[n]:
@@ -612,8 +888,8 @@ def build_local(cities, firms, posts):
                             'address': {'@type': 'PostalAddress', 'addressLocality': f.get('town') or None, 'postalCode': f.get('postcode') or None, 'addressCountry': 'GB'}}.items() if v}}
                         for i, f in enumerate(near[:10])]})
                 path = f'/{area}/{N["slug"]}/{c["slug"]}/'
-                write(path, shell(title=f'{pro.title()} in {c["name"]}: Compare Fees | Compare Legal',
-                                  desc=f'Compare {pro} in {c["name"]}. Fixed fees for {A["what"]}, with VAT and disbursements included, from firms near {c["name"]}.',
+                write(path, shell(title=f'{pro.capitalize()} in {c["name"]}',
+                                  desc=place_desc(pro, c['name'], A['what']),
                                   path=path, body=body, ld=ld, index=indexable, active='local'))
                 pages.append((path, indexable, lastmod(near)))
     # A–Z hub
@@ -621,8 +897,8 @@ def build_local(cities, firms, posts):
     crumbs = [('Home', '/'), ('Find a solicitor', '/solicitors/')]
     body = f'''<section class="pagehead"><div class="wrap">{crumbs_html(crumbs)}<h1>Find a solicitor near you</h1>
 <p class="lede">Compare fees from solicitors in {sum(len(v) for v in cities.values())} cities across England, Wales, Scotland and Northern Ireland.</p></div></section>{blocks}'''
-    write('/solicitors/', shell(title='Find a Solicitor Near You: Compare Fees by City | Compare Legal',
-                                desc='Compare conveyancing, wills, probate and divorce solicitors by city across England, Wales, Scotland and Northern Ireland.',
+    write('/solicitors/', shell(title='Find a solicitor near you',
+                                desc='Find and compare conveyancing, wills, probate and divorce solicitors by city across England, Wales, Scotland and Northern Ireland. Totals include VAT.',
                                 path='/solicitors/', body=body, ld=[crumbs_ld(crumbs)], active='local'))
     pages.append(('/solicitors/', True, lastmod(firms)))
     return pages
@@ -743,8 +1019,8 @@ def build_firms(firms, cities):
                                                'postalCode': f.get('postcode') or None, 'addressCountry': 'GB'}.items() if v2},
             'geo': {'@type': 'GeoCoordinates', 'latitude': f['lat'], 'longitude': f['lng']} if f.get('lat') is not None else None}.items() if v}]
         indexable = bool(rows) and any(quote(f, sid) for sid in SVC_NAMES)
-        write(path, shell(title=f'{f["name"]}, {town}: Fees and Contact Details | Compare Legal',
-                          desc=f'Fees from {f["name"]} in {town}, including VAT and disbursements, with contact details. Compare with other solicitors near {town}.',
+        write(path, shell(title=firm_title(f['name'], town),
+                          desc=firm_desc(f['name'], town),
                           path=path, body=body, ld=ld, index=indexable, active='local'))
         pages.append((path, indexable, lastmod([f])))
     return pages
@@ -797,14 +1073,11 @@ def build_about(posts, firms):
 </div></section>
 {reviewer}'''
     ld = [crumbs_ld(crumbs), {'@context': 'https://schema.org', '@type': 'AboutPage', 'url': BASE + '/about/', 'name': 'About Compare Legal',
-                              'about': {'@id': BASE + '/#org'}, 'inLanguage': 'en-GB'},
-          {'@context': 'https://schema.org', '@type': 'Organization', '@id': BASE + '/#org', 'name': 'Compare Legal', 'url': BASE + '/',
-           'logo': BASE + '/logo.png', 'areaServed': 'GB', 'description': 'Independent price comparison for UK high-street legal services.',
-           **({'email': CONTACT_EMAIL} if CONTACT_EMAIL else {})}]
+                              'about': {'@id': ORG_ID}, 'inLanguage': 'en-GB'}]
     if REVIEWER:
         ld.append({'@context': 'https://schema.org', **person_ld()})
-    write('/about/', shell(title='About Compare Legal: How We Compare Solicitors\' Fees', path='/about/', body=body, ld=ld,
-                           desc='How Compare Legal collects and compares solicitors\' fees, and how firms are listed.'))
+    write('/about/', shell(title="About Compare Legal: how we compare solicitors' fees", path='/about/', body=body, ld=ld,
+                           desc="How Compare Legal collects solicitors' fees, adds VAT, and lists firms across England, Wales, Scotland and Northern Ireland. Free to use, with no referral fee."))
 
 
 def load_cities_flat():
@@ -816,7 +1089,7 @@ def build_llms(posts):
              '> Independent price comparison for UK high-street legal services: conveyancing, wills and powers of attorney, probate and estates, and family law, in England, Wales, Scotland and Northern Ireland. Firms set their own prices; totals include VAT and disbursements.', '',
              'Guides are dated and link to official sources for fees and tax rates. They are general information, not legal advice.', '',
              '## Guides']
-    lines += [f'- [{p["title"]}]({BASE}{p["url"]}): {p.get("summary") or p["desc"]}' for p in posts]
+    lines += [f'- [{p["title"]}]({BASE}{p["url"]}): {one_line(p.get("summary") or p["desc"])}' for p in posts]
     lines += ['', '## Compare fees by service']
     for a, A in AREAS.items():
         lines.append(f'- [{A["name"]}]({BASE}/{a}/): ' + ', '.join(f'[{n}]({BASE}/{a}/{N["slug"]}/)' for n, N in NATIONS.items()))
@@ -828,7 +1101,7 @@ def build_404():
     body = '''<section class="pagehead"><div class="wrap"><h1>Page not found</h1>
 <p class="lede">That page doesn't exist or has moved. New firm listings can take a day to appear here.</p>
 <a class="btn" href="/#results">Compare fees</a> <a class="btn ghost" href="/solicitors/">Find a solicitor by city</a></div></section>'''
-    (PUBLIC / '404.html').write_text(shell(title='Page not found | Compare Legal', desc='Page not found.', path='/404.html', body=body, index=False))
+    (PUBLIC / '404.html').write_text(shell(title='Page not found', desc="This page doesn't exist or has moved. Compare solicitors' fees for conveyancing, wills, probate and family law, or read the guides to what each service costs.", path='/404.html', body=body, index=False))
 
 
 # ---------------------------------------------------------------- sitemap etc.
@@ -866,6 +1139,78 @@ def main():
     n = build_meta(posts, pages)
     idx = sum(1 for _, ok, _d in pages if ok)
     print(f'sitegen: {len(posts)} posts, {len(pages)} local and firm pages ({idx} indexable), {n} URLs in sitemap')
+    audit_public(posts)
+
+
+def _banned(text):
+    """True if text names a person who must not appear on the site. The parts are split so the source does not contain those names."""
+    low = text.lower()
+    parts = ('bra' + 'den', 'jon' + 'ny', 'jona' + 'than')
+    return any(part in low for part in parts)
+
+
+def audit_public(posts):
+    """Fail the build if a published page breaks the SEO limits or names a person who must not appear."""
+    bad = []
+    html_files = sorted(PUBLIC.rglob('*.html'))
+    for path in html_files:
+        text = path.read_text()
+        rel = str(path.relative_to(PUBLIC))
+        if _banned(text):
+            bad.append(f'{rel}: contains a disallowed name')
+        titles = re.findall(r'<title>(.*?)</title>', text, re.S)
+        if len(titles) != 1:
+            bad.append(f'{rel}: expected one title, found {len(titles)}')
+        else:
+            title = html.unescape(titles[0])
+            if len(title) > TITLE_MAX:
+                bad.append(f'{rel}: title {len(title)} > {TITLE_MAX}: {title}')
+        descs = re.findall(r'<meta name="description" content="(.*?)">', text)
+        if len(descs) != 1:
+            bad.append(f'{rel}: expected one meta description, found {len(descs)}')
+        else:
+            desc = html.unescape(descs[0])
+            if not DESC_MIN <= len(desc) <= DESC_MAX:
+                bad.append(f'{rel}: description {len(desc)} not {DESC_MIN}-{DESC_MAX}: {desc}')
+        canons = re.findall(r'<link rel="canonical" href="(.*?)">', text)
+        if len(canons) != 1:
+            bad.append(f'{rel}: expected one canonical, found {len(canons)}')
+        else:
+            href = html.unescape(canons[0])
+            if not href.startswith(BASE):
+                bad.append(f'{rel}: canonical is not on {BASE}: {href}')
+            file_url = rel == '404.html'
+            if not file_url and not href.endswith('/'):
+                bad.append(f'{rel}: canonical has no trailing slash: {href}')
+        if 'property="og:image"' not in text:
+            bad.append(f'{rel}: missing og:image')
+        if 'name="twitter:card"' not in text:
+            bad.append(f'{rel}: missing twitter:card')
+        if '"@id": "https://comparelegal.com/#organization"' not in text and '"@id":"https://comparelegal.com/#organization"' not in text:
+            bad.append(f'{rel}: missing organization @id')
+        if '"@type": "WebSite"' not in text and '"@type":"WebSite"' not in text:
+            bad.append(f'{rel}: missing WebSite schema')
+    llms = (PUBLIC / 'llms.txt').read_text()
+    if _banned(llms):
+        bad.append('llms.txt: contains a disallowed name')
+    for post in posts:
+        needle = f'({BASE}{post["url"]})'
+        if needle not in llms:
+            bad.append(f'llms.txt: missing {post["url"]}')
+            continue
+        line = next(ln for ln in llms.splitlines() if needle in ln)
+        summary = line.split('): ', 1)[-1].strip() if '): ' in line else ''
+        if not summary or '\n' in summary:
+            bad.append(f'llms.txt: {post["slug"]} has no one-line summary')
+    for key, hub in HUBS.items():
+        plain = re.sub(r'<[^>]+>', ' ', ' '.join(hub['paras']))
+        count = len(re.findall(r"[A-Za-z0-9£']+", plain))
+        print(f'sitegen: {key} hub intro {count} words')
+        if not 270 <= count <= 360:
+            bad.append(f'{key} hub intro is {count} words, expected about 300')
+    if bad:
+        raise SystemExit('SEO audit failed:\n' + '\n'.join(bad))
+    print(f'sitegen: SEO audit ok ({len(html_files)} pages)')
 
 
 if __name__ == '__main__':

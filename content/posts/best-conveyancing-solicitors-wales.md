@@ -1,7 +1,8 @@
 ---
 title: "Best-reviewed conveyancing solicitors in Wales: Cardiff, Swansea and Newport"
+seo_title: "Best conveyancers in Wales"
 short: Top-rated Welsh conveyancers
-description: The highest-rated conveyancing solicitors on Google in Cardiff, Swansea and Newport, and what their clients say makes them good. Ratings checked November 2026.
+description: "The highest-rated conveyancing solicitors on Google in Cardiff, Swansea and Newport, and what their clients say makes them good. Ratings checked November 2026."
 date: 2026-11-16
 updated: 2026-11-16
 category: conveyancing

@@ -1,7 +1,8 @@
 ---
 title: "Wills and powers of attorney: how the rules differ across the UK"
+seo_title: "Wills and powers of attorney"
 short: Wills and powers of attorney
-description: Signing and witnessing rules for wills in England and Wales, Scotland and Northern Ireland, what happens on marriage, and which power of attorney you need where you live.
+description: "How wills and powers of attorney differ in England and Wales, Scotland and Northern Ireland: witnesses, marriage, and which power of attorney you need."
 summary: The rules for making a valid will differ across the UK: Scotland needs one witness and lets you make a will from age 12, while England, Wales and Northern Ireland need two witnesses and a minimum age of 18. Powers of attorney differ too: lasting powers of attorney in England and Wales (£92 each to register), continuing and welfare powers in Scotland, and enduring powers of attorney for money and property in Northern Ireland.
 date: 2026-11-13
 updated: 2026-11-13
@@ -9,7 +10,7 @@ category: wills
 nations: [England, Wales, Scotland, Northern Ireland]
 service: will1
 ---
-A will made correctly in one part of the UK can be invalid, or work differently, in another. The same goes for powers of attorney. If you're comparing will-writing fees, it helps to know what the solicitor has to do in your part of the UK, and what you're paying for.
+A will made correctly in one part of the UK can be invalid, or work differently, in another. The same goes for powers of attorney. If you're comparing will-writing fees, it helps to know what the solicitor has to do in your part of the UK, and what you're paying for. You can [compare will-writing fees](/wills/) with VAT included.
 
 ## Making a valid will
 
@@ -26,7 +27,7 @@ In England, Wales and Northern Ireland, a witness who benefits from the will, or
 
 In England, Wales and Northern Ireland you can, in principle, leave your estate to anyone. Family members and dependants who are left out can ask the court for reasonable provision, so an unusual will benefits from careful advice.
 
-Scotland is different. A spouse or civil partner and children have **legal rights** to a share of the moveable estate (money, shares, belongings, but not land and buildings) whatever the will says. This is one reason a Scottish will should be drafted by someone who knows Scots law.
+Scotland is different. A spouse or civil partner and children have **legal rights** to a share of the moveable estate (money, shares, belongings, but not land and buildings) whatever the will says. This is one reason a Scottish will should be drafted by someone who knows Scots law. After a death, Scotland uses confirmation rather than probate. [Probate costs across the UK](/blog/probate-costs-uk/) covers the court fees in each nation.
 
 ## Powers of attorney
 
@@ -53,7 +54,7 @@ Northern Ireland's Mental Capacity Act 2016 allows for a new kind of lasting pow
 - Guidance on signing, or a supervised signing appointment
 - Storage of the original, and whether that costs extra
 
-Simple wills are usually a fixed fee, with a discount for mirror wills for couples. Wills involving trusts, a business, property abroad or a blended family take more work and cost more. VAT is added to solicitors' fees.
+Simple wills are usually a fixed fee, with a discount for mirror wills for couples. Wills involving trusts, a business, property abroad or a blended family take more work and cost more. VAT is added to solicitors' fees. Ask [what else to check before you instruct](/blog/questions-to-ask-before-instructing-a-solicitor/).
 
 ## Frequently asked questions
 

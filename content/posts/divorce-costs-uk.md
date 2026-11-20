@@ -1,5 +1,6 @@
 ---
 title: "How much does a divorce cost? England and Wales, Scotland and Northern Ireland"
+seo_title: "Divorce costs across the UK"
 short: Divorce costs across the UK
 description: Court fees and solicitors' fees for an uncontested divorce in each part of the UK, the grounds you need, and why the financial settlement is a separate cost.
 summary: In England and Wales the court fee for a divorce is £628 (from July 2026), and a consent order to make a financial agreement binding costs another £62. An agreed divorce is often handled for a fixed fee; most of the cost comes from disputes over money or children, which are usually charged by the hour. Scotland and Northern Ireland have their own grounds and procedures, and Northern Ireland has not adopted no-fault divorce.
@@ -9,11 +10,13 @@ category: family-law
 nations: [England, Wales, Scotland, Northern Ireland]
 service: divorce
 ---
-The cost of a divorce depends far less on the divorce itself than on whether you can agree about money and children. The paperwork to end a marriage is fairly standard, and many firms offer it for a fixed fee. This guide covers what you'll pay in each part of the UK, and the rules that affect how long it takes.
+The cost of a divorce depends far less on the divorce itself than on whether you can agree about money and children. The paperwork to end a marriage is fairly standard, and many firms offer it for a fixed fee. This guide covers what you'll pay in each part of the UK, and the rules that affect how long it takes. You can [compare divorce and family law fees](/family-law/) with VAT and disbursements included.
 
 ## The divorce and the finances are separate
 
 A divorce ends the marriage. It doesn't divide your property, savings or pensions, and it doesn't end the financial claims you have against each other. That needs a separate agreement, made binding by the court. Many people skip this step and regret it, because claims can be brought years later.
+
+Divorce is also a reason to review your will, because marriage and divorce change what an existing will does. [Wills and powers of attorney](/blog/wills-and-powers-of-attorney-uk-differences/) explains how that differs by nation. The same checks on a quote are in [questions to ask before instructing a solicitor](/blog/questions-to-ask-before-instructing-a-solicitor/).
 
 So when you compare fees, check whether a quote covers:
 
@@ -48,7 +51,7 @@ Northern Ireland has not adopted no-fault divorce. You can't petition until two 
 - adultery
 - desertion for two years
 
-Most NI divorces rely on separation. Even undefended cases normally involve a short court hearing. The Department of Justice consulted on moving to a no-fault system in 2025, so check the current position before you start.
+Most NI divorces rely on separation. Even undefended cases normally involve a short court hearing. The Department of Justice consulted on moving to a no-fault system in 2025, so check the current position before you start. You can [compare family law fees in Northern Ireland](/family-law/northern-ireland/).
 
 ## What makes a divorce cost more
 

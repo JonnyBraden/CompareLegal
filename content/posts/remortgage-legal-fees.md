@@ -1,7 +1,8 @@
 ---
 title: "Remortgage legal fees: do you need a solicitor, and what does it cost?"
+seo_title: "Remortgage legal fees"
 short: Remortgage legal fees
-description: When a remortgage needs a solicitor or conveyancer, how lenders' free legal packages work, and what a remortgage quote should include across the UK.
+description: "When a remortgage needs a solicitor or conveyancer, how a lender's free legals work, and what the quote should include across England, Wales, Scotland and NI."
 summary: You only need a conveyancer if you switch lenders; a product transfer with your existing lender usually needs no legal work. A remortgage quote should include the legal fee, VAT, the registration fee for the new lender's charge, searches or search insurance, and ID and bank transfer fees. Lenders' free legal packages can be good value for a simple remortgage but often exclude extras such as a transfer of equity.
 date: 2026-11-13
 updated: 2026-11-13
@@ -9,7 +10,7 @@ category: conveyancing
 nations: [England, Wales, Scotland, Northern Ireland]
 service: remortgage
 ---
-If you're moving your mortgage to a new lender, someone has to do the legal work: paying off the old mortgage and registering the new lender's charge against your home. It's simpler than buying a house, and often cheaper, but there are a few choices that affect what you pay.
+If you're moving your mortgage to a new lender, someone has to do the legal work: paying off the old mortgage and registering the new lender's charge against your home. It's simpler than buying a house, and often cheaper, but there are a few choices that affect what you pay. [Compare conveyancing fees](/conveyancing/), including remortgages, with VAT and disbursements in the total.
 
 ## Do you need a solicitor at all?
 
@@ -41,8 +42,8 @@ If someone is being added to or removed from the title at the same time, for exa
 
 ## How it differs across the UK
 
-- **England and Wales:** the new mortgage is registered at HM Land Registry.
-- **Scotland:** a mortgage is called a **standard security** and is registered with Registers of Scotland. Your solicitor must be qualified in Scots law.
+- **England and Wales:** the new mortgage is registered at HM Land Registry. See [conveyancing quotes in England and Wales](/blog/conveyancing-quote-explained-england-wales/).
+- **Scotland:** a mortgage is called a **standard security** and is registered with Registers of Scotland. Your solicitor must be qualified in Scots law. [Buying a house in Scotland](/blog/buying-a-house-in-scotland-conveyancing/) explains registration there.
 - **Northern Ireland:** the mortgage is registered at Land Registry NI, or in the Registry of Deeds for unregistered titles, which can take longer. Your solicitor must be qualified in Northern Ireland.
 
 ## Frequently asked questions
@@ -57,7 +58,7 @@ Often, for a simple remortgage. Compare the total cost, including any extras and
 
 ### Do I pay stamp duty when I remortgage?
 
-Not on a straightforward remortgage. A transfer of equity can trigger it, depending on the share of the mortgage the new owner takes on.
+Not on a straightforward remortgage. A transfer of equity can trigger it, depending on the share of the mortgage the new owner takes on. See [SDLT, LTT and LBTT compared](/blog/stamp-duty-sdlt-ltt-lbtt-compared/).
 
 ## Sources
 
