@@ -5,7 +5,7 @@ short: Remortgage legal fees
 description: "When a remortgage needs a solicitor or conveyancer, how a lender's free legals work, and what the quote should include across England, Wales, Scotland and NI."
 summary: You only need a conveyancer if you switch lenders; a product transfer with your existing lender usually needs no legal work. A remortgage quote should include the legal fee, VAT, the registration fee for the new lender's charge, searches or search insurance, and ID and bank transfer fees. Lenders' free legal packages can be good value for a simple remortgage but often exclude extras such as a transfer of equity.
 date: 2026-11-13
-updated: 2026-11-13
+updated: 2026-11-21
 category: conveyancing
 nations: [England, Wales, Scotland, Northern Ireland]
 service: remortgage
@@ -34,7 +34,7 @@ Many lenders offer "free legals" on a remortgage, using a firm from their own pa
 - **Searches or search insurance.** Many lenders accept insurance instead of full searches on a remortgage, which is cheaper and quicker.
 - **Identity checks and a bank transfer fee**
 
-Ask whether the old lender charges a fee to close your mortgage account, as that comes from your own funds, not the new lender's.
+The registration fee is a disbursement set by the land registry, not by the firm. [Conveyancing disbursements explained](/blog/conveyancing-disbursements-explained/) sets out the official figures. Ask whether the old lender charges a fee to close your mortgage account, as that comes from your own funds, not the new lender's.
 
 ## Remortgaging and changing who owns the home
 

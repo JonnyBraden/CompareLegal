@@ -5,7 +5,7 @@ short: Conveyancing quotes explained
 description: "How to read a conveyancing quote in England and Wales, which disbursements to expect, why fees differ, and what to ask a firm before you instruct them."
 summary: Every conveyancing quote in England and Wales should show three things: the firm's legal fee, VAT at 20% on that fee, and disbursements such as searches, the HM Land Registry fee, ID checks and a bank transfer fee. Leasehold, new-build, shared ownership and unregistered properties cost extra. Stamp Duty Land Tax (or Land Transaction Tax in Wales) is collected by your conveyancer but is the same whichever firm you use.
 date: 2026-11-13
-updated: 2026-11-13
+updated: 2026-11-21
 category: conveyancing
 nations: [England, Wales]
 service: purchase
@@ -28,7 +28,7 @@ Since December 2018, firms regulated by the Solicitors Regulation Authority must
 - **Identity and anti-money-laundering checks**, charged per person.
 - **A bank transfer fee** for sending your money on completion.
 
-The tax, Stamp Duty Land Tax in England or Land Transaction Tax in Wales, is collected by your conveyancer but isn't a legal cost. It's the same whoever you instruct. The [comparison of SDLT, LTT and LBTT](/blog/stamp-duty-sdlt-ltt-lbtt-compared/) sets the three taxes side by side.
+The tax, Stamp Duty Land Tax in England or Land Transaction Tax in Wales, is collected by your conveyancer but isn't a legal cost. It's the same whoever you instruct. The [comparison of SDLT, LTT and LBTT](/blog/stamp-duty-sdlt-ltt-lbtt-compared/) sets the three taxes side by side. The official search and registration fees are in [conveyancing disbursements explained](/blog/conveyancing-disbursements-explained/). Worked examples are in [conveyancing costs in England](/blog/conveyancing-costs-england/) and [conveyancing costs in Wales](/blog/conveyancing-costs-wales/).
 
 ## Extras that push the price up
 
