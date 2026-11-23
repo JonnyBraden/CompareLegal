@@ -34,7 +34,7 @@ Checked 21 November 2026. There is no official scale for the legal fee.
 
 In England and Wales, HM Land Registry's Scale 2 fee for an electronic application to register a charge over the whole of a registered title is £20 up to £100,000, £30 from £100,001 to £200,000, £45 from £200,001 to £500,000, £65 from £500,001 to £1 million, and £140 above that. A postal application is higher, for example £100 where the amount secured is £200,001 to £500,000. The bands are in the Land Registration Fee Order 2024, in force since 9 December 2024. HM Land Registry is consulting on simplifying Scale 2 fees until 22 December 2026. The bands above are the ones in force.
 
-Ask whether the old lender charges an administration fee to close the account. That comes from your own funds, or from the new mortgage, and it is not part of the conveyancer's legal fee.
+Ask whether the old lender charges an administration fee to close the account. That comes from your own funds, or from the new mortgage, and it is not part of the conveyancer's legal fee. The registration fees themselves, including the scales in Scotland and Northern Ireland, are set out in [conveyancing disbursements explained](/blog/conveyancing-disbursements-explained/).
 
 ## Are a lender's free legals worth taking?
 

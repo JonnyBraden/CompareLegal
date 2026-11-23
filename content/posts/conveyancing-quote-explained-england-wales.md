@@ -32,7 +32,7 @@ Official amounts behind the disbursements and the tax were checked on 21 Novembe
 - **Identity and anti-money-laundering checks**, charged per person.
 - **A bank transfer fee** for sending the money on completion.
 
-The tax is not a disbursement and not a legal cost. [SDLT, LTT and LBTT compared](/blog/stamp-duty-sdlt-ltt-lbtt-compared/) sets the bands side by side. England and Northern Ireland share SDLT. Wales charges Land Transaction Tax, so an English quote cannot be reused for a Welsh purchase.
+The tax is not a disbursement and not a legal cost. [SDLT, LTT and LBTT compared](/blog/stamp-duty-sdlt-ltt-lbtt-compared/) sets the bands side by side. England and Northern Ireland share SDLT. Wales charges Land Transaction Tax, so an English quote cannot be reused for a Welsh purchase. The official search and registration fees are in [conveyancing disbursements explained](/blog/conveyancing-disbursements-explained/), with the purchase figures in [conveyancing costs in England](/blog/conveyancing-costs-england/) and [conveyancing costs in Wales](/blog/conveyancing-costs-wales/).
 
 ## Which extras push the fee up?
 
