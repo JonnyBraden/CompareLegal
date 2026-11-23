@@ -53,6 +53,8 @@ On a £300,000 home, a buyer who isn't a first-time buyer pays £4,600 in LBTT. 
 
 You can [compare conveyancing fees in Scotland](/conveyancing/scotland/) once you know which lines to expect. For the equivalent in England and Wales, see [what a conveyancing quote should include](/blog/conveyancing-quote-explained-england-wales/). [Questions to ask before you instruct](/blog/questions-to-ask-before-instructing-a-solicitor/) apply here too.
 
+The published figures for LBTT and Registers of Scotland dues are in [conveyancing costs in Scotland](/blog/conveyancing-costs-scotland/).
+
 Your solicitor must be qualified in Scots law and is regulated by the [Law Society of Scotland](https://www.lawscot.org.uk/). A firm from England or Wales can't act on a Scottish purchase.
 
 ## Frequently asked questions
