@@ -20,7 +20,7 @@ They apply when you are [comparing conveyancing fees](/conveyancing/), [making a
 
 ### 1. Is this a fixed fee, and what would make it go up?
 
-Fixed fees are common for a straightforward purchase or sale, a simple will or an uncontested divorce. Ask what falls outside, such as a leasehold, a new build, extra lender requirements, an unregistered title, a dispute or overseas assets, and get the answer in writing.
+Fixed fees are common for a straightforward purchase or sale, a simple will or an uncontested divorce. Ask what falls outside the fee, such as a leasehold, a new build or a dispute, and get the answer in writing.
 
 ### 2. Does the total include VAT and all disbursements?
 
@@ -38,7 +38,7 @@ If an estate agent, broker or website suggested the firm, ask whether anyone is 
 
 ### 5. Who will handle my case, and what are they qualified as?
 
-Ask who will do the work, their qualification and who supervises them: a partner, a solicitor, a trainee or, in England and Wales, a licensed conveyancer or a chartered legal executive. In Scotland and Northern Ireland a solicitor does the conveyancing.
+Ask who will do the work, their qualification and who supervises them: a partner, a solicitor, a trainee or, in England and Wales, a licensed conveyancer or a chartered legal executive. In Scotland conveyancing is usually done by a solicitor, though a small number of licensed conveyancing practitioners are also regulated by the Law Society of Scotland. In Northern Ireland a solicitor does the conveyancing.
 
 ### 6. How will you keep me updated, and how quickly do you reply?
 
@@ -46,7 +46,7 @@ Ask how the firm will update you, and how quickly it aims to reply.
 
 ### 7. How many similar cases do you handle?
 
-Ask whether the firm regularly does your sort of work, such as new builds, leasehold, Scottish purchases, confirmation, disputed estates, or arrangements for children.
+Ask whether the firm regularly does work like yours, including confirmation in Scotland.
 
 ### 8. How long is this likely to take?
 
@@ -56,9 +56,9 @@ Ask for a timescale and what usually causes delay. Firms often say around 8 to 1
 
 ### 9. Who regulates you, and are you insured?
 
-In England and Wales, check the [Solicitors Register](https://www.sra.org.uk/consumers/register/). Solicitors are regulated by the Solicitors Regulation Authority, and emails should show the SRA number and that the firm is authorised and regulated by it. Licensed conveyancers are regulated by the Council for Licensed Conveyancers: use its [register](https://www.clc-uk.org/consumers/find-a-licensed-conveyancer/). Scotland and Northern Ireland have no licensed conveyancers. The [Law Society of Scotland](https://www.lawscot.org.uk/find-a-solicitor/) regulates Scottish solicitors, and the [Law Society of Northern Ireland](https://lawsoc-ni.org/using-a-solicitor/find-a-solicitor) regulates solicitors in Northern Ireland.
+In England and Wales, check the [Solicitors Register](https://www.sra.org.uk/consumers/register/). Solicitors are regulated by the Solicitors Regulation Authority, and emails should show the SRA number and that the firm is authorised and regulated by it. Licensed conveyancers are regulated by the Council for Licensed Conveyancers: use its [register](https://www.clc-uk.org/consumers/find-a-licensed-conveyancer/). The Law Society of Scotland regulates Scottish solicitors and licensed conveyancing practitioners. [Find a solicitor](https://www.lawscot.org.uk/find-a-solicitor/) lists solicitors. Northern Ireland has no licensed conveyancers. The [Law Society of Northern Ireland](https://lawsoc-ni.org/using-a-solicitor/find-a-solicitor) regulates solicitors there.
 
-Solicitors in private practice, and licensed conveyancers, must hold professional indemnity insurance. In Scotland that cover is the Master Policy. England and Wales is a single jurisdiction. A firm qualified only in Scotland or only in Northern Ireland acts in that nation unless it is also qualified elsewhere.
+Solicitors in private practice, and licensed conveyancers, must hold professional indemnity insurance. In Scotland, solicitors' cover is the Master Policy. England and Wales is a single jurisdiction. A firm qualified only in Scotland or only in Northern Ireland acts in that nation unless it is also qualified elsewhere.
 
 ### 10. How do I complain if something goes wrong?
 
@@ -103,7 +103,7 @@ Yes. You usually pay for work already done, and the new firm asks the old one fo
 
 ### Should I always choose the cheapest quote?
 
-Compare totals for the same work. A lower legal fee can omit VAT or disbursements. Where the work, the person doing it and the fall-through terms match, the lower total is a fair reason to choose.
+Compare totals for the same work. A lower legal fee can omit VAT or disbursements. Where the work and the fall-through terms match, the lower total is a fair reason to choose.
 
 ### What is a client care letter?
 
@@ -111,7 +111,7 @@ It is the engagement letter, also called terms of business. It sets out the work
 
 ### Do solicitors have to publish their prices?
 
-In England and Wales, Solicitors Regulation Authority firms must publish prices for residential conveyancing and for uncontested work collecting and distributing assets in the UK after a death, plus some other listed services. Wills and divorce are not included. A firm with no website must still provide the information on request, and licensed conveyancers must publish conveyancing costs. In Scotland a written estimate is required when you instruct; publishing a price is guidance, not a rule. In Northern Ireland the written estimate is required at instruction, not a website price.
+In England and Wales, Solicitors Regulation Authority firms must publish prices for residential conveyancing and for uncontested work collecting and distributing assets in the UK after a death, plus some other listed services. Wills and divorce are not included. Firms without a website must provide it on request. Licensed conveyancers must publish conveyancing costs. Scotland requires a written estimate when you instruct; a published price is only guidance. Northern Ireland requires that estimate at instruction, not a website price.
 
 ## Sources
 
@@ -123,4 +123,5 @@ In England and Wales, Solicitors Regulation Authority firms must publish prices 
 - [CLC consumer questions](https://www.clc-uk.org/faq/) and [CLC professional indemnity insurance](https://www.clc-uk.org/professional-indemnity-insurance/)
 - [CLC informed choice guidance](https://www.clc-uk.org/wp-content/uploads/2018/10/180924-Informed-Choice-guidance.pdf)
 - [How solicitors are insured](https://www.lawscot.org.uk/for-the-public/client-protection/how-solicitors-are-insured/) and [complaints against Scottish solicitors](https://www.lawscot.org.uk/for-the-public/client-protection/complaints-against-solicitors/)
+- [Conveyancing practitioner](https://www.regulated-professions.service.gov.uk/professions/conveyancing-practitioner) (GOV.UK)
 - [Law Society of Northern Ireland: its role](https://lawsoc-ni.org/about-the-law-society/our-role) and [client complaints](https://lawsoc-ni.org/using-a-solicitor/making-a-complaint/client-complaint)
