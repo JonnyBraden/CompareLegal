@@ -1,160 +1,191 @@
 ---
 title: "Best-reviewed conveyancing solicitors in Northern Ireland: Belfast, Derry, Lisburn and Newry"
-seo_title: "Best conveyancers in Northern Ireland"
+seo_title: "Best-reviewed Conveyancing Solicitors in NI"
 short: Top-rated NI conveyancers
-description: "Highest-rated conveyancing solicitors on Google in Belfast, Derry, Lisburn and Newry, and what their clients praise. Ratings checked in November 2026."
+description: "Best-reviewed conveyancing solicitors in Belfast, Derry, Lisburn and Newry, with Google ratings and what clients praise. Ratings checked in November 2026."
+summary: "The best-reviewed conveyancing solicitors in Northern Ireland, on Google ratings checked in November 2026, include Boyd Rice, O'Hare and MKB Law in Belfast, Hasson & Company and Dickson & McNulty in Derry~Londonderry, Skelton Callender, Donaldson McConnell and Reid & Co in Lisburn, and Luke Curran & Co. and McShanes in Newry. Compare the full quote, including VAT and disbursements, before you instruct."
 date: 2026-11-16
-updated: 2026-11-16
+updated: 2026-11-26
 category: conveyancing
 nations: [Northern Ireland]
 service: purchase
 ---
-Choosing a solicitor to buy or sell a home in Northern Ireland usually comes down to two things: the price, and whether they'll keep the sale moving. Compare Legal shows you the price. This guide looks at the second part, using Google reviews to find the best-reviewed conveyancing solicitors in Belfast, Derry~Londonderry, Lisburn and Newry, and summarising what their clients consistently praise.
+The best-reviewed conveyancing solicitors in Belfast, on Google ratings checked on 16 November 2026, are Boyd Rice Solicitors, O'Hare Solicitors and MKB Law. The same standard, a Google rating of 4.7 or higher from at least 30 reviews, also identifies firms in Derry~Londonderry, Lisburn and Newry, and the right choice still depends on the full quote.
 
-Every firm below has a Google rating of 4.7 or higher from at least 30 reviews, and its recent reviews show it handles residential property. No firm paid to be included. You can read [how we chose these firms](#how-we-chose-these-firms) at the end.
+Choosing a solicitor for a purchase in Northern Ireland usually comes down to the price and whether the firm keeps the matter moving. Every firm below has recent reviews showing residential property work. No firm paid to be included. [How we chose these firms](#how-did-we-choose-these-firms) is set out at the end.
 
-## Best-reviewed conveyancing solicitors in Belfast
+The table uses only the rating, review count and check date already given for each firm in this guide.
 
-### 1. Boyd Rice Solicitors
+| Firm | City | Google rating | Review count | Date checked |
+| --- | --- | --- | --- | --- |
+| Boyd Rice Solicitors | Belfast | 5.0 | 58 | 16 November 2026 |
+| O'Hare Solicitors | Belfast | 4.9 | 460 | 16 November 2026 |
+| MKB Law | Belfast | 4.8 | 220 | 16 November 2026 |
+| Hasson & Company Solicitors | Derry~Londonderry | 4.9 | 164 | 16 November 2026 |
+| Dickson & McNulty | Derry~Londonderry | 4.9 | 68 | 16 November 2026 |
+| Skelton Callender Solicitors | Lisburn | 5.0 | 42 | 16 November 2026 |
+| Donaldson McConnell Solicitors | Lisburn | 4.9 | 175 | 16 November 2026 |
+| Reid & Co Solicitors | Lisburn | 4.9 | 30 | 16 November 2026 |
+| Luke Curran & Co. Solicitors | Newry | 5.0 | 56 | 16 November 2026 |
+| McShanes Solicitors | Newry | 4.7 | 36 | 16 November 2026 |
+
+## Who are the best-reviewed conveyancing solicitors in Belfast?
+
+### Boyd Rice Solicitors
 
 **Lisburn Road, south Belfast · 5.0 from 58 Google reviews**
 
-Boyd Rice's property clients describe a reliable, efficient service from start to finish. First-time buyers describe the purchase as hassle-free, with quick updates and fast replies to questions. Others mention practical, sensible advice when issues came up, and several are repeat clients who came back for a remortgage or a second purchase.
+First-time buyers mention quick updates on a straightforward purchase, and several clients returned for a remortgage or a second purchase.
 
 [See Boyd Rice Solicitors on Google](https://www.google.com/maps/place/?q=place_id:ChIJBTohC-UJYUgRHoexafGqVq8)
 
-### 2. O'Hare Solicitors
+### O'Hare Solicitors
 
 **High Street, city centre · 4.9 from 460 Google reviews**
 
-O'Hare had the most reviews of the Belfast firms we looked at. Its property clients praise its persistence: reviewers describe purchases that fell through, chains that dragged on and deadlines such as a rental lease ending, with the firm keeping them informed throughout. First-time buyers say the process felt easy and that questions were answered promptly.
+O'Hare had the most reviews of the Belfast firms in this guide. Clients praise persistence when a purchase fell through or a chain dragged on.
 
 [See O'Hare Solicitors on Google](https://www.google.com/maps/place/?q=place_id:ChIJf9QMJlQIYUgRpfvSftxcNhE)
 
-### 3. MKB Law
+### MKB Law
 
 **Great Victoria Street, city centre · 4.8 from 220 Google reviews**
 
-MKB Law's reviews come mostly from first-time buyers, who say they were updated at every step and that emails and calls were answered quickly. A common theme is a calm, patient approach when delays came up, with everything explained clearly. Several reviewers also describe the work as fast, thorough and efficient.
+First-time buyers say they were updated at every step, with quick replies and a calm explanation when a delay came up.
 
 [See MKB Law on Google](https://www.google.com/maps/place/?q=place_id:ChIJ3WKw-_cIYUgRSOLS00jBn_E)
 
 [Compare conveyancing fees in Belfast](/conveyancing/northern-ireland/belfast/)
 
-## Best-reviewed conveyancing solicitors in Derry~Londonderry
+## Who are the best-reviewed conveyancing solicitors in Derry~Londonderry?
 
-Two Derry firms met our standard at the time of writing.
+Two firms met the standard on 16 November 2026.
 
-### 1. Hasson & Company Solicitors
+### Hasson & Company Solicitors
 
 **Clarendon Street · 4.9 from 164 Google reviews**
 
-Hasson & Co's reviewers repeatedly single out its conveyancing team. Clients who have bought and sold homes and land with the firm several times describe the work as thorough and experienced. Others say they were updated regularly on both a sale and an onward purchase. First-time buyers say they always felt in good hands, and several came to the firm on a family recommendation.
+Reviewers single out the conveyancing team, including clients who have bought and sold with the firm several times and first-time buyers who came on a family recommendation.
 
 [See Hasson & Company on Google](https://www.google.com/maps/place/?q=place_id:ChIJ25x744HhX0gRhq4kOlS2mQY)
 
-### 2. Dickson & McNulty
+### Dickson & McNulty
 
 **Spencer Road, Waterside · 4.9 from 68 Google reviews**
 
-Dickson & McNulty's reviews come mostly from first-time buyers, who say each stage was explained in plain language and that nothing was too much trouble. Buyers new to Northern Ireland say the firm guided them through an unfamiliar process and worked closely with their mortgage lender so nothing stalled. Reviewers also mention prompt replies, close attention to detail and purchases completed quickly.
+First-time buyers say each stage was explained in plain language, and buyers new to Northern Ireland say the firm worked with their mortgage lender.
 
 [See Dickson & McNulty on Google](https://www.google.com/maps/place/?q=place_id:ChIJGyoiVpnhX0gR0NVSM5UFuPY)
 
 [Compare conveyancing fees in Derry~Londonderry](/conveyancing/northern-ireland/derry-londonderry/)
 
-## Best-reviewed conveyancing solicitors in Lisburn
+## Who are the best-reviewed conveyancing solicitors in Lisburn?
 
-### 1. Skelton Callender Solicitors
+### Skelton Callender Solicitors
 
 **Crescent Business Park · 5.0 from 42 Google reviews**
 
-Skelton Callender's clients often contrast it with the idea that solicitors are slow. Reviewers describe the firm as fast, efficient and easy to reach, sometimes replying outside office hours. First-time buyers say the process was easy to understand. Sellers praise thorough handling of extra issues such as a boundary question, and reviewers say they were glad they chose the firm.
+Clients describe the firm as fast and easy to reach, sometimes outside office hours, and sellers praise the handling of a boundary question.
 
 [See Skelton Callender Solicitors on Google](https://www.google.com/maps/place/?q=place_id:ChIJJRP7eJ8DYUgRO3m4LrjCFIg)
 
-### 2. Donaldson McConnell Solicitors
+### Donaldson McConnell Solicitors
 
 **Graham Gardens · 4.9 from 175 Google reviews**
 
-Donaldson McConnell is a broad practice, and its property clients describe the same strengths as its other clients: quick replies, regular updates and a proactive approach. A buyer completing a co-ownership buy-out, for example, praised the firm for chasing the necessary extensions and keeping things moving. Reviewers across the firm also describe it as reassuring and kind during stressful times.
+Property clients describe quick replies and a proactive approach, including a co-ownership buy-out where the firm chased the extensions needed.
 
 [See Donaldson McConnell on Google](https://www.google.com/maps/place/?q=place_id:ChIJA7LXAl0EYUgRYLEGw5Py9b8)
 
-### 3. Reid & Co Solicitors
+### Reid & Co Solicitors
 
 **Bachelors Walk, town centre · 4.9 from 30 Google reviews**
 
-Reid & Co is a town-centre firm whose clients describe a seamless, stress-free service. Reviewers mention approachable staff who were always available to answer questions and who explained things in down-to-earth terms. Its conveyancing work is praised specifically, and several clients say they would recommend the firm to friends and family.
+Clients describe plain explanations from approachable staff, and conveyancing is praised specifically.
 
 [See Reid & Co on Google](https://www.google.com/maps/place/?q=place_id:ChIJBd-f_GcEYUgRCM6IquTOPw8)
 
 [Compare conveyancing fees in Lisburn](/conveyancing/northern-ireland/lisburn/)
 
-## Best-reviewed conveyancing solicitors in Newry
+## Who are the best-reviewed conveyancing solicitors in Newry?
 
-Two Newry firms met our standard at the time of writing.
+Two Newry firms met the standard on 16 November 2026.
 
-### 1. Luke Curran & Co. Solicitors
+### Luke Curran & Co. Solicitors
 
 **Hill Street · 5.0 from 56 Google reviews**
 
-Luke Curran & Co's property clients often come back, with some reviewers saying they have used the firm for several sales and purchases. Buyers moving home from abroad say the firm worked with them by video call and email, which made a long-distance purchase straightforward. Others praise it for completing a sale and purchase together on a tight deadline, and for being reasonably priced.
+Some clients have used the firm for several sales and purchases, and buyers moving from abroad say video calls and email made the purchase straightforward.
 
 [See Luke Curran & Co. on Google](https://www.google.com/maps/place/?q=place_id:ChIJ6VVssFbbYEgRbhagiHBoKrs)
 
-### 2. McShanes Solicitors
+### McShanes Solicitors
 
 **Hill Street · 4.7 from 36 Google reviews**
 
-McShanes is a long-established Newry firm, founded in the 1970s, that lists residential conveyancing among its services. Clients describe each step being explained clearly, prompt updates when things moved forward, and steady guidance during stressful moments. Reviewers also mention attention to detail, and several have used the firm over many years for property and other matters.
+This long-established Newry firm, founded in the 1970s, is praised for explaining each step and for prompt updates. Residential conveyancing is one of its services.
 
 [See McShanes Solicitors on Google](https://www.google.com/maps/place/?q=place_id:ChIJPT3NU1HbYEgRnoQKPuFhPKk)
 
 [Compare conveyancing fees in Newry](/conveyancing/northern-ireland/newry/)
 
-## What the best-reviewed firms have in common
+## What do the best-reviewed firms in Northern Ireland have in common?
 
-Across all four towns, the same few things come up again and again in five-star reviews:
+Across Belfast, Derry~Londonderry, Lisburn and Newry, reviews mention the same points:
 
-- **Updates without chasing.** Clients most often praise being told what was happening before they had to ask.
-- **Plain explanations.** First-time buyers in particular value a solicitor who explains each stage, from searches to completion, without jargon.
-- **Persistence when things go wrong.** Many of the best reviews come from difficult purchases: broken chains, slow lenders or tight deadlines.
-- **Being easy to reach.** Quick replies by phone and email matter more to reviewers than almost anything else.
+- **Updates before you chase.** Clients praise being told what was happening.
+- **Plain explanations.** First-time buyers value each stage, from searches to completion, in ordinary language.
+- **Sticking with a tight deadline.** Reviews often describe a broken chain, a slow lender, or a lease about to end.
+- **Being easy to reach.** Quick replies by phone and email come up again and again.
 
-You can ask any firm about these things before you instruct them. Our guide to [questions to ask before instructing a solicitor](/blog/questions-to-ask-before-instructing-a-solicitor/) has a full list, and our guide to [conveyancing costs in Northern Ireland](/blog/conveyancing-costs-northern-ireland/) explains what a quote should include.
+[Questions to ask before instructing a solicitor](/blog/questions-to-ask-before-instructing-a-solicitor/) is a useful list before you choose a firm in Northern Ireland.
 
-## How we chose these firms
+## What should a conveyancing quote in Northern Ireland include?
 
-We searched Google for conveyancing solicitors in each town and kept firms that:
+A quote for a purchase in Northern Ireland should show the full bill. Ask the solicitor to list:
 
-- had a Google rating of **4.7 or higher**
-- had at least **30 Google reviews**
-- had recent reviews showing they act on residential purchases, sales or remortgages
+- the legal fee
+- VAT on that fee
+- searches and reports, including property certificates from the council
+- the Land Registry fee, collected through Land & Property Services
+- Stamp Duty Land Tax, paid to HMRC
+- extras, such as an older title still in the Registry of Deeds, a mortgage, or a new build
 
-We ranked them by rating, then by number of reviews, and listed up to three per town. Where fewer than three firms met the standard, we listed fewer rather than lowering it. Ratings and review counts were checked on 16 November 2026 and will change over time.
+Solicitors in Northern Ireland are regulated by the Law Society of Northern Ireland. A firm qualified only in England and Wales cannot act on a purchase there. Most titles are at Land Registry NI, through Land & Property Services, and some older titles are still in the Registry of Deeds. Buyers in Northern Ireland pay Stamp Duty Land Tax to HMRC, as buyers in England do. [Conveyancing costs in Northern Ireland](/blog/conveyancing-costs-northern-ireland/) explains a quote, and [Stamp Duty, Land Transaction Tax and LBTT](/blog/stamp-duty-sdlt-ltt-lbtt-compared/) sets the three UK property taxes side by side. [Compare conveyancing fees in Northern Ireland](/conveyancing/northern-ireland/) before you choose.
 
-A Google rating covers all of a firm's work, not just conveyancing. The summaries above paraphrase the themes that come up most often in each firm's reviews. They are not a complete picture, and individual experiences vary, so read the reviews yourself and get a written quote before you decide. No firm paid to be included. If you run a firm and think you should be on this list, or want to be listed on Compare Legal, you can [add your prices for free](/#firms).
+## How did we choose these firms?
+
+We searched Google for conveyancing solicitors in each town and kept firms with a rating of 4.7 or higher, at least 30 reviews, and recent reviews of residential purchases, sales or remortgages. Firms are ordered by rating, then by number of reviews, up to three per town. Ratings were checked on 16 November 2026 and will change. A Google rating covers all of a firm's work. Read the reviews and get a written quote. No firm paid to be included. Compare Legal is independent of the firms named. If you run a firm and think you should be on this list, or want to be listed on Compare Legal, you can [add your prices for free](/#firms).
 
 ## Frequently asked questions
 
-### Who are the best conveyancing solicitors in Belfast?
+### Who are the best-reviewed conveyancing solicitors in Belfast?
 
-Based on Google reviews in November 2026, the highest-rated conveyancing firms in Belfast with at least 30 reviews were Boyd Rice Solicitors, O'Hare Solicitors and MKB Law. The best firm for you also depends on price, availability and the type of property you're buying.
+Boyd Rice Solicitors (5.0 from 58 Google reviews), O'Hare Solicitors (4.9 from 460) and MKB Law (4.8 from 220), checked on 16 November 2026. Compare the full quote as well as the rating.
+
+### Who are the best-reviewed conveyancing solicitors in Northern Ireland?
+
+On Google ratings checked on 16 November 2026, this guide lists Boyd Rice, O'Hare and MKB Law in Belfast, Hasson & Company and Dickson & McNulty in Derry~Londonderry, Skelton Callender, Donaldson McConnell and Reid & Co in Lisburn, and Luke Curran & Co and McShanes in Newry. Compare the full quote, including VAT and disbursements, before you instruct.
 
 ### Is a highly rated solicitor more expensive?
 
-Not necessarily. A rating tells you about service, not price. Compare fixed-fee quotes that include VAT and disbursements, then use reviews to choose between firms at a similar price.
+A Google rating describes the service clients report. The fee is a separate question. Compare quotes that include VAT and disbursements, then use the reviews to choose between firms at a similar total.
 
 ### Do I need a solicitor in Northern Ireland, or can I use a firm in England?
 
-Northern Ireland has its own property law and land registers, so you need a solicitor qualified in Northern Ireland. Firms in England and Wales can't act on an NI purchase.
+You need a solicitor qualified in Northern Ireland and regulated by the Law Society of Northern Ireland. A firm in England or Wales cannot act on a purchase there.
 
 ### How long does conveyancing take in Northern Ireland?
 
-A typical purchase takes around 8 to 12 weeks from offer to completion, but chains, mortgage offers and searches can make it longer. Ask the firm what timescale they expect for your purchase.
+A typical purchase takes around 8 to 12 weeks from offer to completion. Chains, mortgage offers and searches can make it longer. Ask the firm what they expect for your purchase.
+
+### What should a conveyancing quote in Northern Ireland include?
+
+The legal fee, VAT, searches and reports, the Land Registry fee through Land & Property Services, Stamp Duty Land Tax paid to HMRC, and extras such as a mortgage or a title still in the Registry of Deeds. The tax is the same whichever solicitor you use.
 
 ## Sources
 
 - Google reviews and ratings for each firm, checked 16 November 2026 (linked under each firm)
 - [Find a solicitor](https://lawsoc-ni.org/using-a-solicitor/finding-a-solicitor) (Law Society of Northern Ireland)
+- [Land & Property Services](https://www.finance-ni.gov.uk/land-property-services-lps) (Department of Finance)
+- [Stamp Duty Land Tax](https://www.gov.uk/stamp-duty-land-tax) (HMRC, GOV.UK)
