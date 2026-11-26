@@ -51,6 +51,8 @@ Property clients praise attention to detail and frequent updates, including opti
 
 [See Martyn Prowel Gartsides on Google](https://www.google.com/maps/place/?q=place_id:ChIJR91cw8ccbkgR10f19FrzV0A)
 
+[Compare conveyancing fees in Cardiff](/conveyancing/wales/cardiff/)
+
 ## Who are the best-reviewed conveyancing solicitors in Swansea?
 
 Two Swansea firms met the standard on 16 November 2026.
@@ -71,6 +73,8 @@ Clients praise clear targets that were met, including a completion date agreed a
 
 [See Peter Lynn & Partners Mumbles on Google](https://www.google.com/maps/place/?q=place_id:ChIJ_RU6CZ6LbkgRK9-_VMMczBo)
 
+[Compare conveyancing fees in Swansea](/conveyancing/wales/swansea/)
+
 ## Who are the best-reviewed conveyancing solicitors in Newport?
 
 One Newport firm met the standard on 16 November 2026.
@@ -82,6 +86,8 @@ One Newport firm met the standard on 16 November 2026.
 Clients compare the firm favourably with solicitors they have used before, and praise being kept in touch without having to chase. Reviewers mention a clear explanation of each stage and no hidden fees at the end.
 
 [See Roger James Clements & Partners on Google](https://www.google.com/maps/place/?q=place_id:ChIJYWTMyM7mcUgRJijjAcNrkX0)
+
+[Compare conveyancing fees in Newport](/conveyancing/wales/newport/)
 
 ## What do the best-reviewed firms in Wales have in common?
 
@@ -111,7 +117,7 @@ England and Wales share a legal system. Solicitors are regulated by the Solicito
 
 We searched Google for conveyancing solicitors in each city and kept firms with a rating of 4.7 or higher, at least 30 reviews, and recent reviews showing residential purchases, sales or remortgages. We ordered them by rating, then by number of reviews, and listed up to three per city. Where fewer than three firms met that standard, we listed fewer. Offices are rated separately on Google, so the figure is for the office named. Ratings and review counts were checked on 16 November 2026 and will change.
 
-A Google rating covers all of a firm's work, not only conveyancing. The notes above paraphrase themes that come up often. Experiences vary, so read the reviews and get a written quote before you decide. No firm paid to be included. Compare Legal is independent of the firms named.
+A Google rating covers all of a firm's work, not only conveyancing. The notes above paraphrase themes that come up often. Experiences vary, so read the reviews and get a written quote before you decide. No firm paid to be included. Compare Legal is independent of the firms named. If you run a firm and think you should be on this list, or want to be listed on Compare Legal, you can [add your prices for free](/#firms).
 
 ## Frequently asked questions
 

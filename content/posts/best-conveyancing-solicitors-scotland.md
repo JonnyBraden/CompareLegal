@@ -56,6 +56,8 @@ Clients describe a friendly office that takes on problems before they become del
 
 [See Claphams Solicitors on Google](https://www.google.com/maps/place/?q=place_id:ChIJq_HWSZlHiEgRrSrzuPmRd5Q)
 
+[Compare conveyancing fees in Glasgow](/conveyancing/scotland/glasgow/)
+
 ## Who are the best-reviewed conveyancing solicitors in Edinburgh?
 
 ### VMH Solicitors
@@ -82,6 +84,8 @@ First-time buyers say the firm helped them decide what to bid, with costs set ou
 
 [See Blair Cadell on Google](https://www.google.com/maps/place/?q=place_id:ChIJy9RiJwi4h0gRLXR9rdWqWYg)
 
+[Compare conveyancing fees in Edinburgh](/conveyancing/scotland/edinburgh/)
+
 ## Who are the best-reviewed conveyancing solicitors in Aberdeen?
 
 ### Gilson Gray
@@ -99,6 +103,8 @@ Sellers praise local market knowledge and a smooth hand-over from the estate age
 Buyers moving from elsewhere in the UK praise a clear account of the Scottish process, a fast quote at the start, and cover during holidays.
 
 [See James & George Collie on Google](https://www.google.com/maps/place/?q=place_id:ChIJIcXVaCQOhEgRuJv4OZFS9hc)
+
+[Compare conveyancing fees in Aberdeen](/conveyancing/scotland/aberdeen/)
 
 ## Who are the best-reviewed conveyancing solicitors in Dundee?
 
@@ -126,6 +132,8 @@ Clients praise costs set out clearly from the start, including people who sold a
 
 [See Lindsays Dundee on Google](https://www.google.com/maps/place/?q=place_id:ChIJxbDKxepchkgRcccGStNE-Rs)
 
+[Compare conveyancing fees in Dundee](/conveyancing/scotland/dundee/)
+
 ## What do the best-reviewed firms in Scotland have in common?
 
 Reviews in Glasgow, Edinburgh, Aberdeen and Dundee praise advice on what to offer, a plain explanation of the Home Report and missives, news before the client has to ask, and a final bill that matches the quote.
@@ -141,13 +149,13 @@ A quote for a purchase in Scotland should show the whole bill. There is no offic
 - searches and reports, such as a property enquiry certificate
 - the fee to register the title with Registers of Scotland
 - Land and Buildings Transaction Tax (LBTT), paid to Revenue Scotland
-- extras, such as a mortgage (a standard security), leasehold, a new build, or further work if missives are never concluded
+- extras, such as a new build, a mortgage (acting for the lender), a shared-equity or Help to Buy-style scheme, a title with unusual burdens, or further work if missives are never concluded
 
-Fixed-fee conveyancing is common in Scotland for a straightforward purchase. Check what the fee leaves out. Leasehold, new-build and mortgage work are typical extras, and the Home Report is the seller's cost. LBTT is the same whichever solicitor you use. Solicitors who act in Scotland are regulated by the Law Society of Scotland. [Conveyancing costs in Scotland](/blog/conveyancing-costs-scotland/) goes through the bill, and [Stamp Duty, Land Transaction Tax and LBTT](/blog/stamp-duty-sdlt-ltt-lbtt-compared/) compares the taxes in Scotland, Wales, England and Northern Ireland. [Compare conveyancing fees in Scotland](/conveyancing/scotland/) before you ask for a quote.
+Fixed-fee conveyancing is common in Scotland for a straightforward purchase. Check what the fee leaves out. A new build, acting for a lender, a shared-equity or Help to Buy-style scheme, or a title with unusual burdens can sit outside the fee, and the Home Report is the seller's cost. LBTT is the same whichever solicitor you use. Solicitors who act in Scotland are regulated by the Law Society of Scotland. [Conveyancing costs in Scotland](/blog/conveyancing-costs-scotland/) goes through the bill, and [Stamp Duty, Land Transaction Tax and LBTT](/blog/stamp-duty-sdlt-ltt-lbtt-compared/) compares the taxes in Scotland, Wales, England and Northern Ireland. [Compare conveyancing fees in Scotland](/conveyancing/scotland/) before you ask for a quote.
 
 ## How did we choose these firms?
 
-We searched Google for conveyancing solicitors in each city and kept firms with a rating of 4.7 or higher, at least 30 reviews, and recent reviews of residential purchases, sales or remortgages. Firms are ordered by rating, then by number of reviews, up to three per city. The figure is for the office named. Ratings were checked on 16 November 2026 and will change. A Google rating covers all of a firm's work. Read the reviews and get a written quote. No firm paid to be included. Compare Legal is independent of the firms named.
+We searched Google for conveyancing solicitors in each city and kept firms with a rating of 4.7 or higher, at least 30 reviews, and recent reviews of residential purchases, sales or remortgages. Firms are ordered by rating, then by number of reviews, up to three per city. The figure is for the office named. Ratings were checked on 16 November 2026 and will change. A Google rating covers all of a firm's work. Read the reviews and get a written quote. No firm paid to be included. Compare Legal is independent of the firms named. If you run a firm and think you should be on this list, or want to be listed on Compare Legal, you can [add your prices for free](/#firms).
 
 ## Frequently asked questions
 
@@ -165,7 +173,7 @@ VMH Solicitors (4.9 from 344 reviews), Connor Malcolm Solicitors (4.9 from 206) 
 
 ### Is fixed-fee conveyancing available in Scotland?
 
-Yes. Fixed fees are common for a straightforward purchase in Scotland. Ask what is excluded, such as leasehold, new-build or mortgage work. The Home Report is the seller's cost. Compare the full quote, including VAT and outlays.
+Yes. Fixed fees are common for a straightforward purchase in Scotland. Ask what is excluded, such as a new build, acting for a lender, a shared-equity or Help to Buy-style scheme, or a title with unusual burdens. The Home Report is the seller's cost. Compare the full quote, including VAT and outlays.
 
 ### Do I need a Scottish solicitor to buy a house in Scotland?
 

@@ -55,6 +55,8 @@ First-time buyers say they were updated at every step, with quick replies and a 
 
 [See MKB Law on Google](https://www.google.com/maps/place/?q=place_id:ChIJ3WKw-_cIYUgRSOLS00jBn_E)
 
+[Compare conveyancing fees in Belfast](/conveyancing/northern-ireland/belfast/)
+
 ## Who are the best-reviewed conveyancing solicitors in Derry~Londonderry?
 
 Two firms met the standard on 16 November 2026.
@@ -74,6 +76,8 @@ Reviewers single out the conveyancing team, including clients who have bought an
 First-time buyers say each stage was explained in plain language, and buyers new to Northern Ireland say the firm worked with their mortgage lender.
 
 [See Dickson & McNulty on Google](https://www.google.com/maps/place/?q=place_id:ChIJGyoiVpnhX0gR0NVSM5UFuPY)
+
+[Compare conveyancing fees in Derry~Londonderry](/conveyancing/northern-ireland/derry-londonderry/)
 
 ## Who are the best-reviewed conveyancing solicitors in Lisburn?
 
@@ -101,6 +105,8 @@ Clients describe plain explanations from approachable staff, and conveyancing is
 
 [See Reid & Co on Google](https://www.google.com/maps/place/?q=place_id:ChIJBd-f_GcEYUgRCM6IquTOPw8)
 
+[Compare conveyancing fees in Lisburn](/conveyancing/northern-ireland/lisburn/)
+
 ## Who are the best-reviewed conveyancing solicitors in Newry?
 
 Two Newry firms met the standard on 16 November 2026.
@@ -120,6 +126,8 @@ Some clients have used the firm for several sales and purchases, and buyers movi
 This long-established Newry firm, founded in the 1970s, is praised for explaining each step and for prompt updates. Residential conveyancing is one of its services.
 
 [See McShanes Solicitors on Google](https://www.google.com/maps/place/?q=place_id:ChIJPT3NU1HbYEgRnoQKPuFhPKk)
+
+[Compare conveyancing fees in Newry](/conveyancing/northern-ireland/newry/)
 
 ## What do the best-reviewed firms in Northern Ireland have in common?
 
@@ -147,7 +155,7 @@ Solicitors in Northern Ireland are regulated by the Law Society of Northern Irel
 
 ## How did we choose these firms?
 
-We searched Google for conveyancing solicitors in each town and kept firms with a rating of 4.7 or higher, at least 30 reviews, and recent reviews of residential purchases, sales or remortgages. Firms are ordered by rating, then by number of reviews, up to three per town. Ratings were checked on 16 November 2026 and will change. A Google rating covers all of a firm's work. Read the reviews and get a written quote. No firm paid to be included. Compare Legal is independent of the firms named.
+We searched Google for conveyancing solicitors in each town and kept firms with a rating of 4.7 or higher, at least 30 reviews, and recent reviews of residential purchases, sales or remortgages. Firms are ordered by rating, then by number of reviews, up to three per town. Ratings were checked on 16 November 2026 and will change. A Google rating covers all of a firm's work. Read the reviews and get a written quote. No firm paid to be included. Compare Legal is independent of the firms named. If you run a firm and think you should be on this list, or want to be listed on Compare Legal, you can [add your prices for free](/#firms).
 
 ## Frequently asked questions
 
